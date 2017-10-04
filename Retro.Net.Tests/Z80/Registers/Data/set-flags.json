@@ -1,0 +1,3330 @@
+[
+    {
+        "value": 0x00,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x01,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x02,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x03,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x04,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x05,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x06,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x07,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x08,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x09,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x0A,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x0B,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x0C,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x0D,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x0E,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x0F,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x10,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x11,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x12,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x13,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x14,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x15,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x16,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x17,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x18,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x19,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x1A,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x1B,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x1C,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x1D,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x1E,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x1F,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x20,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x21,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x22,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x23,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x24,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x25,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x26,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x27,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x28,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x29,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x2A,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x2B,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x2C,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x2D,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x2E,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x2F,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x30,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x31,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x32,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x33,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x34,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x35,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x36,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x37,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x38,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x39,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x3A,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x3B,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x3C,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x3D,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x3E,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x3F,
+        "expected": {
+            "sign": false,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x40,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x41,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x42,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x43,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x44,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x45,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x46,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x47,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x48,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x49,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x4A,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x4B,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x4C,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x4D,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x4E,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x4F,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x50,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x51,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x52,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x53,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x54,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x55,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x56,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x57,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x58,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x59,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x5A,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x5B,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x5C,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x5D,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x5E,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x5F,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x60,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x61,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x62,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x63,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x64,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x65,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x66,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x67,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x68,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x69,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x6A,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x6B,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x6C,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x6D,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x6E,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x6F,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x70,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x71,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x72,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x73,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x74,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x75,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x76,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x77,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x78,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x79,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x7A,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x7B,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x7C,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x7D,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x7E,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x7F,
+        "expected": {
+            "sign": false,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x80,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x81,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x82,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x83,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x84,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x85,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x86,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x87,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x88,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x89,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x8A,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x8B,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x8C,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x8D,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x8E,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x8F,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x90,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x91,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x92,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x93,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x94,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x95,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x96,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x97,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x98,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x99,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x9A,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x9B,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x9C,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x9D,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0x9E,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0x9F,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xA0,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xA1,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xA2,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xA3,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xA4,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xA5,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xA6,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xA7,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xA8,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xA9,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xAA,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xAB,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xAC,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xAD,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xAE,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xAF,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xB0,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xB1,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xB2,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xB3,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xB4,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xB5,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xB6,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xB7,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xB8,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xB9,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xBA,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xBB,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xBC,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xBD,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xBE,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xBF,
+        "expected": {
+            "sign": true,
+            "zero": false,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xC0,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xC1,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xC2,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xC3,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xC4,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xC5,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xC6,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xC7,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xC8,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xC9,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xCA,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xCB,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xCC,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xCD,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xCE,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xCF,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xD0,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xD1,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xD2,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xD3,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xD4,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xD5,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xD6,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xD7,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xD8,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xD9,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xDA,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xDB,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xDC,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xDD,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xDE,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xDF,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": false,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xE0,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xE1,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xE2,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xE3,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xE4,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xE5,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xE6,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xE7,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xE8,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xE9,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xEA,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xEB,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xEC,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xED,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xEE,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xEF,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": false,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xF0,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xF1,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xF2,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xF3,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xF4,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xF5,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xF6,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xF7,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": false,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xF8,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xF9,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xFA,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xFB,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": false,
+            "subtract": true,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xFC,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xFD,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": false,
+            "carry": true
+        }
+    },
+    {
+        "value": 0xFE,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": false
+        }
+    },
+    {
+        "value": 0xFF,
+        "expected": {
+            "sign": true,
+            "zero": true,
+            "flag5": true,
+            "halfCarry": true,
+            "flag3": true,
+            "parityOverflow": true,
+            "subtract": true,
+            "carry": true
+        }
+    }
+]

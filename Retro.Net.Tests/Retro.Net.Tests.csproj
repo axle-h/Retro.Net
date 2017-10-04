@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Z80\Registers\Data\set-parity-flags.json" />
+    <None Remove="Z80\Registers\Data\set-result-flags.json" />
+    <None Remove="Z80\Registers\Data\set-undocumented-flags.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Z80\Registers\Data\set-flags.json" />
+    <EmbeddedResource Include="Z80\Registers\Data\set-parity-flags.json" />
+    <EmbeddedResource Include="Z80\Registers\Data\set-result-flags.json" />
+    <EmbeddedResource Include="Z80\Registers\Data\set-undocumented-flags.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extras.Moq" Version="4.1.0-rc5-246" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="Moq" Version="4.7.0" />
+    <PackageReference Include="Shouldly" Version="2.8.2" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Retro.Net\Retro.Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+</Project>
