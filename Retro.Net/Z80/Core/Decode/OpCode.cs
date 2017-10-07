@@ -32,8 +32,8 @@ namespace Retro.Net.Z80.Core.Decode
 
         // 16-Bit arithmetic
         Add16,
-        AddCarry16,
-        SubtractCarry16,
+        AddWithCarry16,
+        SubtractWithCarry16,
         Increment16,
         Decrement16,
 
@@ -132,8 +132,8 @@ namespace Retro.Net.Z80.Core.Decode
             {
                 case OpCode.Load16:
                 case OpCode.Add16:
-                case OpCode.AddCarry16:
-                case OpCode.SubtractCarry16:
+                case OpCode.AddWithCarry16:
+                case OpCode.SubtractWithCarry16:
                 case OpCode.Increment16:
                 case OpCode.Decrement16:
                     return true;
@@ -186,9 +186,9 @@ namespace Retro.Net.Z80.Core.Decode
                     return "DEC";
                 case OpCode.Add16:
                     return "ADD";
-                case OpCode.AddCarry16:
+                case OpCode.AddWithCarry16:
                     return "ADC";
-                case OpCode.SubtractCarry16:
+                case OpCode.SubtractWithCarry16:
                     return "SBC";
                 case OpCode.Increment16:
                     return "INC";

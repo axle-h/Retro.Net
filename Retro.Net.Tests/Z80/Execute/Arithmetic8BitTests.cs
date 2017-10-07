@@ -54,7 +54,7 @@ namespace Retro.Net.Tests.Z80.Execute
             using (var fixture = new ExecuteFixture())
             {
                 fixture.Operation.OpCode(op).Operands(o).RandomLiterals();
-                fixture.With(c => c.Alu.Setup(GetAluExpression<Func<IAlu, byte>>(f, c, o)).Returns(c.Byte).Verifiable());
+                fixture.With(c => c.Alu.Setup(c.Alu8Call(f, Operand.A, o)).Returns(c.Byte).Verifiable());
                 fixture.Assert(c => c.Accumulator.A.ShouldBe(c.Byte));
             }
         }
@@ -64,8 +64,8 @@ namespace Retro.Net.Tests.Z80.Execute
             using (var fixture = new ExecuteFixture())
             {
                 fixture.Operation.OpCode(op).Operands(o).RandomLiterals();
-                fixture.With(c => c.Alu.Setup(GetAluExpression<Func<IAlu, byte>>(f, c, o)).Returns(c.Byte).Verifiable());
-                fixture.Assert(c => c.ByteOperand(o).ShouldBe(c.Byte));
+                fixture.With(c => c.Alu.Setup(c.Alu8Call(f, o)).Returns(c.Byte).Verifiable());
+                fixture.Assert(c => c.Operand8(o).ShouldBe(c.Byte));
             }
         }
 
@@ -74,18 +74,8 @@ namespace Retro.Net.Tests.Z80.Execute
             using (var fixture = new ExecuteFixture())
             {
                 fixture.Operation.OpCode(op).Operands(o).RandomLiterals();
-                fixture.With(c => c.Alu.Setup(GetAluExpression<Action<IAlu>>(f, c, o)).Verifiable());
+                fixture.With(c => c.Alu.Setup(c.AluCall(f, Operand.A, o)).Verifiable());
             }
-        }
-
-        private static Expression<TFunc> GetAluExpression<TFunc>(LambdaExpression f, ExecutionContext c, Operand o)
-        {
-            var method = (f.Body as MethodCallExpression)?.Method ?? throw new ArgumentException("not a method call");
-            var alu = Expression.Parameter(typeof(IAlu));
-            var call = method.GetParameters().Length == 2
-                ? Expression.Call(alu, method, Expression.Constant(c.Accumulator.A), Expression.Constant(c.ByteOperand(o)))
-                : Expression.Call(alu, method, Expression.Constant(c.ByteOperand(o)));
-            return Expression.Lambda<TFunc>(call, alu);
         }
     }
 }

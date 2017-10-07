@@ -1,4 +1,7 @@
-﻿namespace Retro.Net.Z80.State
+﻿using System;
+using Retro.Net.Util;
+
+namespace Retro.Net.Z80.State
 {
     /// <summary>
     /// The state of Intel 8080 registers A and F.
@@ -31,5 +34,13 @@
         /// The F register.
         /// </value>
         public byte F { get; }
+
+        /// <summary>
+        /// Gets the AF register.
+        /// </summary>
+        /// <value>
+        /// The AF register.
+        /// </value>
+        public ushort AF => BitConverterHelpers.To16Bit(A, F);
     }
 }

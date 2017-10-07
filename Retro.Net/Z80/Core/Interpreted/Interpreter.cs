@@ -156,11 +156,11 @@ namespace Retro.Net.Z80.Core.Interpreted
                     helper.Alu16BitOperation(alu.Add);
                     break;
 
-                case OpCode.AddCarry16:
+                case OpCode.AddWithCarry16:
                     helper.Alu16BitOperation(alu.AddWithCarry);
                     break;
 
-                case OpCode.SubtractCarry16:
+                case OpCode.SubtractWithCarry16:
                     helper.Alu16BitOperation(alu.SubtractWithCarry);
                     break;
 

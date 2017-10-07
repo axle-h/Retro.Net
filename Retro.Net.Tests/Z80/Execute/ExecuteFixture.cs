@@ -81,12 +81,7 @@ namespace Retro.Net.Tests.Z80.Execute
                 mock.Mock<IRuntimeConfig>().Setup(x => x.DebugMode).Returns(true);
                 mock.Mock<IPlatformConfig>().Setup(x => x.CpuMode).Returns(CpuMode.Z80);
                 
-                var af = new AccumulatorAndFlagsRegisterSet(new Intel8080FlagsRegister());
-                var gp = new GeneralPurposeRegisterSet();
-                gp.ResetToState(_registersFactory());
-                af.ResetToState(_accumulatorFactory());
-
-                var context = new ExecutionContext(mock, operation, gp, af);
+                var context = new ExecutionContext(mock, operation, _registersFactory(), _accumulatorFactory());
                 foreach (var setup in _setups)
                 {
                     setup(context);

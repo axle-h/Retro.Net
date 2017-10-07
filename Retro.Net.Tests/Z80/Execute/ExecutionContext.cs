@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using Autofac.Extras.Moq;
 using Moq;
 using Retro.Net.Memory;
@@ -7,13 +8,23 @@ using Retro.Net.Z80.Core;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
+using Retro.Net.Z80.State;
 
 namespace Retro.Net.Tests.Z80.Execute
 {
     public class ExecutionContext
     {
-        public ExecutionContext(AutoMock mock, Operation operation, GeneralPurposeRegisterSet registers, AccumulatorAndFlagsRegisterSet accumulator)
+        private readonly ushort _IX, _IY;
+
+        public ExecutionContext(AutoMock mock, Operation operation, GeneralPurposeRegisterState initialRegisters, AccumulatorAndFlagsRegisterState initialAccumulator)
         {
+            InitialRegisters = initialRegisters;
+            InitialAccumulator = initialAccumulator;
+            var accumulator = new AccumulatorAndFlagsRegisterSet(new Intel8080FlagsRegister());
+            var registers = new GeneralPurposeRegisterSet();
+            registers.ResetToState(initialRegisters);
+            accumulator.ResetToState(initialAccumulator);
+
             Operation = operation;
             Registers = registers;
             Accumulator = accumulator;
@@ -21,10 +32,10 @@ namespace Retro.Net.Tests.Z80.Execute
             Alu = mock.Mock<IAlu>();
             Mmu = mock.Mock<IMmu>();
             Peripherals = mock.Mock<IPeripheralManager>();
-                
+
             MockRegisters.SetupAllProperties();
-            MockRegisters.Object.IX = Rng.Word();
-            MockRegisters.Object.IY = Rng.Word();
+            MockRegisters.Object.IX = _IX = Rng.Word();
+            MockRegisters.Object.IY = _IY = Rng.Word();
             MockRegisters.Object.IXl = Rng.Byte();
             MockRegisters.Object.IXh = Rng.Byte();
             MockRegisters.Object.IYl = Rng.Byte();
@@ -57,6 +68,10 @@ namespace Retro.Net.Tests.Z80.Execute
             }
         }
 
+        public GeneralPurposeRegisterState InitialRegisters { get; }
+
+        public AccumulatorAndFlagsRegisterState InitialAccumulator { get; }
+
         public Operation Operation { get; }
 
         public GeneralPurposeRegisterSet Registers { get; }
@@ -85,7 +100,55 @@ namespace Retro.Net.Tests.Z80.Execute
 
         public ushort Word { get; } = Rng.Word();
 
-        public byte ByteOperand(Operand r)
+        public byte InitialRegister8(Operand r)
+        {
+            switch (r)
+            {
+                case Operand.A:
+                    return InitialAccumulator.A;
+                case Operand.B:
+                    return InitialRegisters.B;
+                case Operand.C:
+                    return InitialRegisters.C;
+                case Operand.D:
+                    return InitialRegisters.D;
+                case Operand.E:
+                    return InitialRegisters.E;
+                case Operand.F:
+                    return InitialAccumulator.F;
+                case Operand.H:
+                    return InitialRegisters.H;
+                case Operand.L:
+                    return InitialRegisters.L;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(r), r, "Must be an 8-bit register");
+            }
+        }
+
+        public ushort InitialRegister16(Operand r)
+        {
+            switch (r)
+            {
+                case Operand.AF:
+                    return InitialAccumulator.AF;
+                case Operand.BC:
+                    return InitialRegisters.BC;
+                case Operand.DE:
+                    return InitialRegisters.DE;
+                case Operand.HL:
+                    return InitialRegisters.HL;
+                case Operand.IX:
+                    return _IX;
+                case Operand.IY:
+                    return _IY;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(r), r, "Must be an 8-bit register");
+            }
+        }
+
+        public byte Operand8(Operand r)
         {
             switch (r)
             {
@@ -130,7 +193,7 @@ namespace Retro.Net.Tests.Z80.Execute
             }
         }
 
-        public ushort WordOperand(Operand r)
+        public ushort Operand16(Operand r)
         {
             switch (r)
             {
@@ -156,6 +219,28 @@ namespace Retro.Net.Tests.Z80.Execute
                 default:
                     throw new ArgumentOutOfRangeException(nameof(r), r, "Must be an 16-bit operand");
             }
+        }
+
+        public Expression<Func<IAlu, byte>> Alu8Call(LambdaExpression f, Operand o1, Operand? o2 = null) => GetAluExpression<Func<IAlu, byte>>(f, o1, o2);
+
+        public Expression<Func<IAlu, ushort>> Alu16Call(LambdaExpression f, Operand o1, Operand? o2 = null) => GetAluExpression<Func<IAlu, ushort>>(f, o1, o2);
+
+        public Expression<Action<IAlu>> AluCall(LambdaExpression f, Operand o1, Operand? o2 = null) => GetAluExpression<Action<IAlu>>(f, o1, o2);
+
+        private Expression<TFunc> GetAluExpression<TFunc>(LambdaExpression f, Operand o1, Operand? o2 = null)
+        {
+            var method = (f.Body as MethodCallExpression)?.Method ?? throw new ArgumentException("not a method call");
+            var alu = Expression.Parameter(typeof(IAlu));
+
+            var parameters = method.GetParameters();
+            var is16Bit = parameters[0].ParameterType == typeof(ushort);
+
+            Expression GetExpression(Operand o) => is16Bit ? Expression.Constant(Operand16(o)) : Expression.Constant(Operand8(o));
+
+            var call = method.GetParameters().Length == 2 && o2.HasValue
+                ? Expression.Call(alu, method, GetExpression(o1), GetExpression(o2.Value))
+                : Expression.Call(alu, method, GetExpression(o1));
+            return Expression.Lambda<TFunc>(call, alu);
         }
     }
 }

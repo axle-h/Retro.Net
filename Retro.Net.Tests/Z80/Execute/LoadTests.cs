@@ -13,7 +13,7 @@ namespace Retro.Net.Tests.Z80.Execute
             using (var fixture = new ExecuteFixture())
             {
                 fixture.Operation.OpCode(OpCode.Load).RandomRegister(out var o).Operand2(r).RandomLiterals();
-                fixture.Assert(c => c.ByteOperand(o).ShouldBe(c.ByteOperand(r)));
+                fixture.Assert(c => c.Operand8(o).ShouldBe(c.Operand8(r)));
             }
         }
 
@@ -24,7 +24,7 @@ namespace Retro.Net.Tests.Z80.Execute
             using (var fixture = new ExecuteFixture())
             {
                 fixture.Operation.OpCode(OpCode.Load16).Random16BitRegister(out var o).Operand2(r).RandomLiterals();
-                fixture.Assert(c => c.WordOperand(o).ShouldBe(c.WordOperand(r)));
+                fixture.Assert(c => c.Operand16(o).ShouldBe(c.Operand16(r)));
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Retro.Net.Z80.State
+﻿using Retro.Net.Util;
+
+namespace Retro.Net.Z80.State
 {
     /// <summary>
     /// The state of Intel 8080 general purpose registers B, C, D, E, H & L.
@@ -71,5 +73,29 @@
         /// The L register.
         /// </value>
         public byte L { get; }
+
+        /// <summary>
+        /// Gets the BC register.
+        /// </summary>
+        /// <value>
+        /// The BC register.
+        /// </value>
+        public ushort BC => BitConverterHelpers.To16Bit(B, C);
+
+        /// <summary>
+        /// Gets the DE register.
+        /// </summary>
+        /// <value>
+        /// The DE register.
+        /// </value>
+        public ushort DE => BitConverterHelpers.To16Bit(D, E);
+
+        /// <summary>
+        /// Gets the HL register.
+        /// </summary>
+        /// <value>
+        /// The HL register.
+        /// </value>
+        public ushort HL => BitConverterHelpers.To16Bit(H, L);
     }
 }

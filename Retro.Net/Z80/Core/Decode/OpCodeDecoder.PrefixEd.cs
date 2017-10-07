@@ -145,42 +145,42 @@ namespace Retro.Net.Z80.Core.Decode
                     _timer.Arithmetic16();
                     _operand1 = Operand.HL;
                     _operand2 = Operand.BC;
-                    return OpCode.AddCarry16;
+                    return OpCode.AddWithCarry16;
                 case PrefixEdOpCode.ADC_HL_DE:
                     _timer.Arithmetic16();
                     _operand1 = Operand.HL;
                     _operand2 = Operand.DE;
-                    return OpCode.AddCarry16;
+                    return OpCode.AddWithCarry16;
                 case PrefixEdOpCode.ADC_HL_HL:
                     _timer.Arithmetic16();
                     _operand1 = _operand2 = Operand.HL;
-                    return OpCode.AddCarry16;
+                    return OpCode.AddWithCarry16;
                 case PrefixEdOpCode.ADC_HL_SP:
                     _timer.Arithmetic16();
                     _operand1 = Operand.HL;
                     _operand2 = Operand.SP;
-                    return OpCode.AddCarry16;
+                    return OpCode.AddWithCarry16;
 
                 // SBC HL, ss
                 case PrefixEdOpCode.SBC_HL_BC:
                     _timer.Arithmetic16();
                     _operand1 = Operand.HL;
                     _operand2 = Operand.BC;
-                    return OpCode.SubtractCarry16;
+                    return OpCode.SubtractWithCarry16;
                 case PrefixEdOpCode.SBC_HL_DE:
                     _timer.Arithmetic16();
                     _operand1 = Operand.HL;
                     _operand2 = Operand.DE;
-                    return OpCode.SubtractCarry16;
+                    return OpCode.SubtractWithCarry16;
                 case PrefixEdOpCode.SBC_HL_HL:
                     _timer.Arithmetic16();
                     _operand1 = _operand2 = Operand.HL;
-                    return OpCode.SubtractCarry16;
+                    return OpCode.SubtractWithCarry16;
                 case PrefixEdOpCode.SBC_HL_SP:
                     _timer.Arithmetic16();
                     _operand1 = Operand.HL;
                     _operand2 = Operand.SP;
-                    return OpCode.SubtractCarry16;
+                    return OpCode.SubtractWithCarry16;
 
                 // ********* General-Purpose Arithmetic *********
                 // NEG

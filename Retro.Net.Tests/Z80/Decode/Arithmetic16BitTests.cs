@@ -45,7 +45,7 @@ namespace Retro.Net.Tests.Z80.Decode
         {
             using (var fixture = new DecodeFixture(4, 15, PrimaryOpCode.Prefix_ED, op).ThrowUnlessZ80())
             {
-                fixture.Expected.OpCode(OpCode.AddCarry16).Operands(Operand.HL, s);
+                fixture.Expected.OpCode(OpCode.AddWithCarry16).Operands(Operand.HL, s);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Retro.Net.Tests.Z80.Decode
         {
             using (var fixture = new DecodeFixture(4, 15, PrimaryOpCode.Prefix_ED, op).ThrowUnlessZ80())
             {
-                fixture.Expected.OpCode(OpCode.SubtractCarry16).Operands(Operand.HL, s);
+                fixture.Expected.OpCode(OpCode.SubtractWithCarry16).Operands(Operand.HL, s);
             }
         }
 

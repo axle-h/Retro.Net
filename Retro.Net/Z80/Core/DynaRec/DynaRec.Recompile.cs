@@ -112,11 +112,11 @@ namespace Retro.Net.Z80.Core.DynaRec
                     yield return WriteOperand1(operation, Expression.Call(Alu, AluAdd16, ReadOperand1(operation, true), ReadOperand2(operation, true)), true);
                     break;
 
-                case OpCode.AddCarry16:
+                case OpCode.AddWithCarry16:
                     yield return WriteOperand1(operation, Expression.Call(Alu, AluAdd16WithCarry, ReadOperand1(operation, true), ReadOperand2(operation, true)), true);
                     break;
 
-                case OpCode.SubtractCarry16:
+                case OpCode.SubtractWithCarry16:
                     yield return WriteOperand1(operation, Expression.Call(Alu, AluSubtract16WithCarry, ReadOperand1(operation, true), ReadOperand2(operation, true)), true);
                     break;
 
