@@ -74,7 +74,7 @@ namespace Retro.Net.Tests.Z80.Execute
             using (var fixture = new ExecuteFixture())
             {
                 fixture.Operation.OpCode(op).Operands(o).RandomLiterals();
-                fixture.With(c => c.Alu.Setup(c.AluCall(f, Operand.A, o)).Verifiable());
+                fixture.With(c => c.Alu.Setup(c.AluAction(f, Operand.A, o)).Verifiable());
             }
         }
     }

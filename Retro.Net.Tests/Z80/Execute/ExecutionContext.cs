@@ -253,7 +253,7 @@ namespace Retro.Net.Tests.Z80.Execute
 
         public Expression<Func<IAlu, ushort>> Alu16Call(LambdaExpression f, Operand o1, Operand? o2 = null) => GetAluExpression<Func<IAlu, ushort>>(f, o1, o2);
 
-        public Expression<Action<IAlu>> AluCall(LambdaExpression f, Operand o1, Operand? o2 = null) => GetAluExpression<Action<IAlu>>(f, o1, o2);
+        public Expression<Action<IAlu>> AluAction(LambdaExpression f, Operand o1, Operand? o2 = null) => GetAluExpression<Action<IAlu>>(f, o1, o2);
 
         private Expression<TFunc> GetAluExpression<TFunc>(LambdaExpression f, Operand o1, Operand? o2 = null)
         {
