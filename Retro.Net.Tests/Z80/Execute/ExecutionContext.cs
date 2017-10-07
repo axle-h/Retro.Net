@@ -9,6 +9,8 @@ using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
 using Retro.Net.Z80.State;
+using Retro.Net.Z80.Util;
+using Shouldly;
 
 namespace Retro.Net.Tests.Z80.Execute
 {
@@ -20,10 +22,15 @@ namespace Retro.Net.Tests.Z80.Execute
         {
             InitialRegisters = initialRegisters;
             InitialAccumulator = initialAccumulator;
-            var accumulator = new AccumulatorAndFlagsRegisterSet(new Intel8080FlagsRegister());
+
+            Flags = mock.Mock<IFlagsRegister>();
+            Flags.SetupAllProperties();
+
+            var accumulator = new AccumulatorAndFlagsRegisterSet(Flags.Object);
             var registers = new GeneralPurposeRegisterSet();
             registers.ResetToState(initialRegisters);
             accumulator.ResetToState(initialAccumulator);
+            Flags.ResetCalls(); // Don't want the initialization calls hanging around for verification.
 
             Operation = operation;
             Registers = registers;
@@ -79,7 +86,9 @@ namespace Retro.Net.Tests.Z80.Execute
         public AccumulatorAndFlagsRegisterSet Accumulator { get; }
 
         public Mock<IRegisters> MockRegisters { get; }
-        
+
+        public Mock<IFlagsRegister> Flags { get; }
+
         public Mock<IAlu> Alu { get; }
 
         public Mock<IMmu> Mmu { get; }
@@ -219,6 +228,25 @@ namespace Retro.Net.Tests.Z80.Execute
                 default:
                     throw new ArgumentOutOfRangeException(nameof(r), r, "Must be an 16-bit operand");
             }
+        }
+
+        public void VerifyFlag(Expression<Func<IFlagsRegister, bool>> flag, bool? value)
+        {
+            var flagsExpression = Expression.Parameter(typeof(IFlagsRegister), "flags");
+            var property = flagsExpression.GetPropertyExpression(flag);
+            var getLambda = Expression.Lambda<Func<IFlagsRegister, bool>>(property, flagsExpression);
+
+            if (!value.HasValue)
+            {
+                Flags.Verify(getLambda, Times.Never);
+                return;
+            }
+
+            var setExpression = Expression.Assign(property, Expression.Constant(value.Value));
+            var setLambda = Expression.Lambda<Action<IFlagsRegister>>(setExpression, flagsExpression);
+
+            Flags.VerifySet(setLambda.Compile(), Times.AtLeastOnce);
+            getLambda.Compile()(Flags.Object).ShouldBe(value.Value);
         }
 
         public Expression<Func<IAlu, byte>> Alu8Call(LambdaExpression f, Operand o1, Operand? o2 = null) => GetAluExpression<Func<IAlu, byte>>(f, o1, o2);

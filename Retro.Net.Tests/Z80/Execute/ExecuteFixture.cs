@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Autofac.Extras.Moq;
 using Castle.Components.DictionaryAdapter;
 using Retro.Net.Tests.Util;
@@ -63,6 +64,23 @@ namespace Retro.Net.Tests.Z80.Execute
         public ExecuteFixture Assert(params Action<ExecutionContext>[] assertions)
         {
             _assertions.AddRange(assertions);
+            return this;
+        }
+
+        public ExecuteFixture AssertFlags(Func<ExecutionContext, byte> result = null, bool? sign = null, bool? zero = null,
+            bool? halfCarry = null, bool? parityOverflow = null, bool? subtract = null, bool? carry = null)
+        {
+            if (result != null)
+            {
+                Assert(c => c.Flags.Verify(x => x.SetUndocumentedFlags(result(c))));
+            }
+
+            Assert(c => c.VerifyFlag(x => x.Sign, sign));
+            Assert(c => c.VerifyFlag(x => x.Zero, zero));
+            Assert(c => c.VerifyFlag(x => x.HalfCarry, halfCarry));
+            Assert(c => c.VerifyFlag(x => x.ParityOverflow, parityOverflow));
+            Assert(c => c.VerifyFlag(x => x.Subtract, subtract));
+            Assert(c => c.VerifyFlag(x => x.Carry, carry));
             return this;
         }
 

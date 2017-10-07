@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -9,7 +7,7 @@ namespace Retro.Net.Z80.Util
     /// <summary>
     /// Extension methods for expression trees.
     /// </summary>
-    internal static class ExpressionHelpers
+    public static class ExpressionHelpers
     {
         /// <summary>
         /// Gets the property expression defined by the specified lambda and instance expressions.
