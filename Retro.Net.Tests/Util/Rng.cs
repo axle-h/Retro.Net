@@ -48,13 +48,16 @@ namespace Retro.Net.Tests.Util
             {
                 ulong result;
                 var buffer = new byte[sizeof(ulong)];
+                // Prevent a modolo bias; see https://stackoverflow.com/a/10984975/238419
+                //In the worst case, the expected number of calls is 2 (though usually it's much closer to 1) so this loop doesn't really hurt performance at all.
+                var threshold = ulong.MaxValue - (ulong.MaxValue % range + 1) % range;
                 do
                 {
                     r.NextBytes(buffer);
                     result = BitConverter.ToUInt64(buffer, 0);
-                } while (result > ulong.MaxValue - (ulong.MaxValue % range + 1) % range);
+                } while (result > threshold);
 
-                return result;
+                return result % range + min;
             });
         }
 

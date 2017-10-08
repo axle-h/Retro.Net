@@ -369,8 +369,7 @@ namespace Retro.Net.Z80.Core.DynaRec
             var expressions = GetSearchExpressions(decrement);
             var iterationExpressions = new[]
                                        {
-                                           Expression.IfThen(Expression.OrElse(Expression.Equal(BC, Expression.Constant((ushort) 0)),
-                                                                               Zero),
+                                           Expression.IfThen(Expression.OrElse(Expression.Equal(BC, Expression.Constant((ushort) 0)), Zero),
                                                              Expression.Break(breakLabel)),
                                            AddDynamicTimings(5, 21),
                                            GetMemoryRefreshDeltaExpression(Expression.Constant(2))
