@@ -165,7 +165,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                     else
                     {
                         _usesDynamicTimings = true;
-                        yield return Expression.IfThen(GetFlagTestExpression(operation.FlagTest), Expression.Block(JumpToDisplacement(operation), GetDynamicTimings(1, 5)));
+                        yield return Expression.IfThen(GetFlagTestExpression(operation.FlagTest), Expression.Block(JumpToDisplacement(operation), AddDynamicTimings(1, 5)));
                     }
 
                     // Relative jump so must also sync the PC.
@@ -175,7 +175,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                 case OpCode.DecrementJumpRelativeIfNonZero:
                     _usesDynamicTimings = true;
                     yield return Expression.Assign(B, Expression.Convert(Expression.Decrement(Expression.Convert(B, typeof (int))), typeof (byte)));
-                    yield return Expression.IfThen(Expression.NotEqual(B, Expression.Constant((byte) 0)), Expression.Block(JumpToDisplacement(operation), GetDynamicTimings(1, 5)));
+                    yield return Expression.IfThen(Expression.NotEqual(B, Expression.Constant((byte) 0)), Expression.Block(JumpToDisplacement(operation), AddDynamicTimings(1, 5)));
 
                     // Relative jump so must also sync the PC.
                     yield return SyncProgramCounter(block);
@@ -193,7 +193,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                     else
                     {
                         _usesDynamicTimings = true;
-                        var trueBlock = Expression.Block(PushSP, WritePCToStack, Expression.Assign(PC, ReadOperand1(operation)), GetDynamicTimings(2, 7));
+                        var trueBlock = Expression.Block(PushSP, WritePCToStack, Expression.Assign(PC, ReadOperand1(operation)), AddDynamicTimings(2, 7));
                         yield return Expression.IfThen(GetFlagTestExpression(operation.FlagTest), trueBlock);
                     }
                     break;
@@ -207,7 +207,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                     else
                     {
                         _usesDynamicTimings = true;
-                        var trueBlock = Expression.Block(ReadPCFromStack, PopSP, GetDynamicTimings(2, 6));
+                        var trueBlock = Expression.Block(ReadPCFromStack, PopSP, AddDynamicTimings(2, 6));
                         yield return Expression.IfThenElse(GetFlagTestExpression(operation.FlagTest), trueBlock, SyncProgramCounter(block));
                     }
                     break;

@@ -29,6 +29,7 @@ namespace Retro.Net.Z80.Core.DynaRec
         /// This is required for instructions that don't have compile time known timings e.g. LDIR.
         /// </summary>
         private readonly ParameterExpression DynamicTimer;
+        private readonly MethodCallExpression GetDynamicTimings;
         private readonly MethodInfo DynamicTimerAdd;
 
         /// <summary>
@@ -163,6 +164,7 @@ namespace Retro.Net.Z80.Core.DynaRec
             LocalWord = Expression.Parameter(typeof (ushort), "w");
             DynamicTimer = Expression.Parameter(typeof (IInstructionTimingsBuilder), "timer");
             DynamicTimerAdd = ExpressionHelpers.GetMethodInfo<IInstructionTimingsBuilder, int, int>((dt, m, t) => dt.Add(m, t));
+            GetDynamicTimings = Expression.Call(DynamicTimer, ExpressionHelpers.GetMethodInfo<IInstructionTimingsBuilder>(dt => dt.GetInstructionTimings()));
 
             AccumulatorAndResult = Expression.Parameter(typeof (AccumulatorAndResult), "result");
             AccumulatorAndResult_Accumulator = AccumulatorAndResult.GetPropertyExpression<AccumulatorAndResult, byte>(r => r.Accumulator);

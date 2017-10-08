@@ -153,21 +153,17 @@ namespace Retro.Net.Z80.Core.DynaRec
                 // Update Z80 specific memory refresh register
                 yield return GetMemoryRefreshDeltaExpression(blockLengthExpression);
             }
-
-            var returnTarget = Expression.Label(typeof (InstructionTimings), "InstructionTimings_Return");
-
-            // Return the dynamic timings.
+            
             if (_usesDynamicTimings)
             {
-                var getInstructionTimings =
-                    ExpressionHelpers.GetMethodInfo<IInstructionTimingsBuilder>(dt => dt.GetInstructionTimings());
-                yield return
-                    Expression.Return(returnTarget,
-                                      Expression.Call(DynamicTimer, getInstructionTimings),
-                                      typeof (InstructionTimings));
+                // Return the dynamic timings.
+                yield return GetDynamicTimings;
             }
-
-            yield return Expression.Label(returnTarget, Expression.Constant(default(InstructionTimings)));
+            else
+            {
+                // Return default timings.
+                yield return Expression.Constant(default(InstructionTimings));
+            }
         }
     }
 }

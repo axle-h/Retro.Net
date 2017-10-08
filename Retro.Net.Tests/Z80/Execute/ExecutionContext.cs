@@ -18,7 +18,7 @@ namespace Retro.Net.Tests.Z80.Execute
     {
         private readonly ushort _IX, _IY;
 
-        public ExecutionContext(AutoMock mock, Operation operation, GeneralPurposeRegisterState initialRegisters, AccumulatorAndFlagsRegisterState initialAccumulator)
+        public ExecutionContext(AutoMock mock, Operation operation, int blockLength, GeneralPurposeRegisterState initialRegisters, AccumulatorAndFlagsRegisterState initialAccumulator)
         {
             InitialRegisters = initialRegisters;
             InitialAccumulator = initialAccumulator;
@@ -30,16 +30,16 @@ namespace Retro.Net.Tests.Z80.Execute
             var registers = new GeneralPurposeRegisterSet();
             registers.ResetToState(initialRegisters);
             accumulator.ResetToState(initialAccumulator);
-            Flags.ResetCalls(); // Don't want the initialization calls hanging around for verification.
 
             Operation = operation;
+            BlockLength = blockLength;
             Registers = registers;
             Accumulator = accumulator;
-            MockRegisters = mock.Mock<IRegisters>();
             Alu = mock.Mock<IAlu>();
             Mmu = mock.Mock<IMmu>();
             Peripherals = mock.Mock<IPeripheralManager>();
 
+            MockRegisters = mock.Mock<IRegisters>();
             MockRegisters.SetupAllProperties();
             MockRegisters.Object.IX = _IX = Rng.Word();
             MockRegisters.Object.IY = _IY = Rng.Word();
@@ -49,8 +49,8 @@ namespace Retro.Net.Tests.Z80.Execute
             MockRegisters.Object.IYh = Rng.Byte();
             MockRegisters.Object.I = Rng.Byte();
             MockRegisters.Object.R = Rng.Byte();
-            MockRegisters.Object.StackPointer = Rng.Word();
-            MockRegisters.Object.ProgramCounter = ProgramCounter = Rng.Word();
+            MockRegisters.Object.StackPointer = InitialStackPointer = Rng.Word();
+            MockRegisters.Object.ProgramCounter = InitialProgramCounter = Rng.Word();
             MockRegisters.Setup(x => x.GeneralPurposeRegisters).Returns(registers);
             MockRegisters.Setup(x => x.AccumulatorAndFlagsRegisters).Returns(accumulator);
 
@@ -73,6 +73,10 @@ namespace Retro.Net.Tests.Z80.Execute
             {
                 Mmu.Setup(m => m.ReadByte(It.Is<ushort>(a => a == Operation.WordLiteral))).Returns(LiteralIndexedByte).Verifiable();
             }
+
+            // Don't want the initialization calls hanging around for verification.
+            Flags.ResetCalls(); 
+            MockRegisters.ResetCalls();
         }
 
         public GeneralPurposeRegisterState InitialRegisters { get; }
@@ -80,6 +84,8 @@ namespace Retro.Net.Tests.Z80.Execute
         public AccumulatorAndFlagsRegisterState InitialAccumulator { get; }
 
         public Operation Operation { get; }
+
+        public int BlockLength { get; }
 
         public GeneralPurposeRegisterSet Registers { get; }
 
@@ -95,7 +101,19 @@ namespace Retro.Net.Tests.Z80.Execute
 
         public Mock<IPeripheralManager> Peripherals { get; }
 
-        public ushort ProgramCounter { get; }
+        public ushort InitialProgramCounter { get; }
+
+        public ushort SyncedProgramCounter => unchecked ((ushort) (InitialProgramCounter + BlockLength));
+
+        public ushort InitialStackPointer { get; }
+
+        public ushort PushedStackPointer => unchecked((ushort) (InitialStackPointer - 2));
+
+        public ushort PoppedStackPointer => unchecked((ushort)(InitialStackPointer + 2));
+
+        public ushort ProgramCounter => MockRegisters.Object.ProgramCounter;
+
+        public ushort StackPointer => MockRegisters.Object.StackPointer;
 
         public byte LiteralIndexedByte { get; } = Rng.Byte();
 
@@ -151,6 +169,9 @@ namespace Retro.Net.Tests.Z80.Execute
                     return _IX;
                 case Operand.IY:
                     return _IY;
+
+                case Operand.SP:
+                    return StackPointer;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(r), r, "Must be an 8-bit register");

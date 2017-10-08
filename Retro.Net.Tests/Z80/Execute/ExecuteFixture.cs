@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Autofac.Extras.Moq;
 using Castle.Components.DictionaryAdapter;
 using Retro.Net.Tests.Util;
@@ -12,10 +11,8 @@ using Retro.Net.Z80.Core;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Core.DynaRec;
 using Retro.Net.Z80.Core.Interpreted;
-using Retro.Net.Z80.Registers;
 using Retro.Net.Z80.State;
 using Shouldly;
-using Xunit;
 
 namespace Retro.Net.Tests.Z80.Execute
 {
@@ -99,7 +96,7 @@ namespace Retro.Net.Tests.Z80.Execute
                 mock.Mock<IRuntimeConfig>().Setup(x => x.DebugMode).Returns(true);
                 mock.Mock<IPlatformConfig>().Setup(x => x.CpuMode).Returns(CpuMode.Z80);
                 
-                var context = new ExecutionContext(mock, operation, _registersFactory(), _accumulatorFactory());
+                var context = new ExecutionContext(mock, operation, decodedBlock.Length, _registersFactory(), _accumulatorFactory());
                 foreach (var setup in _setups)
                 {
                     setup(context);
@@ -107,7 +104,7 @@ namespace Retro.Net.Tests.Z80.Execute
                 
                 var block = mock.Create<TInstructionBlockFactory>().Build(decodedBlock);
                 var assertions = RunAndYieldAssertions(block, decodedBlock, context);
-                block.ShouldSatisfyAllConditions(typeof(TInstructionBlockFactory).ToString(), assertions.ToArray());
+                block.ShouldSatisfyAllConditions($"{typeof(TInstructionBlockFactory)}: {block.DebugInfo}", assertions.ToArray());
             }
         }
 
@@ -124,8 +121,10 @@ namespace Retro.Net.Tests.Z80.Execute
             yield return () => timings.ShouldBe(expectedTimings);
 
             // TODO: also assert I & R on Z80
-            var expectedProgramCounter = unchecked((ushort)(context.ProgramCounter + decodedBlock.Length));
-            yield return () => context.MockRegisters.VerifySet(x => x.ProgramCounter = expectedProgramCounter);
+            if (_halt)
+            {
+                yield return () => context.MockRegisters.VerifySet(x => x.ProgramCounter = context.SyncedProgramCounter);
+            }
 
             foreach (var assertion in _assertions)
             {

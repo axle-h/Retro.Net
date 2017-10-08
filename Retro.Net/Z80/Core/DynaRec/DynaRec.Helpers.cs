@@ -277,7 +277,7 @@ namespace Retro.Net.Z80.Core.DynaRec
         /// <param name="mCycles">The machine cycles.</param>
         /// <param name="tStates">The t-states.</param>
         /// <returns></returns>
-        private Expression GetDynamicTimings(int mCycles, int tStates)
+        private Expression AddDynamicTimings(int mCycles, int tStates)
             => Expression.Call(DynamicTimer, DynamicTimerAdd, Expression.Constant(mCycles), Expression.Constant(tStates));
 
         /// <summary>
@@ -336,7 +336,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                                                  Expression.PreDecrementAssign(BC),
                                                  Expression.IfThen(Expression.Equal(BC, Expression.Constant((ushort) 0)),
                                                                    Expression.Break(breakLabel)),
-                                                 GetDynamicTimings(5, 21),
+                                                 AddDynamicTimings(5, 21),
                                                  GetMemoryRefreshDeltaExpression(Expression.Constant(2))),
                                 // This function actually decreases the PC by two for each 'loop' hence need more refresh cycles.
                                 breakLabel);
@@ -372,7 +372,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                                            Expression.IfThen(Expression.OrElse(Expression.Equal(BC, Expression.Constant((ushort) 0)),
                                                                                Zero),
                                                              Expression.Break(breakLabel)),
-                                           GetDynamicTimings(5, 21),
+                                           AddDynamicTimings(5, 21),
                                            GetMemoryRefreshDeltaExpression(Expression.Constant(2))
                                        };
             return Expression.Loop(Expression.Block(expressions.Concat(iterationExpressions).ToArray()), breakLabel);
@@ -411,7 +411,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                                        {
                                            Expression.IfThen(Expression.Equal(B, Expression.Constant((byte) 0)),
                                                              Expression.Break(breakLabel)),
-                                           GetDynamicTimings(5, 21),
+                                           AddDynamicTimings(5, 21),
                                            GetMemoryRefreshDeltaExpression(Expression.Constant(2))
                                        };
 
@@ -451,7 +451,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                                        {
                                            Expression.IfThen(Expression.Equal(B, Expression.Constant((byte) 0)),
                                                              Expression.Break(breakLabel)),
-                                           GetDynamicTimings(5, 21),
+                                           AddDynamicTimings(5, 21),
                                            GetMemoryRefreshDeltaExpression(Expression.Constant(2))
                                        };
 
