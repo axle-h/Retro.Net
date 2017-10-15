@@ -21,8 +21,8 @@ namespace Retro.Net.Tests.Z80.Execute
             using (var fixture = new ExecuteFixture())
             {
                 fixture.Operation.OpCode(op);
-                fixture.With(c => c.Mmu.Setup(x => x.ReadByte(c.Registers.HL)).Returns(c.IndexedByte).Verifiable());
-                fixture.Assert(c => c.Alu.Verify(x => x.Compare(c.Accumulator.A, c.IndexedByte)),
+                fixture.With(c => c.Mmu.Setup(x => x.ReadByte(c.Registers.HL)).Returns(c.Byte).Verifiable());
+                fixture.Assert(c => c.Alu.Verify(x => x.Compare(c.Accumulator.A, c.Byte)),
                     c => c.Registers.BC.ShouldBe(unchecked((ushort) (c.InitialRegister16(Operand.BC) - 1))));
 
                 if (decrement)

@@ -34,7 +34,6 @@
         mnn,
         nn,
         n,
-        d,
 
         // Z80 indexes
         IX,

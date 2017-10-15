@@ -53,27 +53,7 @@ namespace Retro.Net.Tests.Z80.Execute
             MockRegisters.Object.ProgramCounter = InitialProgramCounter = Rng.Word();
             MockRegisters.Setup(x => x.GeneralPurposeRegisters).Returns(registers);
             MockRegisters.Setup(x => x.AccumulatorAndFlagsRegisters).Returns(accumulator);
-
-            if (Operation.Operand1 == Operand.mHL || Operation.Operand2 == Operand.mHL)
-            {
-                Mmu.Setup(m => m.ReadByte(It.Is<ushort>(a => a == registers.HL))).Returns(IndexedByte).Verifiable();
-            }
-
-            if (Operation.Operand1 == Operand.mIXd || Operation.Operand2 == Operand.mIXd)
-            {
-                Mmu.Setup(m => m.ReadByte(It.Is<ushort>(a => a == MockRegisters.Object.IX + operation.Displacement))).Returns(IndexedXByte).Verifiable();
-            }
-
-            if (Operation.Operand1 == Operand.mIYd || Operation.Operand2 == Operand.mIYd)
-            {
-                Mmu.Setup(m => m.ReadByte(It.Is<ushort>(a => a == MockRegisters.Object.IY + operation.Displacement))).Returns(IndexedYByte).Verifiable();
-            }
-
-            if (Operation.Operand1 == Operand.mnn || Operation.Operand2 == Operand.mnn)
-            {
-                Mmu.Setup(m => m.ReadByte(It.Is<ushort>(a => a == Operation.WordLiteral))).Returns(LiteralIndexedByte).Verifiable();
-            }
-
+            
             // Don't want the initialization calls hanging around for verification.
             Flags.ResetCalls(); 
             MockRegisters.ResetCalls();
@@ -114,15 +94,7 @@ namespace Retro.Net.Tests.Z80.Execute
         public ushort ProgramCounter => MockRegisters.Object.ProgramCounter;
 
         public ushort StackPointer => MockRegisters.Object.StackPointer;
-
-        public byte LiteralIndexedByte { get; } = Rng.Byte();
-
-        public byte IndexedByte { get; } = Rng.Byte();
-
-        public byte IndexedXByte { get; } = Rng.Byte();
-
-        public byte IndexedYByte { get; } = Rng.Byte();
-
+        
         public byte Byte { get; } = Rng.Byte();
 
         public ushort Word { get; } = Rng.Word();
@@ -198,6 +170,7 @@ namespace Retro.Net.Tests.Z80.Execute
                     return Registers.H;
                 case Operand.L:
                     return Registers.L;
+
                 case Operand.IXl:
                     return MockRegisters.Object.IXl;
                 case Operand.IYl:
@@ -207,16 +180,13 @@ namespace Retro.Net.Tests.Z80.Execute
                 case Operand.IYh:
                     return MockRegisters.Object.IYh;
 
+                case Operand.I:
+                    return MockRegisters.Object.I;
+                case Operand.R:
+                    return MockRegisters.Object.R;
+                    
                 case Operand.n:
                     return Operation.ByteLiteral;
-                case Operand.mnn:
-                    return LiteralIndexedByte;
-                case Operand.mHL:
-                    return IndexedByte;
-                case Operand.mIXd:
-                    return IndexedXByte;
-                case Operand.mIYd:
-                    return IndexedYByte;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(r), r, "Must be an 8-bit operand");
@@ -245,6 +215,8 @@ namespace Retro.Net.Tests.Z80.Execute
 
                 case Operand.nn:
                     return Operation.WordLiteral;
+                case Operand.SPd:
+                    return (ushort) (MockRegisters.Object.StackPointer + Operation.Displacement);
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(r), r, "Must be an 16-bit operand");

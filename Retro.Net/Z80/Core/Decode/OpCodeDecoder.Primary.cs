@@ -1116,30 +1116,25 @@ namespace Retro.Net.Z80.Core.Decode
 
                 case PrimaryOpCode.JR:
                     _timer.MmuByte().ApplyDisplacement();
-                    _operand1 = Operand.d;
                     _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
                     return OpCode.JumpRelative;
                 case PrimaryOpCode.JR_C:
                     _timer.MmuByte();
-                    _operand1 = Operand.d;
                     _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
                     _flagTest = FlagTest.Carry;
                     return OpCode.JumpRelative;
                 case PrimaryOpCode.JR_NC:
                     _timer.MmuByte();
-                    _operand1 = Operand.d;
                     _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
                     _flagTest = FlagTest.NotCarry;
                     return OpCode.JumpRelative;
                 case PrimaryOpCode.JR_Z:
                     _timer.MmuByte();
-                    _operand1 = Operand.d;
                     _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
                     _flagTest = FlagTest.Zero;
                     return OpCode.JumpRelative;
                 case PrimaryOpCode.JR_NZ:
                     _timer.MmuByte();
-                    _operand1 = Operand.d;
                     _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
                     _flagTest = FlagTest.NotZero;
                     return OpCode.JumpRelative;
@@ -1159,7 +1154,6 @@ namespace Retro.Net.Z80.Core.Decode
                     }
 
                     _timer.Extend(1).MmuByte();
-                    _operand1 = Operand.d;
                     _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
                     return OpCode.DecrementJumpRelativeIfNonZero;
 
