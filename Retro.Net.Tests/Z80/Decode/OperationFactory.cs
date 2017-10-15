@@ -54,9 +54,28 @@ namespace Retro.Net.Tests.Z80.Decode
             return this;
         }
 
+        public OperationFactory RandomRegister2(out Operand o)
+        {
+            o = _operand2 = Rng.Pick(Registers);
+            return this;
+        }
+
         public OperationFactory Random16BitRegister(out Operand o)
         {
             o = _operand1 = Rng.Pick(Registers16);
+            return this;
+        }
+
+        public OperationFactory Random16BitRegister2(out Operand o)
+        {
+            o = _operand2 = Rng.Pick(Registers16);
+            return this;
+        }
+
+        public OperationFactory Random16BitRegisters(out Operand o1, out Operand o2)
+        {
+            o1 = _operand1 = Rng.Pick(Registers16);
+            o2 = _operand2 = Rng.Pick(Registers16);
             return this;
         }
 

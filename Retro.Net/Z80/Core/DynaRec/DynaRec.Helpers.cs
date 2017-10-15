@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Retro.Net.Z80.Core.Decode;
-using Retro.Net.Z80.Util;
 
 namespace Retro.Net.Z80.Core.DynaRec
 {
@@ -39,6 +38,8 @@ namespace Retro.Net.Z80.Core.DynaRec
         /// <exception cref="System.ArgumentOutOfRangeException">null</exception>
         private Expression ReadOperand(Operation operation, Operand operand, bool is16Bit)
         {
+            Expression MmuRead(Expression arg) => Expression.Call(Mmu, is16Bit ? MmuReadWord : MmuReadByte, arg);
+
             switch (operand)
             {
                 case Operand.A:
@@ -68,28 +69,23 @@ namespace Retro.Net.Z80.Core.DynaRec
                 case Operand.SP:
                     return SP;
                 case Operand.mHL:
-                    return Expression.Call(Mmu, is16Bit ? MmuReadWord : MmuReadByte, HL);
+                    return MmuRead(HL);
                 case Operand.mBC:
-                    return Expression.Call(Mmu, is16Bit ? MmuReadWord : MmuReadByte, BC);
+                    return MmuRead(BC);
                 case Operand.mDE:
-                    return Expression.Call(Mmu, is16Bit ? MmuReadWord : MmuReadByte, DE);
+                    return MmuRead(DE);
                 case Operand.mSP:
-                    return Expression.Call(Mmu, is16Bit ? MmuReadWord : MmuReadByte, SP);
+                    return MmuRead(SP);
                 case Operand.mnn:
-                    return Expression.Call(Mmu, is16Bit ? MmuReadWord : MmuReadByte, Expression.Constant(operation.WordLiteral));
+                    return MmuRead(Expression.Constant(operation.WordLiteral));
                 case Operand.nn:
                     return Expression.Constant(operation.WordLiteral);
                 case Operand.n:
                     return Expression.Constant(operation.ByteLiteral);
-                case Operand.d:
-                    return Expression.Convert(Expression.Constant((sbyte) operation.ByteLiteral), typeof (int));
                 case Operand.IX:
                     return IX;
                 case Operand.mIXd:
-                    return Expression.Call(Mmu,
-                        is16Bit ? MmuReadWord : MmuReadByte,
-                        Expression.Convert(Expression.Add(Expression.Convert(IX, typeof (int)), Expression.Constant((int) operation.Displacement)),
-                                           typeof (ushort)));
+                    return MmuRead(Expression.Convert(Expression.Add(Expression.Convert(IX, typeof (int)), Expression.Constant((int) operation.Displacement)), typeof (ushort)));
                 case Operand.IXl:
                     return IXl;
                 case Operand.IXh:
@@ -97,10 +93,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                 case Operand.IY:
                     return IY;
                 case Operand.mIYd:
-                    return Expression.Call(Mmu,
-                        is16Bit ? MmuReadWord : MmuReadByte,
-                        Expression.Convert(Expression.Add(Expression.Convert(IY, typeof (int)), Expression.Constant((int) operation.Displacement)),
-                                           typeof (ushort)));
+                    return MmuRead(Expression.Convert(Expression.Add(Expression.Convert(IY, typeof (int)), Expression.Constant((int) operation.Displacement)), typeof (ushort)));
                 case Operand.IYl:
                     return IYl;
                 case Operand.IYh:
@@ -110,14 +103,9 @@ namespace Retro.Net.Z80.Core.DynaRec
                 case Operand.R:
                     return R;
                 case Operand.mCl:
-                    return Expression.Call(Mmu,
-                                           is16Bit ? MmuReadWord : MmuReadByte,
-                                           Expression.Add(Expression.Convert(C, typeof (ushort)),
-                                                          Expression.Constant((ushort) 0xff00)));
+                    return MmuRead(Expression.Add(Expression.Convert(C, typeof (ushort)), Expression.Constant((ushort) 0xff00)));
                 case Operand.mnl:
-                    return Expression.Call(Mmu,
-                                           is16Bit ? MmuReadWord : MmuReadByte,
-                                           Expression.Constant((ushort) (operation.ByteLiteral + 0xff00)));
+                    return MmuRead(Expression.Constant((ushort) (operation.ByteLiteral + 0xff00)));
                 case Operand.SPd:
                     return Expression.Call(Alu, AluAddDisplacement, SP, Expression.Constant(operation.Displacement));
 
@@ -156,6 +144,8 @@ namespace Retro.Net.Z80.Core.DynaRec
         /// <returns></returns>
         private Expression WriteOperand(Operation operation, Expression value, Operand operand, bool is16Bit)
         {
+            Expression MmuWrite(Expression address) => Expression.Call(Mmu, is16Bit ? MmuWriteWord : MmuWriteByte, address, value);
+
             switch (operand)
             {
                 case Operand.A:
@@ -185,26 +175,19 @@ namespace Retro.Net.Z80.Core.DynaRec
                 case Operand.AF:
                     return Expression.Assign(AF, value);
                 case Operand.mHL:
-                    return Expression.Call(Mmu, is16Bit ? MmuWriteWord : MmuWriteByte, HL, value);
+                    return MmuWrite(HL);
                 case Operand.mBC:
-                    return Expression.Call(Mmu, is16Bit ? MmuWriteWord : MmuWriteByte, BC, value);
+                    return MmuWrite(BC);
                 case Operand.mDE:
-                    return Expression.Call(Mmu, is16Bit ? MmuWriteWord : MmuWriteByte, DE, value);
+                    return MmuWrite(DE);
                 case Operand.mSP:
-                    return Expression.Call(Mmu, is16Bit ? MmuWriteWord : MmuWriteByte, SP, value);
+                    return MmuWrite(SP);
                 case Operand.mnn:
-                    return Expression.Call(Mmu,
-                                           is16Bit ? MmuWriteWord : MmuWriteByte,
-                                           Expression.Constant(operation.WordLiteral),
-                                           value);
+                    return MmuWrite(Expression.Constant(operation.WordLiteral));
                 case Operand.IX:
                     return Expression.Assign(IX, value);
                 case Operand.mIXd:
-                    return Expression.Call(Mmu,
-                                           is16Bit ? MmuWriteWord : MmuWriteByte,
-                                           Expression.Convert(Expression.Add(Expression.Convert(IX, typeof(int)), Expression.Constant((int)operation.Displacement)),
-                                                              typeof(ushort)),
-                                           value);
+                    return MmuWrite(Expression.Convert(Expression.Add(Expression.Convert(IX, typeof(int)), Expression.Constant((int)operation.Displacement)), typeof(ushort)));
                 case Operand.IXl:
                     return Expression.Assign(IXl, value);
                 case Operand.IXh:
@@ -212,11 +195,7 @@ namespace Retro.Net.Z80.Core.DynaRec
                 case Operand.IY:
                     return Expression.Assign(IY, value);
                 case Operand.mIYd:
-                    return Expression.Call(Mmu,
-                                           is16Bit ? MmuWriteWord : MmuWriteByte,
-                                           Expression.Convert(Expression.Add(Expression.Convert(IY, typeof(int)), Expression.Constant((int)operation.Displacement)),
-                                                              typeof(ushort)),
-                                           value);
+                    return MmuWrite(Expression.Convert(Expression.Add(Expression.Convert(IY, typeof(int)), Expression.Constant((int)operation.Displacement)), typeof(ushort)));
                 case Operand.IYl:
                     return Expression.Assign(IYl, value);
                 case Operand.IYh:
@@ -226,15 +205,9 @@ namespace Retro.Net.Z80.Core.DynaRec
                 case Operand.R:
                     return Expression.Assign(R, value);
                 case Operand.mCl:
-                    return Expression.Call(Mmu,
-                                           is16Bit ? MmuWriteWord : MmuWriteByte,
-                                           Expression.Add(Expression.Convert(C, typeof(ushort)), Expression.Constant((ushort)0xff00)),
-                                           value);
+                    return MmuWrite(Expression.Add(Expression.Convert(C, typeof(ushort)), Expression.Constant((ushort)0xff00)));
                 case Operand.mnl:
-                    return Expression.Call(Mmu,
-                                           is16Bit ? MmuWriteWord : MmuWriteByte,
-                                           Expression.Constant((ushort)(operation.ByteLiteral + 0xff00)),
-                                           value);
+                    return MmuWrite(Expression.Constant((ushort)(operation.ByteLiteral + 0xff00)));
                 default:
                     throw new ArgumentOutOfRangeException(nameof(operation.Operand1), operation.Operand1, null);
             }
@@ -299,9 +272,9 @@ namespace Retro.Net.Z80.Core.DynaRec
         /// <returns></returns>
         private Expression JumpToDisplacement(Operation operation)
         {
-            return Expression.Assign(PC,
-                                     Expression.Convert(Expression.Add(Expression.Convert(PC, typeof (int)), ReadOperand1(operation, true)),
-                                                        typeof (ushort)));
+            return Expression.Assign(PC, Expression.Convert(Expression.Add(Expression.Convert(PC, typeof(int)),
+                    Expression.Convert(Expression.Constant((sbyte) operation.ByteLiteral), typeof(int))),
+                typeof(ushort)));
         }
 
         /// <summary>
@@ -329,8 +302,7 @@ namespace Retro.Net.Z80.Core.DynaRec
         {
             var breakLabel = Expression.Label();
             yield return
-                Expression.Loop(
-                                Expression.Block(Expression.Call(Mmu, MmuTransferByte, HL, DE),
+                Expression.Loop(Expression.Block(Expression.Call(Mmu, MmuTransferByte, HL, DE),
                                                  decrement ? Expression.PreDecrementAssign(HL) : Expression.PreIncrementAssign(HL),
                                                  decrement ? Expression.PreDecrementAssign(DE) : Expression.PreIncrementAssign(DE),
                                                  Expression.PreDecrementAssign(BC),

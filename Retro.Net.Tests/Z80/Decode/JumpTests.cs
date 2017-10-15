@@ -33,7 +33,7 @@ namespace Retro.Net.Tests.Z80.Decode
             var literal = Rng.Byte();
             using (var fixture = new DecodeFixture(2, 8, PrimaryOpCode.DJNZ, literal).DoNotHalt().NotOnGameboy())
             {
-                fixture.Expected.OpCode(OpCode.DecrementJumpRelativeIfNonZero).Operands(Operand.d).ByteLiteral(literal);
+                fixture.Expected.OpCode(OpCode.DecrementJumpRelativeIfNonZero).ByteLiteral(literal);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Retro.Net.Tests.Z80.Decode
                     fixture.NotOnGameboy();
                 }
 
-                fixture.Expected.OpCode(OpCode.JumpRelative).Operands(Operand.d).ByteLiteral(literal);
+                fixture.Expected.OpCode(OpCode.JumpRelative).ByteLiteral(literal);
 
                 if (test != FlagTest.None)
                 {

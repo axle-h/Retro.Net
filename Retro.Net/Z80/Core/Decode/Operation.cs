@@ -212,13 +212,11 @@ namespace Retro.Net.Z80.Core.Decode
                 case Operand.mSP:
                     return "(SP)";
                 case Operand.mnn:
-                    return $"(0x{WordLiteral.ToString("x4")})";
+                    return $"(0x{WordLiteral:x4})";
                 case Operand.nn:
-                    return $"0x{WordLiteral.ToString("x4")}";
+                    return $"0x{WordLiteral:x4}";
                 case Operand.n:
-                    return $"0x{ByteLiteral.ToString("x2")}";
-                case Operand.d:
-                    return ((sbyte) ByteLiteral).ToString();
+                    return $"0x{ByteLiteral:x2}";
                 case Operand.mIXd:
                     return Displacement > 0 ? $"(IX+{Displacement})" : $"(IX{Displacement})";
                 case Operand.mIYd:
