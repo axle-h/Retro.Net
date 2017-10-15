@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using Retro.Net.Z80.Core.Decode;
+﻿using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.OpCodes;
-using Retro.Net.Z80.Registers;
 using Xunit;
 
 namespace Retro.Net.Tests.Z80.Decode

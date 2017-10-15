@@ -76,7 +76,7 @@ namespace Retro.Net.Tests.Z80.Execute
             }
         }
 
-        private static IEnumerable<object[]> FlagTests() => new TheorySource<FlagTest>(FlagTest.Carry, FlagTest.Negative,
+        private static IEnumerable<object[]> FlagTests() => new SimpleTheorySource<FlagTest>(FlagTest.Carry, FlagTest.Negative,
             FlagTest.NotCarry, FlagTest.NotZero, FlagTest.ParityEven, FlagTest.ParityOdd, FlagTest.Positive, FlagTest.Zero);
 
         private static void TestCall(OpCode op)

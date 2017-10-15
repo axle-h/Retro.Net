@@ -135,14 +135,14 @@ namespace Retro.Net.Tests.Z80.Execute
         public void Dispose() => "All cores".ShouldSatisfyAllConditions("", Test<DynaRec>, Test<Interpreter>);
 
         public static IEnumerable<object[]> Registers8Bit() =>
-            new TheorySource<Operand>(Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L);
+            new SimpleTheorySource<Operand>(Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L);
 
-        public static IEnumerable<object[]> Registers16Bit() => new TheorySource<Operand>(Operand.AF, Operand.BC, Operand.DE, Operand.HL, Operand.IX, Operand.IY);
-
+        public static IEnumerable<object[]> Registers16Bit() => new SimpleTheorySource<Operand>(Operand.AF, Operand.BC, Operand.DE, Operand.HL, Operand.IX, Operand.IY);
+        
         public static IEnumerable<object[]> Operands8Bit() =>
-            new TheorySource<Operand>(Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L, Operand.n, Operand.mHL, Operand.mIXd, Operand.mIYd, Operand.mnn);
+            new SimpleTheorySource<Operand>(Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L, Operand.n, Operand.mHL, Operand.mIXd, Operand.mIYd, Operand.mnn);
 
         public static IEnumerable<object[]> Operands16Bit() =>
-            new TheorySource<Operand>(Operand.AF, Operand.BC, Operand.DE, Operand.HL, Operand.IX, Operand.IY, Operand.nn);
+            new SimpleTheorySource<Operand>(Operand.AF, Operand.BC, Operand.DE, Operand.HL, Operand.IX, Operand.IY, Operand.nn);
     }
 }

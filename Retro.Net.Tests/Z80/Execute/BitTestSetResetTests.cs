@@ -45,7 +45,7 @@ namespace Retro.Net.Tests.Z80.Execute
         }
 
         public static IEnumerable<object[]> RegistersAndBits() =>
-            new TheorySource<Operand, byte>(Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L)
+            new CartesianTheorySource<Operand, byte>(Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L)
                 .With(Enumerable.Range(0, 8).Select(x => (byte) x).ToArray());
     }
 }
