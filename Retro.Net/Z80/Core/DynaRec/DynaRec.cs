@@ -81,11 +81,11 @@ namespace Retro.Net.Z80.Core.DynaRec
             _usesDynamicTimings = _usesLocalWord = _usesAccumulatorAndResult = false;
 
             // Run this first so we know what init & final expressions to add.
-            var blockExpressions = block.Operations.SelectMany(o => Recompile(o, block)).ToArray();
-            var initExpressions = GetBlockInitExpressions();
-            var finalExpressions = GetBlockFinalExpressions(block);
+            var blockExpressions = block.Operations.SelectMany(o => Recompile(o, block)).ToList();
+            var initExpressions = GetBlockInitExpressions().ToList();
+            var finalExpressions = GetBlockFinalExpressions(block).ToList();
 
-            var expressions = initExpressions.Concat(blockExpressions).Concat(finalExpressions).ToArray();
+            var expressions = initExpressions.Concat(blockExpressions).Concat(finalExpressions).ToList();
 
             var expressionBlock = Expression.Block(GetParameterExpressions(), expressions);
 
