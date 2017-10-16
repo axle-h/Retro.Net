@@ -76,6 +76,10 @@ namespace Retro.Net.Tests.Z80.Execute
             }
         }
 
+        [Fact] public void Stop() => TestHalt(OpCode.Stop);
+
+        [Fact] public void Halt() => TestHalt(OpCode.Halt);
+
         private static IEnumerable<object[]> FlagTests() => new SimpleTheorySource<FlagTest>(FlagTest.Carry, FlagTest.Negative,
             FlagTest.NotCarry, FlagTest.NotZero, FlagTest.ParityEven, FlagTest.ParityOdd, FlagTest.Positive, FlagTest.Zero);
 
@@ -150,6 +154,14 @@ namespace Retro.Net.Tests.Z80.Execute
             {
                 fixture.Assert(c => c.Mmu.Verify(x => x.ReadWord(c.InitialStackPointer), Times.Never),
                     c => c.MockRegisters.VerifySet(r => r.StackPointer = c.PoppedStackPointer, Times.Never));
+            }
+        }
+
+        private static void TestHalt(OpCode op)
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt())
+            {
+                fixture.Operation.OpCode(op);
             }
         }
     }

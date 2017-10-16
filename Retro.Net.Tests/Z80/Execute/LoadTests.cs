@@ -164,6 +164,56 @@ namespace Retro.Net.Tests.Z80.Execute
             }
         }
 
+        [Fact] public void LoadDecrement_Write() => LoadIndexWrite(OpCode.LoadDecrement);
+
+        [Fact] public void LoadIncrement_Write() => LoadIndexWrite(OpCode.LoadIncrement);
+
+        [Fact] public void LoadDecrement_Read() => LoadIndexRead(OpCode.LoadDecrement);
+
+        [Fact] public void LoadIncrement_Read() => LoadIndexRead(OpCode.LoadIncrement);
+
+        private static void LoadIndexRead(OpCode o)
+        {
+            using (var fixture = new ExecuteFixture())
+            {
+                fixture.Operation.OpCode(o).Operands(Operand.A, Operand.mHL);
+                fixture.With(c => c.Mmu.Setup(x => x.ReadByte(c.InitialRegisters.HL)).Returns(c.Byte).Verifiable());
+                fixture.Assert(c => c.Accumulator.A.ShouldBe(c.Byte));
+
+                switch (o)
+                {
+                    case OpCode.LoadIncrement:
+                        fixture.Assert(c => c.Registers.HL.ShouldBe(unchecked((ushort)(c.InitialRegisters.HL + 1))));
+                        break;
+
+                    case OpCode.LoadDecrement:
+                        fixture.Assert(c => c.Registers.HL.ShouldBe(unchecked((ushort)(c.InitialRegisters.HL - 1))));
+                        break;
+                }
+            }
+        }
+
+        private static void LoadIndexWrite(OpCode o)
+        {
+            using (var fixture = new ExecuteFixture())
+            {
+                fixture.Operation.OpCode(o).Operands(Operand.mHL, Operand.A);
+                fixture.Assert(c => c.Mmu.Verify(x => x.WriteByte(c.InitialRegisters.HL, c.Accumulator.A)));
+
+                switch (o)
+                {
+                    case OpCode.LoadIncrement:
+                        fixture.Assert(c => c.Registers.HL.ShouldBe(unchecked((ushort) (c.InitialRegisters.HL + 1))));
+                        break;
+
+                    case OpCode.LoadDecrement:
+                        fixture.Assert(c => c.Registers.HL.ShouldBe(unchecked((ushort)(c.InitialRegisters.HL - 1))));
+                        break;
+                }
+            }
+        }
+
+
         private static IEnumerable<object[]> Readable8Bit() =>
             new SimpleTheorySource<Operand>(Writable8BitOperands.Concat(new[] {Operand.n, Operand.R}).ToArray());
 
