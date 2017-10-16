@@ -383,8 +383,7 @@ namespace Retro.Net.Z80.Core.Interpreted
 
         public void BlockSearchRepeat(IInstructionTimingsBuilder timer, bool decrement = false)
             => SimpleRepeat(() => BlockSearch(decrement),
-                            () =>
-                            _registers.GeneralPurposeRegisters.BC == 0 || _registers.AccumulatorAndFlagsRegisters.Flags.Zero,
+                            () => _registers.GeneralPurposeRegisters.BC == 0 || _registers.AccumulatorAndFlagsRegisters.Flags.Zero,
                             timer);
 
         public void InputTransfer(bool decrement = false)
