@@ -175,7 +175,8 @@ namespace Retro.Net.Z80.Core.DynaRec
                 case OpCode.DecrementJumpRelativeIfNonZero:
                     _usesDynamicTimings = true;
                     yield return Expression.Assign(B, Expression.Convert(Expression.Decrement(Expression.Convert(B, typeof (int))), typeof (byte)));
-                    yield return Expression.IfThen(Expression.NotEqual(B, Expression.Constant((byte) 0)), Expression.Block(JumpToDisplacement(operation), AddDynamicTimings(1, 5)));
+                    yield return Expression.IfThen(Expression.NotEqual(B, Expression.Constant((byte) 0)),
+                        Expression.Block(JumpToDisplacement(operation), AddDynamicTimings(1, 5)));
 
                     // Relative jump so must also sync the PC.
                     yield return SyncProgramCounter(block);

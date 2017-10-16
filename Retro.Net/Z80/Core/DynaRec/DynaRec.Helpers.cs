@@ -273,7 +273,7 @@ namespace Retro.Net.Z80.Core.DynaRec
         private Expression JumpToDisplacement(Operation operation)
         {
             return Expression.Assign(PC, Expression.Convert(Expression.Add(Expression.Convert(PC, typeof(int)),
-                    Expression.Convert(Expression.Constant((sbyte) operation.ByteLiteral), typeof(int))),
+                    Expression.Convert(Expression.Constant(operation.Displacement), typeof(int))),
                 typeof(ushort)));
         }
 

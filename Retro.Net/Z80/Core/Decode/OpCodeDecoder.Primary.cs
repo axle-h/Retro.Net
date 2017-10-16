@@ -1116,26 +1116,26 @@ namespace Retro.Net.Z80.Core.Decode
 
                 case PrimaryOpCode.JR:
                     _timer.MmuByte().ApplyDisplacement();
-                    _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
+                    _decodeMeta = DecodeMeta.Displacement | DecodeMeta.EndBlock;
                     return OpCode.JumpRelative;
                 case PrimaryOpCode.JR_C:
                     _timer.MmuByte();
-                    _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
+                    _decodeMeta = DecodeMeta.Displacement | DecodeMeta.EndBlock;
                     _flagTest = FlagTest.Carry;
                     return OpCode.JumpRelative;
                 case PrimaryOpCode.JR_NC:
                     _timer.MmuByte();
-                    _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
+                    _decodeMeta = DecodeMeta.Displacement | DecodeMeta.EndBlock;
                     _flagTest = FlagTest.NotCarry;
                     return OpCode.JumpRelative;
                 case PrimaryOpCode.JR_Z:
                     _timer.MmuByte();
-                    _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
+                    _decodeMeta = DecodeMeta.Displacement | DecodeMeta.EndBlock;
                     _flagTest = FlagTest.Zero;
                     return OpCode.JumpRelative;
                 case PrimaryOpCode.JR_NZ:
                     _timer.MmuByte();
-                    _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
+                    _decodeMeta = DecodeMeta.Displacement | DecodeMeta.EndBlock;
                     _flagTest = FlagTest.NotZero;
                     return OpCode.JumpRelative;
 

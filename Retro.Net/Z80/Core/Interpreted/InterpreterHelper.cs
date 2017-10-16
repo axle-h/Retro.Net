@@ -327,7 +327,7 @@ namespace Retro.Net.Z80.Core.Interpreted
 
         public void JumpToDisplacement()
         {
-            _registers.ProgramCounter = (ushort) (_registers.ProgramCounter + (sbyte) Operation.ByteLiteral);
+            _registers.ProgramCounter = (ushort) (_registers.ProgramCounter + Operation.Displacement);
         }
 
         private void BlockTransferIteration(bool decrement)

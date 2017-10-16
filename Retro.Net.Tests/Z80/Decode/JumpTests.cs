@@ -86,7 +86,7 @@ namespace Retro.Net.Tests.Z80.Decode
 
         private static void TestRelative(PrimaryOpCode op, FlagTest test = FlagTest.None, bool gameBoy = true)
         {
-            var literal = Rng.Byte();
+            var literal = Rng.SByte();
 
             var (machineCycles, throttlingStates) = test == FlagTest.None ? (3, 12) : (2, 7);
 
@@ -97,7 +97,7 @@ namespace Retro.Net.Tests.Z80.Decode
                     fixture.NotOnGameboy();
                 }
 
-                fixture.Expected.OpCode(OpCode.JumpRelative).ByteLiteral(literal);
+                fixture.Expected.OpCode(OpCode.JumpRelative).Displacement(literal);
 
                 if (test != FlagTest.None)
                 {

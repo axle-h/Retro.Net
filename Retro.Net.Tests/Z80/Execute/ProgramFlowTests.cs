@@ -5,52 +5,141 @@ using Moq;
 using Retro.Net.Tests.Util;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Registers;
+using Shouldly;
 using Xunit;
 
 namespace Retro.Net.Tests.Z80.Execute
 {
-    public class CallReturnResetTests
+    public class ProgramFlowTests
     {
         [Fact] public void Reset() => TestCall(OpCode.Reset);
 
         [Fact] public void Call() => TestCall(OpCode.Call);
 
-        [Theory]
-        [MemberData(nameof(FlagTests))]
-        public void CallWithTest(FlagTest test)
+        [Fact]
+        public void Jump()
         {
-            var positiveValue = GetPositiveValue(test);
-            var flag = GetFlagExpression(test);
-
-            using (var fixture = new ExecuteFixture().DoNotHalt().RuntimeTiming(2, 7))
-            {
-                fixture.With(c => c.Flags.Setup(flag).Returns(positiveValue));
-                SetupCall(fixture, OpCode.Call, test);
-            }
-
             using (var fixture = new ExecuteFixture().DoNotHalt())
             {
-                fixture.With(c => c.Flags.Setup(flag).Returns(!positiveValue));
+                SetupJump(fixture, OpCode.Jump, FlagTest.None);
+            }
+        }
+
+        [Fact]
+        public void JumpRelative()
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt())
+            {
+                SetupRelativeJump(fixture, OpCode.JumpRelative, FlagTest.None);
+            }
+        }
+
+        [Fact]
+        public void DecrementJumpRelativeIfNonZero_Success()
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt().RuntimeTiming(1, 5))
+            {
+                fixture.With(x => x.Registers.B = 2);
+                SetupRelativeJump(fixture, OpCode.DecrementJumpRelativeIfNonZero, FlagTest.None);
+                fixture.Assert(x => x.Registers.B.ShouldBe((byte) 1));
+            }
+        }
+
+        [Fact]
+        public void DecrementJumpRelativeIfNonZero_Fail()
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt())
+            {
+                fixture.With(x => x.Registers.B = 1);
+                SetupRelativeJump(fixture, OpCode.DecrementJumpRelativeIfNonZero, FlagTest.None, false);
+                fixture.Assert(x => x.Registers.B.ShouldBe((byte) 0));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(FlagTests))]
+        public void CallWithTest_Success(FlagTest test)
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt().RuntimeTiming(2, 7))
+            {
+                fixture.With(c => c.Flags.Setup(GetFlagExpression(test)).Returns(GetPositiveValue(test)));
+                SetupCall(fixture, OpCode.Call, test);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(FlagTests))]
+        public void CallWithTest_Fail(FlagTest test)
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt())
+            {
+                fixture.With(c => c.Flags.Setup(GetFlagExpression(test)).Returns(!GetPositiveValue(test)));
                 SetupCall(fixture, OpCode.Call, test, false);
             }
         }
 
         [Theory]
         [MemberData(nameof(FlagTests))]
-        public void Return(FlagTest test)
+        public void JumpWithTest_Success(FlagTest test)
         {
-            var positiveValue = GetPositiveValue(test);
-            var flag = GetFlagExpression(test);
-
-            using (var fixture = new ExecuteFixture().DoNotHalt().RuntimeTiming(2, 6))
-            {
-                fixture.With(c => c.Flags.Setup(flag).Returns(positiveValue));
-                SetupReturn(fixture, OpCode.Return, test);
-            }
-
             using (var fixture = new ExecuteFixture().DoNotHalt())
             {
-                fixture.With(c => c.Flags.Setup(flag).Returns(!positiveValue));
+                fixture.With(c => c.Flags.Setup(GetFlagExpression(test)).Returns(GetPositiveValue(test)));
+                SetupJump(fixture, OpCode.Jump, test);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(FlagTests))]
+        public void JumpWithTest_Fail(FlagTest test)
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt())
+            {
+                fixture.With(c => c.Flags.Setup(GetFlagExpression(test)).Returns(!GetPositiveValue(test)));
+                SetupJump(fixture, OpCode.Jump, test, false);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(FlagTests))]
+        public void JumpRelativeWithTest_Success(FlagTest test)
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt().RuntimeTiming(1, 5))
+            {
+                fixture.With(c => c.Flags.Setup(GetFlagExpression(test)).Returns(GetPositiveValue(test)));
+                SetupRelativeJump(fixture, OpCode.JumpRelative, test);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(FlagTests))]
+        public void JumpRelativeWithTest_Fail(FlagTest test)
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt())
+            {
+                fixture.With(c => c.Flags.Setup(GetFlagExpression(test)).Returns(!GetPositiveValue(test)));
+                SetupRelativeJump(fixture, OpCode.JumpRelative, test, false);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(FlagTests))]
+        public void Return_Success(FlagTest test)
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt().RuntimeTiming(2, 6))
+            {
+                fixture.With(c => c.Flags.Setup(GetFlagExpression(test)).Returns(GetPositiveValue(test)));
+                SetupReturn(fixture, OpCode.Return, test);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(FlagTests))]
+        public void Return_Fail(FlagTest test)
+        {
+            using (var fixture = new ExecuteFixture().DoNotHalt())
+            {
+                fixture.With(c => c.Flags.Setup(GetFlagExpression(test)).Returns(!GetPositiveValue(test)));
                 SetupReturn(fixture, OpCode.Return, test, false);
             }
         }
@@ -133,12 +222,24 @@ namespace Retro.Net.Tests.Z80.Execute
 
         private static void SetupCall(ExecuteFixture fixture, OpCode op, FlagTest test, bool success = true)
         {
+            SetupJump(fixture, op, test, success);
+            var times = success ? Times.Exactly(1) : Times.Never();
+            fixture.Assert(c => c.MockRegisters.VerifySet(r => r.StackPointer = c.PushedStackPointer, times),
+                c => c.Mmu.Verify(x => x.WriteWord(c.StackPointer, c.SyncedProgramCounter), times));
+        }
+
+        private static void SetupJump(ExecuteFixture fixture, OpCode op, FlagTest test, bool success = true)
+        {
             fixture.Operation.OpCode(op).Operands(Operand.nn).RandomLiterals().FlagTest(test);
             var times = success ? Times.Exactly(1) : Times.Never();
-            fixture.Assert(c => c.MockRegisters.VerifySet(r => r.ProgramCounter = c.Operation.WordLiteral, times),
-                c => c.MockRegisters.VerifySet(r => r.StackPointer = c.PushedStackPointer, times),
-                c => c.Mmu.Verify(x => x.WriteWord(c.StackPointer, c.SyncedProgramCounter), times));
+            fixture.Assert(c => c.MockRegisters.VerifySet(r => r.ProgramCounter = c.Operation.WordLiteral, times));
+        }
 
+        private static void SetupRelativeJump(ExecuteFixture fixture, OpCode op, FlagTest test, bool success = true)
+        {
+            fixture.Operation.OpCode(op).RandomLiterals().FlagTest(test);
+            var times = success ? Times.Exactly(1) : Times.Never();
+            fixture.Assert(c => c.MockRegisters.VerifySet(r => r.ProgramCounter = unchecked ((ushort) (c.InitialProgramCounter + c.BlockLength + c.Operation.Displacement)), times));
         }
 
         private static void SetupReturn(ExecuteFixture fixture, OpCode op, FlagTest test, bool success = true)
