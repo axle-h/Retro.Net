@@ -37,7 +37,7 @@ namespace Retro.Net.Tests.Z80.Execute
             Accumulator = accumulator;
             Alu = mock.Mock<IAlu>();
             Mmu = mock.Mock<IMmu>();
-            Peripherals = mock.Mock<IPeripheralManager>();
+            Io = mock.Mock<IPeripheralManager>();
 
             MockRegisters = mock.Mock<IRegisters>();
             MockRegisters.SetupAllProperties();
@@ -79,7 +79,7 @@ namespace Retro.Net.Tests.Z80.Execute
 
         public Mock<IMmu> Mmu { get; }
 
-        public Mock<IPeripheralManager> Peripherals { get; }
+        public Mock<IPeripheralManager> Io { get; }
 
         public ushort InitialProgramCounter { get; }
 

@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using Retro.Net.Tests.Util;
+﻿using Retro.Net.Tests.Util;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.OpCodes;
 using Xunit;

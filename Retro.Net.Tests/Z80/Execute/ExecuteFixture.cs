@@ -116,7 +116,7 @@ namespace Retro.Net.Tests.Z80.Execute
             yield return () => block.HaltCpu.ShouldBe(block.HaltCpu, nameof(block.HaltCpu));
             yield return () => block.HaltPeripherals.ShouldBe(block.HaltPeripherals, nameof(block.HaltPeripherals));
 
-            var timings = block.ExecuteInstructionBlock(context.MockRegisters.Object, context.Mmu.Object, context.Alu.Object, context.Peripherals.Object);
+            var timings = block.ExecuteInstructionBlock(context.MockRegisters.Object, context.Mmu.Object, context.Alu.Object, context.Io.Object);
             var expectedTimings = decodedBlock.Timings + _runtimeTimings;
             yield return () => timings.ShouldBe(expectedTimings);
 
