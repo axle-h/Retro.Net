@@ -65,11 +65,18 @@ namespace Retro.Net.Tests.Z80.Execute
         }
 
         public ExecuteFixture AssertFlags(Func<ExecutionContext, byte> result = null, bool? sign = null, bool? zero = null,
-            bool? halfCarry = null, bool? parityOverflow = null, bool? subtract = null, bool? carry = null)
+            bool? halfCarry = null, bool? parityOverflow = null, bool? subtract = null, bool? carry = null, bool setResult = false)
         {
             if (result != null)
             {
-                Assert(c => c.Flags.Verify(x => x.SetUndocumentedFlags(result(c))));
+                if (setResult)
+                {
+                    Assert(c => c.Flags.Verify(x => x.SetResultFlags(result(c))));
+                }
+                else
+                {
+                    Assert(c => c.Flags.Verify(x => x.SetUndocumentedFlags(result(c))));
+                }
             }
 
             Assert(c => c.VerifyFlag(x => x.Sign, sign));

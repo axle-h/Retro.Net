@@ -358,12 +358,7 @@ namespace Retro.Net.Z80.Core.DynaRec
         {
             yield return Expression.Call(Mmu, MmuWriteByte, HL, Expression.Call(IO, IoReadByte, C, B));
             yield return decrement ? Expression.PreDecrementAssign(HL) : Expression.PreIncrementAssign(HL);
-            yield return
-                Expression.Assign(B,
-                                  Expression.Convert(
-                                                     Expression.Subtract(Expression.Convert(B, typeof (int)),
-                                                                         Expression.Constant(1)),
-                                                     typeof (byte)));
+            yield return Expression.Assign(B, Expression.Convert(Expression.Subtract(Expression.Convert(B, typeof(int)), Expression.Constant(1)), typeof(byte)));
             yield return Expression.Assign(Subtract, Expression.Constant(true));
             yield return Expression.Call(Flags, SetResultFlags, B);
         }
@@ -398,12 +393,7 @@ namespace Retro.Net.Z80.Core.DynaRec
         {
             yield return Expression.Call(IO, IoWriteByte, C, B, ReadByteAtHL);
             yield return decrement ? Expression.PreDecrementAssign(HL) : Expression.PreIncrementAssign(HL);
-            yield return
-                Expression.Assign(B,
-                                  Expression.Convert(
-                                                     Expression.Subtract(Expression.Convert(B, typeof (int)),
-                                                                         Expression.Constant(1)),
-                                                     typeof (byte)));
+            yield return Expression.Assign(B, Expression.Convert(Expression.Subtract(Expression.Convert(B, typeof (int)), Expression.Constant(1)), typeof (byte)));
             yield return Expression.Assign(Subtract, Expression.Constant(true));
             yield return Expression.Call(Flags, SetResultFlags, B);
         }
