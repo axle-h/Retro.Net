@@ -1,0 +1,7 @@
+language: csharp
+mono: none
+dotnet: 2.0.0
+dist: trusty
+solution: Retro.Net.sln
+script:
+  - ./build.sh
