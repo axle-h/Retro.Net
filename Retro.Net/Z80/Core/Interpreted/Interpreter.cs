@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using Retro.Net.Memory;
 using Retro.Net.Timing;
 using Retro.Net.Z80.Config;
@@ -45,7 +46,7 @@ namespace Retro.Net.Z80.Core.Interpreted
         /// <returns></returns>
         public IInstructionBlock Build(DecodedBlock block)
         {
-            var debugInfo = _debug ? $"{string.Join("\n", block.Operations.Select(x => x.ToString()))}" : null;
+            var debugInfo = _debug ? JsonConvert.SerializeObject(new { block.Address, Operations = block.Operations.Select(x => x.ToString()) }) : null;
 
             InstructionTimings Run(IRegisters registers, IMmu mmu, IAlu alu, IPeripheralManager peripherals) => Interpret(registers, mmu, alu, peripherals, block);
             return new InstructionBlock(block.Address, block.Length, Run, block.Timings, block.Halt, block.Stop, debugInfo);

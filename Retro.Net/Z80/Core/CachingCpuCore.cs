@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;

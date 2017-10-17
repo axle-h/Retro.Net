@@ -418,16 +418,5 @@ namespace Retro.Net.Z80.Core.DynaRec
 
             return Expression.Loop(Expression.Block(expressions.Concat(iterationExpressions).ToArray()), breakLabel);
         }
-
-        /// <summary>
-        /// Gets the debug expression.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns></returns>
-        private static Expression GetDebugExpression(string text)
-        {
-            var document = Expression.SymbolDocument(text);
-            return Expression.ClearDebugInfo(document);
-        }
     }
 }

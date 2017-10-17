@@ -12,7 +12,6 @@ namespace Retro.Net.Memory
 
         private readonly IMmu _mmu;
 
-        private ushort _address;
         private byte[] _cache;
         private int _cachePointer;
 
@@ -23,9 +22,16 @@ namespace Retro.Net.Memory
         public PrefetchQueue(IMmu mmu)
         {
             _mmu = mmu;
-            _address = 0x0000;
-            InitFromAddress();
+            ReBuildCache(0x0000);
         }
+
+        /// <summary>
+        /// Gets the address.
+        /// </summary>
+        /// <value>
+        /// The address.
+        /// </value>
+        public ushort BaseAddress { get; private set; }
 
         /// <summary>
         /// Gets the next byte in the prefetch queue.
@@ -105,9 +111,10 @@ namespace Retro.Net.Memory
         public void ReBuildCache(ushort newAddress)
         {
             // TODO: check if we can re-use this cache, make sure TotalBytesRead is still reset
-
-            _address = newAddress;
-            InitFromAddress();
+            BaseAddress = newAddress;
+            _cachePointer = 0;
+            _cache = _mmu.ReadBytes(BaseAddress, CacheSize);
+            TotalBytesRead = 0;
         }
 
         /// <summary>
@@ -117,25 +124,15 @@ namespace Retro.Net.Memory
         /// The total bytes read.
         /// </value>
         public int TotalBytesRead { get; private set; }
-
-        /// <summary>
-        /// Initializes this prefetch queue from <see cref="_address" />.
-        /// </summary>
-        private void InitFromAddress()
-        {
-            _cachePointer = 0;
-            _cache = _mmu.ReadBytes(_address, CacheSize);
-            TotalBytesRead = 0;
-        }
-
+        
         /// <summary>
         /// Increments the address by <see cref="CacheSize" /> and repopulates the cache.
         /// </summary>
         private void NudgeCache()
         {
-            _address = (ushort) (_address + CacheSize);
+            BaseAddress = (ushort) (BaseAddress + CacheSize);
             _cachePointer = 0;
-            _cache = _mmu.ReadBytes(_address, CacheSize);
+            _cache = _mmu.ReadBytes(BaseAddress, CacheSize);
         }
     }
 }

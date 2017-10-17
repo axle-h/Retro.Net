@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using AgileObjects.ReadableExpressions;
+using Newtonsoft.Json;
 using Retro.Net.Memory;
 using Retro.Net.Timing;
 using Retro.Net.Z80.Config;
@@ -64,8 +65,8 @@ namespace Retro.Net.Z80.Core.DynaRec
         {
             var lambda = BuildExpressionTree(block);
             var debugInfo = _debug
-                ? $"{string.Join("\n", block.Operations.Select(x => x.ToString()))}\n\n{lambda.ToReadableString()}"
-                : null;
+                                ? JsonConvert.SerializeObject(new {block.Address, Operations = block.Operations.Select(x => x.ToString()), Execution = lambda.ToReadableString()})
+                                : null;
 
             return new InstructionBlock(block.Address, block.Length, lambda.Compile(), block.Timings, block.Halt, block.Stop, debugInfo);
         }
@@ -140,11 +141,6 @@ namespace Retro.Net.Z80.Core.DynaRec
         /// <returns></returns>
         private IEnumerable<Expression> GetBlockFinalExpressions(DecodedBlock block)
         {
-            if (_debug)
-            {
-                yield return GetDebugExpression("Block Finalize");
-            }
-
             if (_cpuMode == CpuMode.Z80)
             {
                 // Add the block length to the 7 lsb of memory refresh register.
