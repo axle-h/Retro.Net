@@ -7,6 +7,14 @@
     public interface IPrefetchQueue
     {
         /// <summary>
+        /// Gets the base address of the prefetch cache.
+        /// </summary>
+        /// <value>
+        /// The base address of the prefetch cache.
+        /// </value>
+        ushort BaseAddress { get; }
+
+        /// <summary>
         /// Gets the total bytes read since the last rebuild.
         /// </summary>
         /// <value>

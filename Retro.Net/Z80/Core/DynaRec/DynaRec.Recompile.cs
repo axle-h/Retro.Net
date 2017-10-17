@@ -22,11 +22,6 @@ namespace Retro.Net.Z80.Core.DynaRec
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         private IEnumerable<Expression> Recompile(Operation operation, DecodedBlock block)
         {
-            if (_debug)
-            {
-                yield return GetDebugExpression(operation.ToString());
-            }
-
             switch (operation.OpCode)
             {
                 case OpCode.NoOperation:

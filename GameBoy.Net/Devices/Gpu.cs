@@ -38,9 +38,7 @@ namespace GameBoy.Net.Devices
                                                                                             0x2000);
 
         private readonly object _disposingContext = new object();
-
-        private readonly IGameBoyConfig _gameBoyConfig;
-
+        
         private readonly IGpuRegisters _gpuRegisters;
 
         private readonly IInterruptFlagsRegister _interruptFlagsRegister;
@@ -97,7 +95,6 @@ namespace GameBoy.Net.Devices
             _interruptFlagsRegister = interruptFlagsRegister;
             _gpuRegisters = gpuRegisters;
             _renderHandler = renderHandler;
-            _gameBoyConfig = gameBoyConfig;
 
             _spriteRam = new ArrayBackedMemoryBank(SpriteRamConfig);
             _tileRam = new ArrayBackedMemoryBank(MapRamConfig);

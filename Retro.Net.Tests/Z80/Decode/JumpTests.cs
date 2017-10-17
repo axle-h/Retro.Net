@@ -30,10 +30,10 @@ namespace Retro.Net.Tests.Z80.Decode
         [Fact]
         public void DJNZ()
         {
-            var literal = Rng.Byte();
+            var literal = Rng.SByte();
             using (var fixture = new DecodeFixture(2, 8, PrimaryOpCode.DJNZ, literal).DoNotHalt().NotOnGameboy())
             {
-                fixture.Expected.OpCode(OpCode.DecrementJumpRelativeIfNonZero).ByteLiteral(literal);
+                fixture.Expected.OpCode(OpCode.DecrementJumpRelativeIfNonZero).Displacement(literal);
             }
         }
 

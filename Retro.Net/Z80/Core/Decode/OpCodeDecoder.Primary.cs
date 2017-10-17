@@ -1154,7 +1154,7 @@ namespace Retro.Net.Z80.Core.Decode
                     }
 
                     _timer.Extend(1).MmuByte();
-                    _decodeMeta = DecodeMeta.ByteLiteral | DecodeMeta.EndBlock;
+                    _decodeMeta = DecodeMeta.Displacement | DecodeMeta.EndBlock;
                     return OpCode.DecrementJumpRelativeIfNonZero;
 
                 // ********* Call *********

@@ -9,8 +9,8 @@ Currently:
   * Simple interpreted core.
   * "Dynamically Re-compiling" core. Instead of executing each block of Z80 operations immedietely, it builds an expression tree representing the block, which can be cached for increased speed. It's about 2.5x faster than the simple interpreted core. And far cooler.
 * Complete Z80 instruction set decode tests.
-* TODO: Partial Z80 execution tests.
-* TODO: Integration tests for the Gameboy Blargg test roms.
+* Partial Z80 execution tests.
+* Integration tests for the Gameboy Blargg test roms.
 * WIP GameBoy hardware. Just enough to play Tetris at full speed!
 
 TODO:

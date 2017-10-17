@@ -77,8 +77,8 @@ namespace Retro.Net.Z80.Core.Decode
         /// <returns></returns>
         public DecodedBlock DecodeNextBlock(ushort address)
         {
-            var operations = DecodeOperations(address);
-            return new DecodedBlock(address, _prefetch.TotalBytesRead, operations.ToArray(), _timer.GetInstructionTimings(), _halt, _stop);
+            var operations = DecodeOperations(address).ToList();
+            return new DecodedBlock(address, _prefetch.TotalBytesRead, operations, _timer.GetInstructionTimings(), _halt, _stop);
         }
 
         /// <summary>
@@ -92,7 +92,6 @@ namespace Retro.Net.Z80.Core.Decode
             _timer.Reset();
             _index = _indexRegisterOperands[IndexRegister.HL];
             _prefetch.ReBuildCache(address);
-            var totalBytesRead = 0;
 
             while (true)
             {
@@ -128,16 +127,15 @@ namespace Retro.Net.Z80.Core.Decode
                     _wordLiteral = _prefetch.NextWord();
                 }
 
-                yield return
-                    new Operation(address,
-                                  opCode.Value,
-                                  _operand1,
-                                  _operand2,
-                                  _flagTest,
-                                  _opCodeMeta,
-                                  _byteLiteral,
-                                  _wordLiteral,
-                                  (sbyte) _displacement);
+                yield return new Operation(address,
+                                           opCode.Value,
+                                           _operand1,
+                                           _operand2,
+                                           _flagTest,
+                                           _opCodeMeta,
+                                           _byteLiteral,
+                                           _wordLiteral,
+                                           (sbyte) _displacement);
 
                 if (_decodeMeta.HasFlag(DecodeMeta.EndBlock))
                 {
@@ -145,9 +143,7 @@ namespace Retro.Net.Z80.Core.Decode
                 }
 
                 _index = _indexRegisterOperands[IndexRegister.HL];
-                var opBytes = _prefetch.TotalBytesRead - totalBytesRead;
-                address += (ushort) opBytes;
-                totalBytesRead += opBytes;
+                address = unchecked ((ushort) (_prefetch.BaseAddress + _prefetch.TotalBytesRead));
             }
         }
 

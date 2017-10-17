@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="GameBoy\Blargg\Blargg.zip" />
     <None Remove="Z80\Registers\Data\set-parity-flags.json" />
     <None Remove="Z80\Registers\Data\set-result-flags.json" />
     <None Remove="Z80\Registers\Data\set-undocumented-flags.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="GameBoy\Blargg\Blargg.zip" />
     <EmbeddedResource Include="Z80\Registers\Data\set-flags.json" />
     <EmbeddedResource Include="Z80\Registers\Data\set-parity-flags.json" />
     <EmbeddedResource Include="Z80\Registers\Data\set-result-flags.json" />
@@ -28,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GameBoy.Net\GameBoy.Net.csproj" />
     <ProjectReference Include="..\Retro.Net\Retro.Net.csproj" />
   </ItemGroup>
 

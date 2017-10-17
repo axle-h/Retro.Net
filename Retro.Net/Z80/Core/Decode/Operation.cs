@@ -121,23 +121,28 @@ namespace Retro.Net.Z80.Core.Decode
         /// </returns>
         public override string ToString()
         {
-            var sb = new StringBuilder().AppendFormat("0x{0}   {1}", Address.ToString("x4"), OpCode.GetMnemonic());
+            var sb = new StringBuilder($"0x{Address:x4}   {OpCode.GetMnemonic()}");
             if (FlagTest != FlagTest.None)
             {
-                sb.AppendFormat(" {0}", GetFlagTestString(FlagTest));
+                sb.Append($" {GetFlagTestString(FlagTest)}");
             }
 
             if (Operand1 != Operand.None)
             {
-                sb.AppendFormat(" {0}", GetOperandString(Operand1));
+                sb.Append($" {GetOperandString(Operand1)}");
             }
 
-            if (Operand2 == Operand.None)
+            if (Operand2 != Operand.None)
             {
-                return sb.ToString();
+                sb.Append($", {GetOperandString(Operand2)}");
             }
 
-            return sb.AppendFormat(", {0}", GetOperandString(Operand2)).ToString();
+            if (OpCode == OpCode.JumpRelative || OpCode == OpCode.DecrementJumpRelativeIfNonZero)
+            {
+                sb.Append($" {Displacement}");
+            }
+
+            return sb.ToString();
         }
 
         /// <summary>
