@@ -12,9 +12,9 @@ Currently:
 * Complete Z80 execution tests.
 * Integration tests for the Gameboy Blargg test roms.
 * WIP GameBoy hardware. Just enough to play Tetris at full speed!
+* An Angular user interface using websockets. See `gameboy-client`.
 
 TODO:
-* Front end? I've been using a full fat WPF app but thinking something more .net core. Maybe websockets.
 * Gameboy sound.
 * Gameboy GPU window rendering. Background and sprites are enough to play Tetris for now.
 * Debugger.

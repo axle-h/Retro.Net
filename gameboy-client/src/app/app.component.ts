@@ -1,0 +1,11 @@
+import {Component} from "@angular/core";
+
+@Component({
+  selector: "gb-root",
+  templateUrl: "./app.component.html"
+})
+export class AppComponent {
+
+
+
+}

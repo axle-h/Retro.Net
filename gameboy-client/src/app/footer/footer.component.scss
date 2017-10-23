@@ -1,0 +1,17 @@
+@import "../../style/base";
+
+.gb-footer {
+  padding: spacer(5) 0;
+  font-size: $font-size-sm;
+  background-color: $gray-200;
+  text-align: left;
+
+  p {
+    margin-bottom: 0;
+  }
+
+  a {
+    font-weight: $font-weight-bold;
+    color: $gray-700;
+  }
+}

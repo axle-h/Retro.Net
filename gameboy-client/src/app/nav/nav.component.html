@@ -1,0 +1,37 @@
+<div class="container" style="padding-left: 0; padding-right: 0;">
+  <header class="navbar navbar-light navbar-fixed-top navbar-expand-lg">
+
+    <a class="navbar-brand" [routerLink]="['/']" (click)="navbarCollapsed = true">
+      <img src="/assets/img/gameboy-logo.svg" width="150" height="30" alt="">
+    </a>
+
+    <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed"
+            [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse" [ngbCollapse]="navbarCollapsed" id="navbarContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" [routerLinkActive]="['active']">
+          <a class="nav-link" [routerLink]="['/gameboy']" (click)="navbarCollapsed = true">Join In</a>
+        </li>
+      </ul>
+
+      <span class="github-buttons d-none d-lg-inline">
+        <a class="github-button"
+           href="https://github.com/axle-h/Retro.Net/subscription"
+           target="_blank"
+           data-size="large"
+           data-show-count="true"
+           aria-label="Watch axle-h/Retro.Net on GitHub">Watch</a>
+        <a class="github-button"
+           href="https://github.com/axle-h/Retro.Net"
+           target="_blank"
+           data-icon="octicon-star"
+           data-size="large"
+           data-show-count="true"
+           aria-label="Star axle-h/Retro.Net on GitHub">Star</a>
+      </span>
+    </div>
+  </header>
+</div>

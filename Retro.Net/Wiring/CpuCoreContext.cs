@@ -73,8 +73,6 @@ namespace Retro.Net.Wiring
             {
                 kvp.Value.Dispose();
             }
-
-            _coreFactory.Dispose();
         }
     }
 }

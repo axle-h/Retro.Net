@@ -1,0 +1,69 @@
+@import "../../style/base";
+
+.gb-masthead {
+
+  background: theme-color(secondary) linear-gradient(135deg, theme-color(secondary), theme-color-level(secondary, -1));
+
+  &.light {
+    background: theme-color(light) linear-gradient(135deg, theme-color(light), theme-color-level(light, -1));
+    color: theme-color(dark);
+    .btn {
+      color: theme-color(dark);
+      border-color: theme-color(dark);
+      &:hover {
+        color: theme-color(light);
+        background-color: theme-color(primary);
+        border-color: theme-color(primary);
+      }
+    }
+
+    .lead {
+      color: theme-color(dark);
+    }
+  }
+
+  .gb-logo {
+    margin: spacer(4);
+    width: 256px;
+    height: 256px;
+  }
+
+  .gb-lcd {
+    margin: spacer(4);
+  }
+
+  padding-top: spacer(4);
+  padding-bottom: spacer(4);
+  margin-bottom: spacer(5);
+  text-align: center;
+
+  .lead {
+    @include block-center(80%);
+    margin-bottom: spacer(4);
+    font-size: spacer(4);
+    color: $gray-100;
+  }
+
+  .btn {
+    color: $gray-100;
+    border-color: $gray-100;
+    &:hover {
+      background-color: $gray-100;
+      color: theme-color(secondary);
+    }
+  }
+}
+
+.portrait {
+  width: 100%;
+  height: 100%;
+  max-width: 200px;
+  max-height: 200px;
+  padding-top: 100%;
+  border-radius: 50%;
+  display: block;
+  background-position-x: 50%;
+  background-position-y: 50%;
+  background-image: url("/assets/img/alex.jpg");
+  background-size: 120% 120%;
+}

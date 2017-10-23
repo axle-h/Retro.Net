@@ -10,9 +10,13 @@
         /// Initializes a new instance of the <see cref="StaticGameBoyConfig" /> class.
         /// </summary>
         /// <param name="cartridge">The cartridge.</param>
-        public StaticGameBoyConfig(byte[] cartridge)
+        /// <param name="type">The type.</param>
+        /// <param name="runGpu">if set to <c>true</c> [run gpu].</param>
+        public StaticGameBoyConfig(byte[] cartridge, GameBoyType type, bool runGpu)
         {
             CartridgeData = cartridge;
+            GameBoyType = type;
+            RunGpu = runGpu;
         }
 
         /// <summary>
@@ -29,7 +33,7 @@
         /// <value>
         /// The type of the game boy.
         /// </value>
-        public GameBoyType GameBoyType => GameBoyType.GameBoy;
+        public GameBoyType GameBoyType { get; }
 
         /// <summary>
         /// Gets a value indicating whether [run gpu].
@@ -37,6 +41,6 @@
         /// <value>
         /// <c>true</c> if [run gpu]; otherwise, <c>false</c>.
         /// </value>
-        public bool RunGpu => true;
+        public bool RunGpu { get; }
     }
 }

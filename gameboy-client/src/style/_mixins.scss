@@ -1,0 +1,7 @@
+@mixin block-center($width) {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: $width;
+  text-align: center;
+}

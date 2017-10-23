@@ -47,7 +47,10 @@ namespace Retro.Net.Wiring
         {
             builder.RegisterInstance(_runtimeConfig);
             builder.RegisterInstance(_platformConfig);
-            
+
+            builder.RegisterType<AutofacCpuCoreFactory>().As<ICpuCoreFactory>().SingleInstance();
+            builder.RegisterType<CpuCoreContext>().As<ICpuCoreContext>().SingleInstance();
+
             builder.RegisterType<GeneralPurposeRegisterSet>().AsSelf().InZ80Scope();
             builder.RegisterType<AccumulatorAndFlagsRegisterSet>().AsSelf().InZ80Scope();
             
