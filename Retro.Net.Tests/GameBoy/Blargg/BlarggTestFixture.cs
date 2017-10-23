@@ -4,9 +4,14 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Features.OwnedInstances;
+using GameBoy.Net;
+using GameBoy.Net.Config;
 using GameBoy.Net.Graphics;
 using GameBoy.Net.Peripherals;
 using GameBoy.Net.Wiring;
+using Retro.Net.Z80.Core;
 using Shouldly;
 
 namespace Retro.Net.Tests.GameBoy.Blargg
@@ -19,12 +24,18 @@ namespace Retro.Net.Tests.GameBoy.Blargg
 
         public async Task RunAsync(string cartridgeResource)
         {
-            var catridge = GetCartridgeBinary(cartridgeResource);
-            var config = new BlarggTestGameBoyConfig(catridge);
+            var cartridge = GetCartridgeBinary(cartridgeResource);
+            var config = new StaticGameBoyConfig(cartridge, GameBoyType.GameBoy, false);
 
-            using (var context = new GameBoyContext(config, () => new NullRenderHandler()))
-            using (var core = context.CoreContext.GetNewCore())
+            var builder = new ContainerBuilder();
+            builder.RegisterType<NullRenderer>().As<IRenderer>().SingleInstance();
+            builder.RegisterGameBoy(config);
+
+            using (var container = builder.Build())
+            using (var scope = container.BeginLifetimeScope())
+            using (var ownedCore = scope.Resolve<Owned<ICpuCore>>())
             {
+                var core = ownedCore.Value;
                 var io = core.GetPeripheralOfType<IGameBoyMemoryMappedIo>();
 
                 var serialPort = new BlarggTestSerialPort(Timeout);

@@ -1,29 +1,22 @@
-﻿using System.Linq;
-
-namespace GameBoy.Net.Graphics
+﻿namespace GameBoy.Net.Graphics
 {
     public class Frame
     {
-        private readonly byte[][] _buffer;
-
         public Frame(int width, int height)
         {
             Width = width;
             Height = height;
-
-            _buffer = new byte[height][];
-            for (var r = 0; r < height; r++)
-            {
-                _buffer[r] = new byte[width];
-            }
+            Buffer = new byte[Width * Height];
         }
 
-        public byte[] GetRow(int row) => _buffer[row];
+        public void SetPixel(int x, int y, byte value) => Buffer[Index(x, y)] = value;
 
-        public byte[] FlatBuffer => _buffer.SelectMany(x => x).ToArray();
+        public byte[] Buffer { get; }
 
         public int Height { get; }
 
         public int Width { get; }
+
+        private int Index(int x, int y) => Width * y + x;
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using GameBoy.Net.Config;
 using GameBoy.Net.Devices;
 using GameBoy.Net.Graphics;
@@ -37,19 +36,16 @@ namespace GameBoy.Net.Wiring
         /// The runtime configuration.
         /// </value>
         public static IRuntimeConfig RuntimeConfig { get; } = new RuntimeConfig(DebugMode, CoreMode.DynaRec);
-
-        private readonly Func<IRenderHandler> _renderHandlerFactory;
+        
         private readonly IGameBoyConfig _gameBoyConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameBoyHardwareModule"/> class.
         /// </summary>
         /// <param name="gameBoyConfig">The game boy configuration.</param>
-        /// <param name="renderHandlerFactory">The render handler factory.</param>
-        public GameBoyHardwareModule(IGameBoyConfig gameBoyConfig, Func<IRenderHandler> renderHandlerFactory)
+        public GameBoyHardwareModule(IGameBoyConfig gameBoyConfig)
         {
             _gameBoyConfig = gameBoyConfig;
-            _renderHandlerFactory = renderHandlerFactory;
             PlatformConfig = new GameBoyPlatformConfig(gameBoyConfig, new CartridgeFactory());
         }
 
@@ -108,7 +104,6 @@ namespace GameBoy.Net.Wiring
                                            true,
                                            InterruptMode.InterruptMode0);
             builder.RegisterInstance(initialRegisterState);
-            builder.Register(c => _renderHandlerFactory()).InZ80Scope();
         }
     }
 }

@@ -1,0 +1,32 @@
+@import "../../style/base";
+
+.gb-masthead {
+
+  background: theme-color(light) linear-gradient(135deg, theme-color(light), theme-color-level(light, -1));
+  color: theme-color(dark);
+  padding-top: spacer(4);
+  padding-bottom: spacer(4);
+  margin-bottom: spacer(5);
+  text-align: center;
+
+  .gb-lcd {
+    margin: spacer(4);
+  }
+
+  .lead {
+    @include block-center(80%);
+    margin-bottom: spacer(4);
+    font-size: spacer(4);
+    color: theme-color(dark);
+  }
+
+  .btn {
+    color: theme-color(dark);
+    border-color: theme-color(dark);
+    &:hover {
+      color: theme-color(light);
+      background-color: theme-color(primary);
+      border-color: theme-color(primary);
+    }
+  }
+}

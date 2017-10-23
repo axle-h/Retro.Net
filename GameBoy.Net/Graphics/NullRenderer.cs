@@ -1,10 +1,10 @@
 ﻿namespace GameBoy.Net.Graphics
 {
     /// <summary>
-    /// A render handler that does nothing.
+    /// A renderer that does nothing.
     /// </summary>
-    /// <seealso cref="IRenderHandler" />
-    public class NullRenderHandler : IRenderHandler
+    /// <seealso cref="IRenderer" />
+    public class NullRenderer : IRenderer
     {
         /// <summary>
         /// Called every time the GB LCD is updated.
@@ -17,12 +17,10 @@
         }
 
         /// <summary>
-        /// Updates the rendering metrics.
-        /// The render handler can choose to display this if required.
+        /// Updates the metrics.
         /// </summary>
-        /// <param name="fps">The total frames rendered in the last second.</param>
-        /// <param name="skippedFrames">The skipped frames.</param>
-        public void UpdateMetrics(int fps, int skippedFrames)
+        /// <param name="metrics">The metrics.</param>
+        public void UpdateMetrics(GpuMetrics metrics)
         {
         }
     }

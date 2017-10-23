@@ -1,9 +1,9 @@
 ﻿namespace GameBoy.Net.Graphics
 {
     /// <summary>
-    /// An external render handler.
+    /// An external renderer.
     /// </summary>
-    public interface IRenderHandler
+    public interface IRenderer
     {
         /// <summary>
         /// Called every time the GB LCD is updated.
@@ -15,10 +15,9 @@
 
         /// <summary>
         /// Updates the rendering metrics.
-        /// The render handler can choose to display this if required.
+        /// The renderer can choose to display this if required.
         /// </summary>
-        /// <param name="fps">The total frames rendered in the last second.</param>
-        /// <param name="skippedFrames">The skipped frames.</param>
-        void UpdateMetrics(int fps, int skippedFrames);
+        /// <param name="metrics">The metrics.</param>
+        void UpdateMetrics(GpuMetrics metrics);
     }
 }

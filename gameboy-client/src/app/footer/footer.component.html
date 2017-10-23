@@ -1,0 +1,18 @@
+<footer class="gb-footer text-muted">
+  <div class="container">
+    <p>Designed and built for fun by <a href="https://github.com/axle-h" target="_blank">Alex Haslehurst</a> in the UK.</p>
+    <p>Code licensed under <a href="https://raw.githubusercontent.com/ng-bootstrap/ng-bootstrap/master/LICENSE" target="_blank">MIT</a>.</p>
+    <p>Obviously no affiliation whatsoever with <a href="https://www.nintendo.co.uk/" target="_blank">Nintendo</a>.</p>
+
+    <ul class="list-inline mt-2">
+      <li *ngFor="let link of links" class="list-inline-item">
+        <a [href]="link.url" target="_blank">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-{{link.name}} fa-stack-1x fa-inverse"></i>
+        </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>

@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro.Net", "Retro.Net\Retro.Net.csproj", "{167F7D51-B153-4972-BB06-4BDD0B83AFA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.Net", "Retro.Net\Retro.Net.csproj", "{167F7D51-B153-4972-BB06-4BDD0B83AFA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBoy.Net", "GameBoy.Net\GameBoy.Net.csproj", "{00895975-EBF2-4A89-8295-934B500CF6D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBoy.Net", "GameBoy.Net\GameBoy.Net.csproj", "{00895975-EBF2-4A89-8295-934B500CF6D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro.Net.Tests", "Retro.Net.Tests\Retro.Net.Tests.csproj", "{25C4041A-9204-40D5-B2D0-4F09AB0DB5F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.Net.Tests", "Retro.Net.Tests\Retro.Net.Tests.csproj", "{25C4041A-9204-40D5-B2D0-4F09AB0DB5F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro.Net.Api", "Retro.Net.Api\Retro.Net.Api.csproj", "{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,8 +57,23 @@ Global
 		{25C4041A-9204-40D5-B2D0-4F09AB0DB5F6}.Release|x64.Build.0 = Release|Any CPU
 		{25C4041A-9204-40D5-B2D0-4F09AB0DB5F6}.Release|x86.ActiveCfg = Release|Any CPU
 		{25C4041A-9204-40D5-B2D0-4F09AB0DB5F6}.Release|x86.Build.0 = Release|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Debug|x64.Build.0 = Debug|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Debug|x86.Build.0 = Debug|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Release|x64.ActiveCfg = Release|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Release|x64.Build.0 = Release|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Release|x86.ActiveCfg = Release|Any CPU
+		{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7950804D-CED3-48DB-A38D-88B46035F3E4}
 	EndGlobalSection
 EndGlobal

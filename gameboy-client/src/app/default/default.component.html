@@ -1,0 +1,93 @@
+<main class="gb-masthead light">
+  <div class="container">
+    <div class="gb-lcd">
+      <gb-lcd [scale]="1"></gb-lcd>
+    </div>
+    <p class="lead">
+      Server side Gameboy
+    </p>
+    <p>
+      Currently playing Tetris
+    </p>
+    <p class="lead">
+      <a class="btn" [routerLink]="['/gameboy']">Join In</a>
+      <a class="btn" href="https://github.com/axle-h/Retro.Net" target="_blank"><i class="fa fa-github"></i> View on GitHub</a>
+    </p>
+  </div>
+</main>
+
+<section class="container mb-5">
+  <div class="row">
+    <div class="col-sm-2">
+      <img src="/assets/img/cpu.svg" class="img-fluid d-none d-sm-block" alt="CPU (computer chip)">
+    </div>
+    <div class="col-sm-4">
+      <h4>Dynamic Recompilation</h4>
+      <p class="text-muted">
+        What you're seeing is ASP.NET Core running Nintendo Gameboy software server side by dynamically recompiling Z80 opcodes into .NET expression trees.
+      </p>
+    </div>
+
+    <div class="col-sm-2">
+      <img src="/assets/img/stream.svg" class="img-fluid d-none d-sm-block" alt="Websocket">
+    </div>
+    <div class="col-sm-4">
+      <h4>Real Time</h4>
+      <p class="text-muted">
+        GPU rendering is completed on the server once per unique frame, compressed with LZ4 and streamed out to all connected clients over websockets.
+      </p>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-sm-2">
+      <img src="/assets/img/joystick.svg" class="img-fluid d-none d-sm-block" alt="Joystick">
+    </div>
+    <div class="col-sm-4">
+      <h4>Shared Controls</h4>
+      <p class="text-muted">
+        In between each unique frame, all connected clients can vote on what the next control input should be. The server will choose the one with the most votes… most of the time.
+      </p>
+    </div>
+
+    <div class="col-sm-2">
+      <img src="/assets/img/dotnet.svg" class="img-fluid d-none d-sm-block" alt="Accessible icon (escalator)">
+    </div>
+    <div class="col-sm-4">
+      <h4>Open Source</h4>
+      <p class="text-muted">
+        I made this in my spare time for fun - or just to see how far you can go with the .NET Core platform.
+        All code is available under <a href="https://raw.githubusercontent.com/ng-bootstrap/ng-bootstrap/master/LICENSE" target="_blank">MIT</a> license on <a href="https://github.com/axle-h/Retro.Net" target="_blank">GitHub</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<main class="gb-masthead">
+  <div class="container">
+    <img class="gb-logo" src="/assets/img/gameboy.svg" alt="Gameboy logo"/>
+    <p class="lead d-none d-md-block">
+      Server side Gameboy
+    </p>
+    <p class="lead">
+      <a class="btn" [routerLink]="['/gameboy']">Join In</a>
+      <a class="btn" href="https://github.com/axle-h/Retro.Net" target="_blank"><i class="fa fa-github"></i> View on GitHub</a>
+    </p>
+  </div>
+</main>
+
+<section class="container mb-5">
+  <div class="row">
+    <div class="col-sm-5 col-md-3 col-lg-2 d-none d-sm-block">
+      <div class="portrait"></div>
+    </div>
+    <div class="col-sm-7 col-md-9 col-lg-10">
+      <h4>Alex Haslehurst</h4>
+      <p class="text-muted">
+        I am a highly motivated and technically skilled software developer with a strong background in mathematics.
+        I have over 5 years commercial experience as a web developer, specialising in ASP.NET Core.
+        I am based in the UK Midlands and am always open to discussing exciting new opportunities.
+      </p>
+    </div>
+  </div>
+</section>

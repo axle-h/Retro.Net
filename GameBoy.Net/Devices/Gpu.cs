@@ -43,7 +43,7 @@ namespace GameBoy.Net.Devices
 
         private readonly IInterruptFlagsRegister _interruptFlagsRegister;
 
-        private readonly IRenderHandler _renderHandler;
+        private readonly IRenderer _renderer;
 
         /// <summary>
         /// Normal frame buffer.
@@ -84,17 +84,17 @@ namespace GameBoy.Net.Devices
         /// <param name="gameBoyConfig">The game boy configuration.</param>
         /// <param name="interruptFlagsRegister">The interrupt flags register.</param>
         /// <param name="gpuRegisters">The gpu registers.</param>
-        /// <param name="renderHandler">The renderhandler.</param>
+        /// <param name="renderer">The renderer.</param>
         /// <param name="timer">The timer.</param>
         public Gpu(IGameBoyConfig gameBoyConfig,
             IInterruptFlagsRegister interruptFlagsRegister,
             IGpuRegisters gpuRegisters,
-            IRenderHandler renderHandler,
+            IRenderer renderer,
             IInstructionTimer timer)
         {
             _interruptFlagsRegister = interruptFlagsRegister;
             _gpuRegisters = gpuRegisters;
-            _renderHandler = renderHandler;
+            _renderer = renderer;
 
             _spriteRam = new ArrayBackedMemoryBank(SpriteRamConfig);
             _tileRam = new ArrayBackedMemoryBank(MapRamConfig);
@@ -123,7 +123,7 @@ namespace GameBoy.Net.Devices
 
         public void UpdateMetricsCallback(object stateInfo)
         {
-            _renderHandler.UpdateMetrics(_framesRendered, _frameSkip);
+            _renderer.UpdateMetrics(new GpuMetrics(_framesRendered, _frameSkip));
             _framesRendered = _frameSkip = 0;
         }
 
@@ -308,11 +308,9 @@ namespace GameBoy.Net.Devices
             
             for (var y = 0; y < LcdHeight; y++)
             {
-                var buffer = _lcdBuffer.GetRow(y);
-
                 for (var x = 0; x < LcdWidth; x++)
                 {
-                    buffer[x] = (byte) bitmapPalette[_tileMapPointer.Pixel];
+                    _lcdBuffer.SetPixel(x, y, (byte) bitmapPalette[_tileMapPointer.Pixel]);
 
                     if (x + 1 < LcdWidth)
                     {
@@ -326,7 +324,7 @@ namespace GameBoy.Net.Devices
                 }
             }
             
-            _renderHandler.Paint(_lcdBuffer);
+            _renderer.Paint(_lcdBuffer);
 
             _frameSkip = 0;
             _framesRendered++;
