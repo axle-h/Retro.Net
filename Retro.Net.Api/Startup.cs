@@ -10,6 +10,7 @@ using Autofac.Extensions.DependencyInjection;
 using GameBoy.Net;
 using GameBoy.Net.Config;
 using GameBoy.Net.Graphics;
+using GameBoy.Net.Peripherals;
 using GameBoy.Net.Wiring;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,8 +19,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Retro.Net.Api.Middleware;
 using Retro.Net.Api.RealTime;
+using Retro.Net.Api.RealTime.Interfaces;
 using Retro.Net.Wiring;
-using Retro.Net.Z80.Core;
 
 namespace Retro.Net.Api
 {
@@ -29,10 +30,7 @@ namespace Retro.Net.Api
         public const string WebSocketRootPath = "/ws";
 
         private const string CartridgeResource = "cartridge.zip";
-
-        private ICpuCore _core;
-        private CancellationTokenSource _source;
-
+        
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -53,17 +51,15 @@ namespace Retro.Net.Api
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
-            builder.RegisterType<WebSocketsRenderer>().As<IRenderer>().As<IWebSocketsRenderer>().SingleInstance();
+
+            builder.RegisterType<SingleCoreWebSocketContext>().As<IWebSocketContext>().SingleInstance();
+            builder.RegisterType<WebSocketRenderer>().As<IRenderer>().As<IWebSocketRenderer>().InZ80Scope();
+            builder.RegisterGeneric(typeof(FramedMessageHandler<>)).As(typeof(IFramedMessageHandler<>)).InZ80Scope();
 
             var cartridge = GetCartridgeBinary();
             var config = new StaticGameBoyConfig(cartridge, GameBoyType.GameBoy, true);
             builder.RegisterGameBoy(config);
             var container = builder.Build();
-
-            _core = container.Resolve<ICpuCoreContext>().GetNewCore();
-
-            _source = new CancellationTokenSource();
-            Task.Run(() => _core.StartCoreProcessAsync(_source.Token));
 
             return new AutofacServiceProvider(container);
         }
@@ -79,13 +75,6 @@ namespace Retro.Net.Api
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMvc();
-
-            lifetime.ApplicationStopping.Register(() =>
-                                                  {
-                                                      _source.Cancel();
-                                                      _core?.Dispose();
-                                                      _source.Dispose();
-                                                  });
         }
 
         private static byte[] GetCartridgeBinary()

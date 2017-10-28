@@ -1,25 +1,31 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Retro.Net.Api.RealTime;
+using Retro.Net.Api.RealTime.Interfaces;
 
 namespace Retro.Net.Api.Controllers
 {
     [Route(Startup.WebSocketRootPath)]
     public class WebSocketController : Controller
     {
-        private readonly IWebSocketsRenderer _renderer;
+        private readonly IWebSocketContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebSocketController"/> class.
         /// </summary>
-        /// <param name="renderer">The renderer.</param>
-        public WebSocketController(IWebSocketsRenderer renderer)
+        /// <param name="context">The context.</param>
+        public WebSocketController(IWebSocketContext context)
         {
-            _renderer = renderer;
+            _context = context;
         }
 
+
         [Route("gameboy")]
-        public async Task<IActionResult> GameBoy() =>
-            await HttpContext.WithWebSocketDo((ws, ct) => _renderer.RenderToWebSocketAsync(ws, ct)).ConfigureAwait(false);
+        public async Task<IActionResult> GameBoy()
+        {
+            var renderer = _context.GetRenderer(Guid.Empty);
+            return await HttpContext.WithWebSocketDo((ws, ct) => renderer.RenderToWebSocketAsync(ws, ct)).ConfigureAwait(false);
+        }
     }
 }

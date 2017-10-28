@@ -20,20 +20,23 @@ namespace GameBoy.Net.Peripherals
         private readonly IMemoryBankController _memoryBankController;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameBoyMemoryMappedIo"/> class.
+        /// Initializes a new instance of the <see cref="GameBoyMemoryMappedIo" /> class.
         /// </summary>
         /// <param name="hardwareRegisters">The hardware registers.</param>
         /// <param name="interruptRegister">The interrupt register.</param>
         /// <param name="gpu">The gpu.</param>
+        /// <param name="renderer">The renderer.</param>
         /// <param name="memoryBankController">The memory bank controller.</param>
         public GameBoyMemoryMappedIo(IHardwareRegisters hardwareRegisters,
             IInterruptEnableRegister interruptRegister,
             IGpu gpu,
+            IRenderer renderer,
             IMemoryBankController memoryBankController)
         {
             HardwareRegisters = hardwareRegisters;
             _interruptRegister = interruptRegister;
             Gpu = gpu;
+            Renderer = renderer;
             _memoryBankController = memoryBankController;
         }
 
@@ -83,6 +86,14 @@ namespace GameBoy.Net.Peripherals
         /// The GPU.
         /// </value>
         public IGpu Gpu { get; }
+
+        /// <summary>
+        /// Gets the renderer.
+        /// </summary>
+        /// <value>
+        /// The renderer.
+        /// </value>
+        public IRenderer Renderer { get; }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

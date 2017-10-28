@@ -2,55 +2,71 @@
 
 namespace GameBoy.Net.Devices
 {
-    /// <summary>
-    /// A button on the GameBoy joypad.
-    /// </summary>
-    [Flags]
-    public enum JoyPadButton : byte
+    public enum JoyPadButton
     {
-        /// <summary>
-        /// No buttons are pressed.
-        /// </summary>
-        None = 0x00,
-
         /// <summary>
         /// The up button.
         /// </summary>
-        Up = 0x01,
+        Up = 1,
 
         /// <summary>
         /// The down button.
         /// </summary>
-        Down = 0x02,
+        Down = 2,
 
         /// <summary>
         /// The left button.
         /// </summary>
-        Left = 0x04,
+        Left = 3,
 
         /// <summary>
         /// The right button.
         /// </summary>
-        Right = 0x08,
+        Right = 4,
 
         /// <summary>
         /// The A button.
         /// </summary>
-        A = 0x10,
+        A = 5,
 
         /// <summary>
         /// The B button.
         /// </summary>
-        B = 0x20,
+        B = 6,
 
         /// <summary>
         /// The start button.
         /// </summary>
-        Start = 0x40,
+        Start = 7,
 
         /// <summary>
         /// The select button.
         /// </summary>
-        Select = 0x80
+        Select = 8
+    }
+
+    internal static class JoyPadButtonExtensions
+    {
+        /// <summary>
+        /// Gets the <see cref="JoyPadButtonFlags"/> for the specified <see cref="JoyPadButton"/>.
+        /// </summary>
+        /// <param name="button">The button.</param>
+        /// <returns></returns>
+        public static JoyPadButtonFlags GetFlag(this JoyPadButton button)
+        {
+            switch (button)
+            {
+                case JoyPadButton.Up: return JoyPadButtonFlags.Up;
+                case JoyPadButton.Down: return JoyPadButtonFlags.Down;
+                case JoyPadButton.Left: return JoyPadButtonFlags.Left;
+                case JoyPadButton.Right: return JoyPadButtonFlags.Right;
+                case JoyPadButton.A: return JoyPadButtonFlags.A;
+                case JoyPadButton.B: return JoyPadButtonFlags.B;
+                case JoyPadButton.Start: return JoyPadButtonFlags.Start;
+                case JoyPadButton.Select: return JoyPadButtonFlags.Select;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(button), button, null);
+            }
+        }
     }
 }

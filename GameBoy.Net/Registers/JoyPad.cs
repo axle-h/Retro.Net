@@ -12,7 +12,7 @@ namespace GameBoy.Net.Registers
     {
         private readonly IInterruptFlagsRegister _interruptFlagsRegister;
         private MatrixColumn _matrixColumn;
-        private JoyPadButton _buttons;
+        private JoyPadButtonFlags _buttons;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JoyPad"/> class.
@@ -22,7 +22,7 @@ namespace GameBoy.Net.Registers
         {
             _interruptFlagsRegister = interruptFlagsRegister;
             _matrixColumn = MatrixColumn.None;
-            _buttons = JoyPadButton.None;
+            _buttons = JoyPadButtonFlags.None;
         }
 
         /// <summary>
@@ -72,28 +72,25 @@ namespace GameBoy.Net.Registers
                     case MatrixColumn.None:
                         return (byte) ((byte) _matrixColumn | 0xf);
                     case MatrixColumn.Both:
-                        return GetRegister(_buttons.HasFlag(JoyPadButton.Right) || _buttons.HasFlag(JoyPadButton.A),
-                                           _buttons.HasFlag(JoyPadButton.Left) || _buttons.HasFlag(JoyPadButton.B),
-                                           _buttons.HasFlag(JoyPadButton.Up) || _buttons.HasFlag(JoyPadButton.Select),
-                                           _buttons.HasFlag(JoyPadButton.Down) || _buttons.HasFlag(JoyPadButton.Start));
+                        return GetRegister(_buttons.HasFlag(JoyPadButtonFlags.Right) || _buttons.HasFlag(JoyPadButtonFlags.A),
+                                           _buttons.HasFlag(JoyPadButtonFlags.Left) || _buttons.HasFlag(JoyPadButtonFlags.B),
+                                           _buttons.HasFlag(JoyPadButtonFlags.Up) || _buttons.HasFlag(JoyPadButtonFlags.Select),
+                                           _buttons.HasFlag(JoyPadButtonFlags.Down) || _buttons.HasFlag(JoyPadButtonFlags.Start));
                     case MatrixColumn.P15:
-                        return GetRegister(_buttons.HasFlag(JoyPadButton.Right),
-                                           _buttons.HasFlag(JoyPadButton.Left),
-                                           _buttons.HasFlag(JoyPadButton.Up),
-                                           _buttons.HasFlag(JoyPadButton.Down));
+                        return GetRegister(_buttons.HasFlag(JoyPadButtonFlags.Right),
+                                           _buttons.HasFlag(JoyPadButtonFlags.Left),
+                                           _buttons.HasFlag(JoyPadButtonFlags.Up),
+                                           _buttons.HasFlag(JoyPadButtonFlags.Down));
                     case MatrixColumn.P14:
-                        return GetRegister(_buttons.HasFlag(JoyPadButton.A),
-                                           _buttons.HasFlag(JoyPadButton.B),
-                                           _buttons.HasFlag(JoyPadButton.Select),
-                                           _buttons.HasFlag(JoyPadButton.Start));
+                        return GetRegister(_buttons.HasFlag(JoyPadButtonFlags.A),
+                                           _buttons.HasFlag(JoyPadButtonFlags.B),
+                                           _buttons.HasFlag(JoyPadButtonFlags.Select),
+                                           _buttons.HasFlag(JoyPadButtonFlags.Start));
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            set
-            {
-                _matrixColumn = (MatrixColumn) value;
-            }
+            set => _matrixColumn = (MatrixColumn) value;
         }
 
         /// <summary>
@@ -166,19 +163,36 @@ namespace GameBoy.Net.Registers
 
         /// <summary>
         /// Gets or sets the buttons.
-        /// Note: <see cref="JoyPadButton"/> is a flags register.
+        /// Note: <see cref="JoyPadButtonFlags"/> is a flags register.
         /// </summary>
         /// <value>
         /// The buttons.
         /// </value>
-        public JoyPadButton Buttons {
-            get { return _buttons; }
+        public JoyPadButtonFlags Buttons {
+            get => _buttons;
             set
             {
+                var interrupt = _buttons != value;
                 _buttons = value;
-                _interruptFlagsRegister.UpdateInterrupts(InterruptFlag.JoyPadPress);
+                if (interrupt)
+                {
+                    _interruptFlagsRegister.UpdateInterrupts(InterruptFlag.JoyPadPress);
+                }
             }
         }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Releases all buttons and presses the specified button.
+        /// </summary>
+        /// <param name="button">The button to press.</param>
+        public void PressOne(JoyPadButton button) => Buttons = button.GetFlag();
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Releases all buttons.
+        /// </summary>
+        public void ReleaseAll() => Buttons = JoyPadButtonFlags.None;
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

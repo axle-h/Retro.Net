@@ -4,12 +4,16 @@ import * as msgpack from "msgpack-lite";
 import * as lz4 from "lz4js/lz4.js";
 import * as Rx from "rxjs/Rx";
 import {GpuMetrics} from "./models/gpu-metrics";
-import { environment } from "../environments/environment";
+import {environment} from "../environments/environment";
+import {GameboyButton} from "./models/gameboy-button";
 
 const ServicePath = "ws/gameboy";
-const heartbeatMessage = "heartbeat";
 const lcdWidth = 160;
 const lcdHeight = 144;
+
+interface GameboyMessage {
+  button?: GameboyButton;
+}
 
 @Injectable()
 export class GameboyService {
@@ -17,13 +21,16 @@ export class GameboyService {
   public frame: Uint8Array;
   public lcdWidth = lcdWidth;
   public lcdHeight = lcdHeight;
+  public healthy = false;
+
 
   private url: string;
   private reconnectInterval = 1000;
-  private heartbeatInterval = 1000;
+  private heartbeatInterval = 5000;
   private metricsSubject: Rx.Subject<GpuMetrics>;
+  private messageObserver: Rx.Observer<GameboyMessage>;
   private heartbeat: Rx.Subscription;
-  public healthy = false;
+  private messageSinceLastHeartbeat = false;
 
   constructor(@Inject(DOCUMENT) private document) {
     this.metricsSubject = Rx.Subject.create();
@@ -51,22 +58,27 @@ export class GameboyService {
         return ws.close.bind(ws);
       });
 
-    const observer = {
-      next: (data: Object) => {
+    this.messageObserver = <Rx.Observer<GameboyMessage>> {
+      next: (message: GameboyMessage) => {
         if (ws.readyState === WebSocket.OPEN) {
-          if (typeof(data) === "string") {
-            ws.send(data);
-          } else {
-            ws.send(JSON.stringify(data));
-          }
+          const packed = msgpack.encode(message);
+          const b64encoded = btoa(String.fromCharCode.apply(null, packed));
+          console.log(b64encoded);
+          ws.send(packed);
         }
       }
     };
 
     this.heartbeat = Rx.Observable.interval(this.heartbeatInterval)
-      .subscribe(() => observer.next(heartbeatMessage));
+      .subscribe(() => {
+        if (this.messageSinceLastHeartbeat) {
+          this.messageSinceLastHeartbeat = false;
+        } else {
+          this.messageObserver.next({});
+        }
+      });
 
-    Rx.Subject.create(observer, observable)
+    Rx.Subject.create(this.messageObserver, observable)
       .subscribe(msg => {
         this.healthy = true;
         const data = new Uint8Array(<ArrayBuffer> msg.data);
@@ -91,4 +103,9 @@ export class GameboyService {
     return this.metricsSubject.asObservable();
   }
 
+  public pressButton(button: GameboyButton) {
+    this.messageSinceLastHeartbeat = true;
+    this.messageObserver.next({button});
+  }
 }
+

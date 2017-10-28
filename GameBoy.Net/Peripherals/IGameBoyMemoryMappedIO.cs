@@ -25,5 +25,13 @@ namespace GameBoy.Net.Peripherals
         /// The GPU.
         /// </value>
         IGpu Gpu { get; }
+
+        /// <summary>
+        /// Gets the renderer.
+        /// </summary>
+        /// <value>
+        /// The renderer.
+        /// </value>
+        IRenderer Renderer { get; }
     }
 }

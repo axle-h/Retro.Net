@@ -71,7 +71,7 @@ namespace GameBoy.Net.Wiring
 
             // Named registers
             builder.RegisterType<InterruptEnableRegister>().As<IInterruptEnableRegister>().InZ80Scope();
-            builder.RegisterType<JoyPad>().As<IJoyPadRegister>().InZ80Scope();
+            builder.RegisterType<JoyPad>().As<IJoyPadRegister>().As<IJoyPad>().InZ80Scope();
             builder.RegisterType<SyncSerialPort>().As<ISerialPort>().As<ISerialPortRegister>().InZ80Scope();
             builder.RegisterType<MemoryBankController1>().As<IMemoryBankController>().InZ80Scope();
             builder.RegisterType<TimerControlRegister>().As<ITimerControlRegister>().InZ80Scope();

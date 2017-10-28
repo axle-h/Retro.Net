@@ -5,50 +5,59 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Retro.Net.Api.RealTime.Interfaces;
 
 namespace Retro.Net.Api.RealTime
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// A wrapper for a websocket that handles:
+    /// * Safe closing of the socket.
+    /// * Send message locking.
+    /// * Receive message events via the provided <see cref="IWebSocketMessageHandler"/>.
+    /// * Manages a heartbat mechanism where if the client doesn't send a emssage for a pre-determined time then teh socket will be closed.
+    /// </summary>
+    /// <seealso cref="T:System.IDisposable" />
     internal class LockingWebSocket : IDisposable
     {
         private static readonly TimeSpan MinimumHeartbeatInterval = TimeSpan.FromSeconds(30);
-        private const string HeartbeatMessage = "heartbeat";
         private const int InitialBufferSize = 256;
         private const int BufferSizeIncrement = 64;
 
         private readonly SemaphoreSlim _semaphore;
+        private readonly Guid _id;
         private readonly WebSocket _socket;
+        private readonly IWebSocketMessageHandler _handler;
         private readonly CancellationTokenSource _disposing;
-        private readonly Stopwatch _timeSinceLastHeartbeat;
+        private readonly Stopwatch _timeSinceLastMessage;
         private readonly TaskCompletionSource<bool> _lifetime;
         private readonly ILogger _logger;
 
-        public LockingWebSocket(WebSocket socket, ILogger logger, CancellationToken token)
+        public LockingWebSocket(Guid id, WebSocket socket, IWebSocketMessageHandler handler, ILogger logger, CancellationToken token)
         {
+            _id = id;
             _socket = socket;
+            _handler = handler;
             _logger = logger;
             _semaphore = new SemaphoreSlim(1, 1);
-            _timeSinceLastHeartbeat = Stopwatch.StartNew();
+            _timeSinceLastMessage = Stopwatch.StartNew();
             _disposing = new CancellationTokenSource();
-            Task.Run(ReceiveAsync, _disposing.Token);
-            Task.Run(async () =>
-                     {
-                         while (!_disposing.Token.IsCancellationRequested)
-                         {
-                             await Task.Delay(MinimumHeartbeatInterval - _timeSinceLastHeartbeat.Elapsed + TimeSpan.FromSeconds(1)).ConfigureAwait(false);
-
-                             if (_timeSinceLastHeartbeat.Elapsed > MinimumHeartbeatInterval)
-                             {
-                                 _logger.LogInformation($"Received no heartbeat for {_timeSinceLastHeartbeat.Elapsed}, closing websocket");
-                                 await CloseNowAsync().ConfigureAwait(false);
-                                 return;
-                             }
-                         }
-                     }, _disposing.Token);
-
             _lifetime = new TaskCompletionSource<bool>();
-            token.Register(() => _lifetime.TrySetResult(true));
+
+            Task.Run(ReceiveAsync, _disposing.Token);
+            Task.Run(HeartbeatAsync, _disposing.Token);
+
+            // this is a hack... linked token sources don't seem to work here. dunno if it's because the token is from MVC?
+            token.Register(() => _lifetime.SetResult(true));
         }
 
+        /// <summary>
+        /// Gets a task that will complete when the socket has either closed or failed.
+        /// You should run <see cref="Dispose"/> after this task has completed.
+        /// </summary>
+        /// <value>
+        /// The lifetime task.
+        /// </value>
         public Task LifetimeTask => _lifetime.Task;
 
         public bool IsClosed { get; private set; }
@@ -62,11 +71,26 @@ namespace Retro.Net.Api.RealTime
                                           await s.SendAsync(messages[i], WebSocketMessageType.Binary, isLast, _disposing.Token).ConfigureAwait(false);
                                       }
                                   }).ConfigureAwait(false);
-            
+
+        private async Task HeartbeatAsync()
+        {
+            while (!_disposing.IsCancellationRequested)
+            {
+                await Task.Delay(MinimumHeartbeatInterval - _timeSinceLastMessage.Elapsed + TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+
+                if (_timeSinceLastMessage.Elapsed > MinimumHeartbeatInterval)
+                {
+                    _logger.LogInformation($"Received no message from client for {_timeSinceLastMessage.Elapsed}, closing websocket {_id}");
+                    await CloseNowAsync().ConfigureAwait(false);
+                    return;
+                }
+            }
+        }
+
         private async Task ReceiveAsync()
         {
             var buffer = new byte[InitialBufferSize];
-            while (!_disposing.Token.IsCancellationRequested)
+            while (!_disposing.IsCancellationRequested)
             {
                 try
                 {
@@ -79,21 +103,24 @@ namespace Retro.Net.Api.RealTime
                             Array.Resize(ref buffer, buffer.Length + BufferSizeIncrement);
                         }
 
-                        var segment = new ArraySegment<byte>(buffer, length, buffer.Length - length);
+                        var segment = buffer.EndSegment(length);
                         result = await _socket.ReceiveAsync(segment, _disposing.Token);
                         length += result.Count;
                     }
 
+                    _timeSinceLastMessage.Reset();
+
                     switch (result.MessageType)
                     {
                         case WebSocketMessageType.Binary:
-                            throw new NotSupportedException("TODO: Binary messages");
+                            _handler.OnReceive(_id, buffer.Segment(length));
+                            break;
+                        case WebSocketMessageType.Text:
+                            _handler.OnReceive(_id, Encoding.UTF8.GetString(buffer, 0, length));
+                            break;
                         case WebSocketMessageType.Close:
                             await CloseNowAsync().ConfigureAwait(false);
                             return;
-                        case WebSocketMessageType.Text:
-                            HandleTextMessage(buffer, length);
-                            break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -102,20 +129,6 @@ namespace Retro.Net.Api.RealTime
                 {
                     _logger.LogError(0, e, "Receive message failed");
                 }
-                    
-            }
-        }
-
-        private void HandleTextMessage(byte[] buffer, int length)
-        {
-            var message = Encoding.UTF8.GetString(buffer, 0, length);
-            if (message.Trim().Equals(HeartbeatMessage, StringComparison.OrdinalIgnoreCase))
-            {
-                _timeSinceLastHeartbeat.Reset();
-            }
-            else
-            {
-                throw new NotSupportedException("Unknown message: " + message);
             }
         }
 
