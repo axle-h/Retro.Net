@@ -3,6 +3,7 @@ using Autofac;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
 using Retro.Net.Timing;
+using Retro.Net.Util;
 using Retro.Net.Z80.Cache;
 using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Core;
@@ -82,7 +83,8 @@ namespace Retro.Net.Wiring
             builder.RegisterType<InterruptManager>().As<IInterruptManager>().InZ80Scope();
             builder.RegisterType<InstructionTimer>().As<IInstructionTimer>().InZ80Scope();
             builder.RegisterType<OpCodeDecoder>().As<IOpCodeDecoder>().InZ80Scope();
-            
+            builder.RegisterType<MessageBus>().As<IMessageBus>().InZ80Scope();
+
             switch (_runtimeConfig.CoreMode)
             {
                 case CoreMode.Interpreted:

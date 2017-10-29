@@ -7,12 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using GameBoy.Net.Devices;
 using GameBoy.Net.Graphics;
-using GameBoy.Net.Peripherals;
 using LZ4;
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.Extensions.Logging;
 using Retro.Net.Api.RealTime.Interfaces;
+using Retro.Net.Util;
 
 namespace Retro.Net.Api.RealTime
 {
@@ -27,15 +27,17 @@ namespace Retro.Net.Api.RealTime
         private readonly ConcurrentDictionary<Guid, LockingWebSocket> _sockets;
         private readonly IFramedMessageHandler<GameBoySocketMessage> _messageHandler;
         private readonly IJoyPad _joyPad;
+        private readonly IMessageBus _messageBus;
         private readonly CancellationTokenSource _disposing;
         private readonly byte[] _buffer;
 
         private readonly ILogger _logger;
 
-        public WebSocketRenderer(ILoggerFactory loggerFactory, IFramedMessageHandler<GameBoySocketMessage> messageHandler, IJoyPad joyPad)
+        public WebSocketRenderer(ILoggerFactory loggerFactory, IFramedMessageHandler<GameBoySocketMessage> messageHandler, IJoyPad joyPad, IMessageBus messageBus)
         {
             _messageHandler = messageHandler;
             _joyPad = joyPad;
+            _messageBus = messageBus;
             _sockets = new ConcurrentDictionary<Guid, LockingWebSocket>();
             _disposing = new CancellationTokenSource();
             _buffer = new byte[LZ4Codec.MaximumOutputLength(Gpu.LcdWidth * Gpu.LcdHeight)];
@@ -61,6 +63,7 @@ namespace Retro.Net.Api.RealTime
 
         public async Task RenderToWebSocketAsync(WebSocket socket, CancellationToken token)
         {
+            
             var id = Guid.NewGuid();
             try
             {
@@ -69,18 +72,39 @@ namespace Retro.Net.Api.RealTime
                     // Paint the current frame before adding.
                     await safeSocket.SendAsync(FrameHeader, _buffer).ConfigureAwait(false);
 
-                    _sockets.TryAdd(id, safeSocket);
-                    _logger.LogInformation($"Added socket: {id}, Connected sockts: {_sockets.Count}");
+                    lock (_sockets)
+                    {
+                        if (_sockets.Count == 0)
+                        {
+                            _messageBus.SendMessage(Message.ResumeCpu);
+                            _logger.LogInformation("Resuming CPU");
+                        }
 
+                        _sockets.TryAdd(id, safeSocket);
+                        _logger.LogInformation($"Added socket: {id}, Connected sockts: {_sockets.Count}");
+                    }
+                   
                     await safeSocket.LifetimeTask.ConfigureAwait(false);
                 }
             }
             finally
             {
-                if (_sockets.TryRemove(id, out _))
+                lock (_sockets)
                 {
-                    _logger.LogInformation($"Removed socket: {id}, Connected sockts: {_sockets.Count}");
+                    if (_sockets.TryRemove(id, out _))
+                    {
+                        if (_sockets.Count == 0)
+                        {
+                            _messageBus.SendMessage(Message.PauseCpu);
+                            _logger.LogInformation($"Removed socket: {id}, Connected sockts: 0. Pausing CPU.");
+                        }
+                        else
+                        {
+                            _logger.LogInformation($"Removed socket: {id}, Connected sockts: {_sockets.Count}");
+                        }
+                    }
                 }
+                
             }
         }
 

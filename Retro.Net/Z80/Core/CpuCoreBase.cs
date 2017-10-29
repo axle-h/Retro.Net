@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
 using Retro.Net.Timing;
+using Retro.Net.Util;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
@@ -24,8 +25,11 @@ namespace Retro.Net.Z80.Core
         private readonly IOpCodeDecoder _opCodeDecoder;
         private readonly IInstructionBlockFactory _instructionBlockFactory;
         private readonly IDmaController _dmaController;
+        private readonly IMessageBus _messageBus;
 
+        private TaskCompletionSource<bool> _paused;
         private ushort? _interruptAddress;
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CpuCoreBase" /> class.
@@ -39,7 +43,9 @@ namespace Retro.Net.Z80.Core
         /// <param name="opCodeDecoder">The opcode decoder.</param>
         /// <param name="instructionBlockFactory">The instruction block decoder.</param>
         /// <param name="dmaController">The dma controller.</param>
+        /// <param name="messageBus">The message bus.</param>
         /// <param name="requireInstructionBlockCaching">if set to <c>true</c> [require instruction block caching].</param>
+        /// <exception cref="ArgumentException">Instruction block decoder must support caching</exception>
         protected CpuCoreBase(IRegisters registers,
             IInterruptManager interruptManager,
             IPeripheralManager peripheralManager,
@@ -49,6 +55,7 @@ namespace Retro.Net.Z80.Core
             IOpCodeDecoder opCodeDecoder,
             IInstructionBlockFactory instructionBlockFactory,
             IDmaController dmaController,
+            IMessageBus messageBus,
             bool requireInstructionBlockCaching)
         {
             CoreId = Guid.NewGuid();
@@ -61,6 +68,9 @@ namespace Retro.Net.Z80.Core
             _opCodeDecoder = opCodeDecoder;
             _instructionBlockFactory = instructionBlockFactory;
             _dmaController = dmaController;
+            _messageBus = messageBus;
+            messageBus.RegisterHandler(Message.PauseCpu, Pause);
+            messageBus.RegisterHandler(Message.ResumeCpu, Resume);
 
             if (requireInstructionBlockCaching && !_instructionBlockFactory.SupportsInstructionBlockCaching)
             {
@@ -91,6 +101,16 @@ namespace Retro.Net.Z80.Core
         public TPeripheral GetPeripheralOfType<TPeripheral>() where TPeripheral : IPeripheral => _peripheralManager.PeripheralOfType<TPeripheral>();
 
         /// <summary>
+        /// Pauses this core.
+        /// </summary>
+        public void Pause() => _paused = new TaskCompletionSource<bool>();
+
+        /// <summary>
+        /// Resumes this core after a pause.
+        /// </summary>
+        public void Resume() => Task.Run(() => _paused?.TrySetResult(true));
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
@@ -99,6 +119,7 @@ namespace Retro.Net.Z80.Core
             _peripheralManager.Dispose();
             _mmu.Dispose();
             _dmaController.Dispose();
+            _messageBus.Dispose();
         }
 
         /// <summary>
@@ -121,6 +142,11 @@ namespace Retro.Net.Z80.Core
         /// <returns></returns>
         protected async Task ExecuteInstructionBlockAsync(IInstructionBlock instructionBlock)
         {
+            if (_paused != null)
+            {
+                await _paused.Task.ConfigureAwait(false);
+            }
+
             var timings = instructionBlock.ExecuteInstructionBlock(_registers, _mmu, _alu, _peripheralManager);
 
             if (instructionBlock.HaltCpu)

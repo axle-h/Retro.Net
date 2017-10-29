@@ -62,8 +62,6 @@ export class GameboyService {
       next: (message: GameboyMessage) => {
         if (ws.readyState === WebSocket.OPEN) {
           const packed = msgpack.encode(message);
-          const b64encoded = btoa(String.fromCharCode.apply(null, packed));
-          console.log(b64encoded);
           ws.send(packed);
         }
       }

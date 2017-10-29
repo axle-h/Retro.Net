@@ -32,5 +32,15 @@ namespace Retro.Net.Z80.Core
         /// <typeparam name="TPeripheral"></typeparam>
         /// <returns></returns>
         TPeripheral GetPeripheralOfType<TPeripheral>() where TPeripheral : IPeripheral;
+
+        /// <summary>
+        /// Pauses this core.
+        /// </summary>
+        void Pause();
+
+        /// <summary>
+        /// Resumes this core after a pause.
+        /// </summary>
+        void Resume();
     }
 }

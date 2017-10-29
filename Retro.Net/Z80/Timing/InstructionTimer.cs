@@ -94,10 +94,7 @@ namespace Retro.Net.Z80.Timing
         /// Notifies the instruction timer that the CPU has accepted the interrupt and is running again.
         /// I.e. we'll need to stop generating fake timing sync events.
         /// </summary>
-        public void NotifyResume()
-        {
-            _isHalted = false;
-        }
+        public void NotifyResume() => _isHalted = false;
 
         /// <summary>
         /// Occurs when [timing synchronize].

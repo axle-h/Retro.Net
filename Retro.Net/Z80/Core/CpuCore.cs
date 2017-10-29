@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
 using Retro.Net.Timing;
+using Retro.Net.Util;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
@@ -16,7 +17,7 @@ namespace Retro.Net.Z80.Core
     public class CpuCore : CpuCoreBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CpuCore"/> class.
+        /// Initializes a new instance of the <see cref="CpuCore" /> class.
         /// </summary>
         /// <param name="registers">The registers.</param>
         /// <param name="interruptManager">The interrupt manager.</param>
@@ -27,6 +28,7 @@ namespace Retro.Net.Z80.Core
         /// <param name="opCodeDecoder">The opcode decoder.</param>
         /// <param name="instructionBlockFactory">The instruction block decoder.</param>
         /// <param name="dmaController">The dma controller.</param>
+        /// <param name="messageBus">The message bus.</param>
         public CpuCore(IRegisters registers,
             IInterruptManager interruptManager,
             IPeripheralManager peripheralManager,
@@ -35,8 +37,9 @@ namespace Retro.Net.Z80.Core
             IAlu alu,
             IOpCodeDecoder opCodeDecoder,
             IInstructionBlockFactory instructionBlockFactory,
-            IDmaController dmaController)
-            : base(registers, interruptManager, peripheralManager, mmu, instructionTimer, alu, opCodeDecoder, instructionBlockFactory, dmaController, false)
+            IDmaController dmaController,
+            IMessageBus messageBus)
+            : base(registers, interruptManager, peripheralManager, mmu, instructionTimer, alu, opCodeDecoder, instructionBlockFactory, dmaController, messageBus, false)
         {
         }
 

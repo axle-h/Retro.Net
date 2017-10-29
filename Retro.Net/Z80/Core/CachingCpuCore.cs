@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
 using Retro.Net.Timing;
+using Retro.Net.Util;
 using Retro.Net.Z80.Cache;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Peripherals;
@@ -29,6 +30,7 @@ namespace Retro.Net.Z80.Core
         /// <param name="opCodeDecoder">The opcode decoder.</param>
         /// <param name="instructionBlockFactory">The instruction block decoder.</param>
         /// <param name="dmaController">The dma controller.</param>
+        /// <param name="messageBus">The message bus.</param>
         /// <param name="instructionBlockCache">The instruction block cache.</param>
         public CachingCpuCore(IRegisters registers,
             IInterruptManager interruptManager,
@@ -39,8 +41,9 @@ namespace Retro.Net.Z80.Core
             IOpCodeDecoder opCodeDecoder,
             IInstructionBlockFactory instructionBlockFactory,
             IDmaController dmaController,
+            IMessageBus messageBus,
             IInstructionBlockCache instructionBlockCache)
-            : base(registers, interruptManager, peripheralManager, mmu, instructionTimer, alu, opCodeDecoder, instructionBlockFactory, dmaController, true)
+            : base(registers, interruptManager, peripheralManager, mmu, instructionTimer, alu, opCodeDecoder, instructionBlockFactory, dmaController, messageBus, true)
         {
             _instructionBlockCache = instructionBlockCache;
         }
