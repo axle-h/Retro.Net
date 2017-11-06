@@ -52,11 +52,12 @@ namespace Retro.Net.Z80.Timing
         /// </summary>
         /// <param name="timings">The timings.</param>
         /// <param name="backgroundSync">if set to <c>true</c> [background synchronize].</param>
-        public void SyncToTimings(InstructionTimings timings, bool backgroundSync = false)
+        public async Task SyncToTimingsAsync(InstructionTimings timings, bool backgroundSync = false)
         {
             if (backgroundSync)
             {
-                _timer.BlockFor((long) (_ticksPerCycle * timings.MachineCycles));
+                var blockFor = (long)_ticksPerCycle * timings.MachineCycles;
+                await Task.Delay(new TimeSpan(blockFor)).ConfigureAwait(false);
             }
             else
             {
@@ -79,11 +80,13 @@ namespace Retro.Net.Z80.Timing
         {
             _isHalted = true;
 
-            Task.Run(() =>
+            Task.Run(async () =>
                      {
+                         var blockFor = (long) _ticksPerCycle * CyclesPerSyncEvent;
                          while (_isHalted)
                          {
-                             _timer.BlockFor((long)(_ticksPerCycle * CyclesPerSyncEvent));
+                             // Don't use the HPT here as it uses too much CPU.
+                             await Task.Delay(new TimeSpan(blockFor)).ConfigureAwait(false);
                              TimingSync?.Invoke(new InstructionTimings(CyclesPerSyncEvent));
                          }
                      });

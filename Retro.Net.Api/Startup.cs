@@ -10,13 +10,14 @@ using Autofac.Extensions.DependencyInjection;
 using GameBoy.Net;
 using GameBoy.Net.Config;
 using GameBoy.Net.Graphics;
-using GameBoy.Net.Peripherals;
 using GameBoy.Net.Wiring;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using NLog.Web;
 using Retro.Net.Api.Middleware;
 using Retro.Net.Api.RealTime;
 using Retro.Net.Api.RealTime.Interfaces;
@@ -67,9 +68,8 @@ namespace Retro.Net.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IApplicationLifetime lifetime, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
+            loggerFactory.AddNLog();
+            app.AddNLogWeb();
             app.UseMiddleware<AngularRoutesMiddleware>();
             app.UseWebSockets();
             app.UseDefaultFiles();

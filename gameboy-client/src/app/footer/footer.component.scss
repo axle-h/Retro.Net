@@ -3,7 +3,7 @@
 .gb-footer {
   padding: spacer(5) 0;
   font-size: $font-size-sm;
-  background-color: $gray-200;
+  background-color: theme-color(light);
   text-align: left;
 
   p {

@@ -2,7 +2,7 @@ export class SocialLink {
 
   /**
    * Constracts a new social link.
-   * @param {string} name FontAwesome compatible name.
+   * @param {string} name FontAwesome compatible displayName.
    * @param {string} url social provider URL.
    */
   constructor(name: string, url: string) {
@@ -11,7 +11,7 @@ export class SocialLink {
   }
 
   /**
-   * The FontAwesome compatible name.
+   * The FontAwesome compatible displayName.
    */
   public name: string;
 

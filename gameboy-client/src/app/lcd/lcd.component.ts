@@ -13,23 +13,29 @@ const lcdXOffset = 0.22;
 const lcdYOffset = 0.15;
 const lcdScale = 1.45;
 const borderWidth = 3;
+const minScale = 0.5;
 
 @Component({
   selector: "gb-lcd",
-  templateUrl: "./lcd.component.html"
+  templateUrl: "./lcd.component.html",
+  styleUrls: ["./lcd.component.scss"]
 })
 export class LcdComponent implements OnInit {
 
   @ViewChild("lcd") lcdCanvas: ElementRef;
   @ViewChild("rawLcd") rawLcdCanvas: ElementRef;
-  @Input() scale: number;
+  @Input() maxScale: number;
+
+  maxWidth: number;
+  maxHeight: number;
+  minWidth: number;
+  minHeight: number;
+
+  lcdWidth: number;
+  lcdHeight: number;
 
   private lcdInit = false;
-
-  public lcdWidth: number;
-  public lcdHeight: number;
-  public width: number;
-  public height: number;
+  private lcdBorder: HTMLImageElement;
 
   constructor(private service: GameboyService) {
     this.lcdWidth = service.lcdWidth;
@@ -37,16 +43,24 @@ export class LcdComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.width = 390 * this.scale;
-    this.height = 303 * this.scale;
-    this.render();
+    this.maxScale = Math.max(this.maxScale, minScale);
+
+    this.lcdBorder = new Image();
+    this.lcdBorder.src = "/assets/img/gameboy-lcd.svg";
+    this.lcdBorder.onload = () => {
+      this.maxWidth = this.maxScale * this.lcdBorder.width;
+      this.maxHeight = this.maxScale * this.lcdBorder.height;
+      this.minWidth = minScale * this.lcdBorder.width;
+      this.minHeight = minScale * this.lcdBorder.height;
+      this.render();
+    };
   }
 
   render = () => {
     const lcd: HTMLCanvasElement = this.lcdCanvas.nativeElement;
     const context: CanvasRenderingContext2D = lcd.getContext("2d");
-    const lcdX = lcdXOffset * this.width, lcdY = lcdYOffset * this.height;
-    const lcdW = this.lcdWidth * lcdScale * this.scale, lcdH = this.lcdHeight * lcdScale * this.scale;
+    const lcdX = lcdXOffset * this.maxWidth, lcdY = lcdYOffset * this.maxHeight;
+    const lcdW = this.lcdWidth * lcdScale * this.maxScale, lcdH = this.lcdHeight * lcdScale * this.maxScale;
 
     if (this.service.healthy && this.lcdInit) {
       const raw: HTMLCanvasElement = this.rawLcdCanvas.nativeElement;
@@ -58,7 +72,7 @@ export class LcdComponent implements OnInit {
           const index = y * this.lcdWidth + x;
           const imgIndex = index * 4;
           const colourIndex = this.service.frame[index];
-          if (colourIndex < 0 || colourIndex >= colours.length){
+          if (colourIndex < 0 || colourIndex >= colours.length) {
             throw new Error("Unknown colour: " + colourIndex);
           }
 
@@ -74,25 +88,24 @@ export class LcdComponent implements OnInit {
 
       context.drawImage(raw, lcdX, lcdY, lcdW, lcdH);
     } else {
+      lcd.width = this.maxWidth;
+      lcd.height = this.maxHeight;
 
-      const lcdBorder = new Image();
-      lcdBorder.src = "/assets/img/gameboy-lcd.svg";
-      lcdBorder.onload = () => {
-        context.drawImage(lcdBorder, 0, 0, lcd.width, lcd.height);
+      context.drawImage(this.lcdBorder, 0, 0, lcd.width, lcd.height);
 
-        context.fillStyle = borderColour.rgbString();
-        context.fillRect(lcdX - borderWidth, lcdY - borderWidth, lcdW + 2 * borderWidth, lcdH + 2 * borderWidth);
+      context.fillStyle = borderColour.rgbString();
+      context.fillRect(lcdX - borderWidth, lcdY - borderWidth, lcdW + 2 * borderWidth, lcdH + 2 * borderWidth);
 
-        context.fillStyle = colour0.rgbString();
-        context.fillRect(lcdX, lcdY, lcdW, lcdH);
+      context.fillStyle = colour0.rgbString();
+      context.fillRect(lcdX, lcdY, lcdW, lcdH);
 
-        context.fillStyle = colour3.rgbString();
-        context.font = "30px Arial";
-        context.textAlign = "center";
-        context.fillText("Connecting...", lcdX + lcdW / 2, lcdY + lcdH / 2);
+      context.fillStyle = colour3.rgbString();
+      const fontSize = 2 * this.maxScale;
+      context.font = fontSize + "em Arial";
+      context.textAlign = "center";
+      context.fillText("Connecting...", lcdX + lcdW / 2, lcdY + lcdH / 2);
 
-        this.lcdInit = true;
-      };
+      this.lcdInit = true;
     }
 
     requestAnimationFrame(this.render);

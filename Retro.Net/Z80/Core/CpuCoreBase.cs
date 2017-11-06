@@ -185,7 +185,7 @@ namespace Retro.Net.Z80.Core
                 _interruptAddress = null;
             }
 
-            _instructionTimer.SyncToTimings(timings);
+            _instructionTimer.SyncToTimingsAsync(timings);
         }
     }
 }

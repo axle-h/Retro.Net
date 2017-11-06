@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Retro.Net.Timing
 {
@@ -17,7 +18,7 @@ namespace Retro.Net.Timing
         /// </summary>
         /// <param name="timings">The timings.</param>
         /// <param name="backgroundSync">if set to <c>true</c> [background synchronize].</param>
-        void SyncToTimings(InstructionTimings timings, bool backgroundSync = false);
+        Task SyncToTimingsAsync(InstructionTimings timings, bool backgroundSync = false);
 
         /// <summary>
         /// Notifies the instruction timer that the CPU has accepted the halt and is halted.

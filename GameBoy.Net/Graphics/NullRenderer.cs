@@ -19,8 +19,8 @@
         /// <summary>
         /// Updates the metrics.
         /// </summary>
-        /// <param name="metrics">The metrics.</param>
-        public void UpdateMetrics(GpuMetrics metrics)
+        /// <param name="gpuMetrics">The metrics.</param>
+        public void UpdateMetrics(GpuMetrics gpuMetrics)
         {
         }
     }

@@ -1,12 +1,45 @@
 <main class="gb-masthead">
   <div class="container">
-    <gb-lcd [scale]="1.25"></gb-lcd>
+    <gb-lcd [maxScale]="1.25"></gb-lcd>
   </div>
 </main>
 
-<div class="container text-center">
+<div class="container">
+  <ngb-alert *ngFor="let errorMessage of errorMessages" type="danger" (close)="closeErrorMessageAlert(errorMessage)">{{errorMessage}}</ngb-alert>
+</div>
 
-  <div class="row justify-content-md-center">
+<div *ngIf="!healthy" class="container">
+  <div class="alert alert-danger">Waiting for server connection</div>
+</div>
+
+<div *ngIf="healthy" class="container">
+  <form *ngIf="!displayNameSet" #form="ngForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="form-display-name">Display name</label>
+      <input type="text"
+             class="form-control"
+             id="form-display-name"
+             placeholder="What shall we call you?"
+             required minlength="2" maxLength="20" pattern="[\w\s-]+"
+             [(ngModel)]="displayName" #nameField="ngModel" name="displayName">
+      <div *ngIf="nameField.invalid && (nameField.dirty || nameField.touched); else displayNameHelp" class="ng-invalid-feedback">
+        <div *ngIf="nameField.errors.required">Display name is required.</div>
+        <div *ngIf="nameField.errors.minlength">Display name must be at least 2 characters long.</div>
+        <div *ngIf="nameField.errors.maxLength">Display name cannot be longer than 20 characters.</div>
+        <div *ngIf="nameField.errors.pattern">Display name can only contain letters, numbers, hyphens and underscores.</div>
+      </div>
+      <ng-template #displayNameHelp>
+        <small id="display-name-help" class="form-text text-muted">
+          This is simply used to identify your control inputs.
+        </small>
+      </ng-template>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+
+  <div *ngIf="displayNameSet" class="row justify-content-md-center text-center">
     <div class="col col-lg-2">
       <svg width="150" height="150">
         <defs>
@@ -117,4 +150,22 @@
       </svg>
     </div>
   </div>
+</div>
+
+<div class="container mb-3">
+  <ul class="list-group">
+    <li *ngFor="let message of clientMessages" class="list-group-item">
+      <div class="row">
+        <div class="col">
+          <span class="badge badge-primary badge-pill">{{message.user}}</span>
+          {{message.message}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-muted">
+          <small>{{message.date}}</small>
+        </div>
+      </div>
+    </li>
+  </ul>
 </div>

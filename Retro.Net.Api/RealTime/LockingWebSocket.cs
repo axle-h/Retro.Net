@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Retro.Net.Api.RealTime.Interfaces;
+using Retro.Net.Api.RealTime.Models;
 
 namespace Retro.Net.Api.RealTime
 {
@@ -48,7 +50,7 @@ namespace Retro.Net.Api.RealTime
             Task.Run(HeartbeatAsync, _disposing.Token);
 
             // this is a hack... linked token sources don't seem to work here. dunno if it's because the token is from MVC?
-            token.Register(() => _lifetime.SetResult(true));
+            token.Register(Abort);
         }
 
         /// <summary>
@@ -62,15 +64,18 @@ namespace Retro.Net.Api.RealTime
 
         public bool IsClosed { get; private set; }
 
-        public async Task SendAsync(params ArraySegment<byte>[] messages) =>
+        public async Task SendAsync(IWebSocketMessage message) =>
             await WithSocketAsync(async s =>
                                   {
+                                      var messages = message.Serialize().ToArray();
                                       for (var i = 0; i < messages.Length; i++)
                                       {
                                           var isLast = i == messages.Length - 1;
                                           await s.SendAsync(messages[i], WebSocketMessageType.Binary, isLast, _disposing.Token).ConfigureAwait(false);
                                       }
                                   }).ConfigureAwait(false);
+
+        private void Abort() => Task.Run(() => _lifetime.TrySetResult(true));
 
         private async Task HeartbeatAsync()
         {
@@ -128,17 +133,28 @@ namespace Retro.Net.Api.RealTime
                 catch (Exception e)
                 {
                     _logger.LogError(0, e, "Receive message failed");
+                    Abort();
                 }
             }
         }
 
-        private async Task CloseNowAsync() => await WithSocketAsync(async s =>
-                                                                    {
-                                                                        await s.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, CancellationToken.None).ConfigureAwait(false);
-                                                                        IsClosed = true;
-                                                                    }).ConfigureAwait(false);
-        
-        private async Task WithSocketAsync(Func<WebSocket, Task> f)
+        private async Task CloseNowAsync()
+        {
+            await _semaphore.WaitAsync(_disposing.Token).ConfigureAwait(false);
+            try
+            {
+                _logger.LogDebug("Closing web socket");
+                await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None).ConfigureAwait(false);
+                IsClosed = true;
+                Abort();
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+
+        private async Task WithSocketAsync(Func<WebSocket, Task> socketFunc)
         {
             if (_disposing.IsCancellationRequested)
             {
@@ -153,13 +169,14 @@ namespace Retro.Net.Api.RealTime
                 {
                     if (!IsClosed)
                     {
-                        await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, CancellationToken.None).ConfigureAwait(false);
+                        await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None).ConfigureAwait(false);
                         IsClosed = true;
                     }
+                    Abort();
                 }
                 else
                 {
-                    await f(_socket).ConfigureAwait(false);
+                    await socketFunc(_socket).ConfigureAwait(false);
                 }
 
             }

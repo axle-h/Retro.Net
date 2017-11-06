@@ -5,21 +5,21 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GpuMetrics"/> class.
         /// </summary>
-        /// <param name="framsPerSecond">The frams per second.</param>
+        /// <param name="framesPerSecond">The frams per second.</param>
         /// <param name="skippedFrames">The skipped frames.</param>
-        public GpuMetrics(int framsPerSecond, int skippedFrames)
+        public GpuMetrics(int framesPerSecond, int skippedFrames)
         {
-            FramsPerSecond = framsPerSecond;
+            FramesPerSecond = framesPerSecond;
             SkippedFrames = skippedFrames;
         }
 
         /// <summary>
-        /// Gets or sets the frams per second.
+        /// Gets or sets the frames per second.
         /// </summary>
         /// <value>
-        /// The frams per second.
+        /// The frames per second.
         /// </value>
-        public int FramsPerSecond { get; set; }
+        public int FramesPerSecond { get; set; }
 
         /// <summary>
         /// Gets or sets the skipped frames.

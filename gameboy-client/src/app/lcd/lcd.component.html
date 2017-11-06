@@ -1,2 +1,7 @@
 <canvas #rawLcd [width]="lcdWidth" [height]="lcdHeight" class="d-none"></canvas>
-<canvas #lcd [width]="width" [height]="height"></canvas>
+<canvas #lcd
+        [style.max-width]="maxWidth + 'px'"
+        [style.max-height]="maxHeight + 'px'"
+        [style.min-width]="minWidth + 'px'"
+        [style.min-height]="minHeight + 'px'"
+        class="lcd"></canvas>

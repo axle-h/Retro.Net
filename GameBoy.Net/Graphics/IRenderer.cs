@@ -17,7 +17,7 @@
         /// Updates the rendering metrics.
         /// The renderer can choose to display this if required.
         /// </summary>
-        /// <param name="metrics">The metrics.</param>
-        void UpdateMetrics(GpuMetrics metrics);
+        /// <param name="gpuMetrics">The metrics.</param>
+        void UpdateMetrics(GpuMetrics gpuMetrics);
     }
 }

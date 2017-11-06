@@ -2,3 +2,9 @@
 @import '~bootstrap/scss/bootstrap';
 @import "functions";
 @import "mixins";
+
+.ng-invalid-feedback {
+  margin-top: $form-text-margin-top;
+  font-size: $small-font-size;
+  color: $form-feedback-invalid-color;
+}

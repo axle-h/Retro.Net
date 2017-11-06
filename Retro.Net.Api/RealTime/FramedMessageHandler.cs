@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using MessagePack;
 using MessagePack.Resolvers;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Retro.Net.Api.RealTime.Interfaces;
 
@@ -16,14 +17,15 @@ namespace Retro.Net.Api.RealTime
     public class FramedMessageHandler<TMessage> : IFramedMessageHandler<TMessage>
     {
         private readonly ConcurrentQueue<(Guid id, TMessage message)> _messages;
-        
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FramedMessageHandler{TMessage}"/> class.
         /// </summary>
-        public FramedMessageHandler()
+        public FramedMessageHandler(ILoggerFactory loggerFactory)
         {
             _messages = new ConcurrentQueue<(Guid, TMessage)>();
+            _logger = loggerFactory.CreateLogger<FramedMessageHandler<TMessage>>();
         }
 
         /// <inheritdoc />
@@ -59,7 +61,15 @@ namespace Retro.Net.Api.RealTime
             {
                 if (_messages.TryDequeue(out var msg))
                 {
-                    yield return msg;
+                    if (_logger.IsEnabled(LogLevel.Debug))
+                    {
+                        _logger.LogDebug(msg.ToString());
+                    }
+
+                    if (!Equals(msg, default(TMessage)))
+                    {
+                        yield return msg;
+                    }
                 }
                 else
                 {
