@@ -118,7 +118,7 @@ namespace Retro.Net.Tests.Z80.Decode
             }
         }
 
-        private static IEnumerable<object[]> SimpleLoadOpCodes() => new[]
+        public static IEnumerable<object[]> SimpleLoadOpCodes() => new[]
         {
             new object[] {PrimaryOpCode.LD_A_A, Operand.A, Operand.A}, new object[] {PrimaryOpCode.LD_A_B, Operand.A, Operand.B}, new object[] {PrimaryOpCode.LD_A_C, Operand.A, Operand.C},
             new object[] {PrimaryOpCode.LD_A_D, Operand.A, Operand.D}, new object[] {PrimaryOpCode.LD_A_E, Operand.A, Operand.E}, new object[] {PrimaryOpCode.LD_A_H, Operand.A, Operand.H},
@@ -139,9 +139,9 @@ namespace Retro.Net.Tests.Z80.Decode
             new object[] {PrimaryOpCode.LD_L_L, Operand.L, Operand.L}
         };
 
-        private static IEnumerable<object[]> Z80IndexOpcodes(PrimaryOpCode[] ops) => new[] { Operand.mIXd, Operand.mIYd }
+        public static IEnumerable<object[]> Z80IndexOpcodes(PrimaryOpCode[] ops) => new[] { Operand.mIXd, Operand.mIYd }
             .SelectMany(index => new[] { Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L }.Zip(ops, (o, op) => new object[] { op, o, index })).ToArray();
 
-        private static IEnumerable<object[]> Opcodes(IEnumerable<PrimaryOpCode> ops) => new[] { Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L }.Zip(ops, (o, op) => new object[] { op, o }).ToArray();
+        public static IEnumerable<object[]> Opcodes(IEnumerable<PrimaryOpCode> ops) => new[] { Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L }.Zip(ops, (o, op) => new object[] { op, o }).ToArray();
     }
 }

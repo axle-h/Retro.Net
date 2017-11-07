@@ -530,7 +530,7 @@ namespace Retro.Net.Tests.Z80
             _flags.Verify(x => x.SetParityFlags(result.Accumulator), Times.Once);
         }
 
-        private static IEnumerable<object[]> Bits() => Enumerable.Range(0, 8).Select(b => new object[] { b });
+        public static IEnumerable<object[]> Bits() => Enumerable.Range(0, 8).Select(b => new object[] { b });
 
         [Theory]
         [MemberData(nameof(Bits))]

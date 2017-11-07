@@ -34,7 +34,7 @@ namespace Retro.Net.Tests.Z80.Decode
         [MemberData(nameof(Z80IndexTestArgs), "SET")]
         public void SET_n_IXYd(Operand index, PrefixCbOpCode op, byte bit, Operand r) => Z80IndexTest(index, op, bit, r, OpCode.BitSet);
 
-        private static IEnumerable<object[]> TestArgs(string op) =>
+        public static IEnumerable<object[]> TestArgs(string op) =>
             Enum.GetValues(typeof(PrefixCbOpCode))
                 .Cast<PrefixCbOpCode>()
                 .Select(x => (op: x, tokens: x.ToString().Split(new[] { '_' }, 3)))
@@ -49,8 +49,8 @@ namespace Retro.Net.Tests.Z80.Decode
                 fixture.Expected.OpCode(expected).Operands(r).ByteLiteral(bit);
             }
         }
-        
-        private static IEnumerable<object[]> Z80IndexTestArgs(string op) =>
+
+        public static IEnumerable<object[]> Z80IndexTestArgs(string op) =>
             new [] { Operand.mIXd, Operand.mIYd }.SelectMany(index => TestArgs(op).Select(x => new object[] { index }.Concat(x).ToArray()));
 
 

@@ -42,7 +42,7 @@ namespace Retro.Net.Tests.Z80.Execute
             }
         }
 
-        private static IEnumerable<object[]> Registers16Bit() => new CartesianTheorySource<Operand, Operand>(Operand.AF, Operand.BC, Operand.DE, Operand.HL, Operand.IX, Operand.IY)
+        public static IEnumerable<object[]> Registers16Bit() => new CartesianTheorySource<Operand, Operand>(Operand.AF, Operand.BC, Operand.DE, Operand.HL, Operand.IX, Operand.IY)
             .With(Operand.AF, Operand.BC, Operand.DE, Operand.HL, Operand.IX, Operand.IY);
     }
 }

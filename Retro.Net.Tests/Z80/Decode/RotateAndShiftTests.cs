@@ -239,7 +239,7 @@ namespace Retro.Net.Tests.Z80.Decode
             }
         }
 
-        private static IEnumerable<object[]> Z80IndexOpcodes(PrefixCbOpCode[] ops) => new[] { Operand.mIXd, Operand.mIYd }
+        public static IEnumerable<object[]> Z80IndexOpcodes(PrefixCbOpCode[] ops) => new[] { Operand.mIXd, Operand.mIYd }
             .SelectMany(index => new[] { Operand.A, Operand.B, Operand.C, Operand.D, Operand.E, Operand.H, Operand.L }.Zip(ops, (o, op) => new object[] { op, o, index })).ToArray();
     }
 }

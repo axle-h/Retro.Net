@@ -283,7 +283,7 @@ namespace Retro.Net.Memory
                     // Execute the operation.
                     operation.Execute(this);
 
-                    await _instructionTimer.SyncToTimingsAsync(operation.Timings, true);
+                    await _instructionTimer.DelayAsync(operation.Timings);
 
                     // Unlock the locked address ranges.
                     _lockedAddressRanges.Clear();

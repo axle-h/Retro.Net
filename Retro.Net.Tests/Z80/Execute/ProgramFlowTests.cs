@@ -169,7 +169,7 @@ namespace Retro.Net.Tests.Z80.Execute
 
         [Fact] public void Halt() => TestHalt(OpCode.Halt);
 
-        private static IEnumerable<object[]> FlagTests() => new SimpleTheorySource<FlagTest>(FlagTest.Carry, FlagTest.Negative,
+        public static IEnumerable<object[]> FlagTests() => new SimpleTheorySource<FlagTest>(FlagTest.Carry, FlagTest.Negative,
             FlagTest.NotCarry, FlagTest.NotZero, FlagTest.ParityEven, FlagTest.ParityOdd, FlagTest.Positive, FlagTest.Zero);
 
         private static void TestCall(OpCode op)

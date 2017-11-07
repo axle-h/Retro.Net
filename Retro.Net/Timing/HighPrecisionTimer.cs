@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Retro.Net.Timing
 {
     public class HighPrecisionTimer
     {
         private readonly Stopwatch _stopwatch;
+        private long _lastTicks;
 
         public HighPrecisionTimer()
         {
@@ -14,24 +16,15 @@ namespace Retro.Net.Timing
                 throw new InvalidOperationException("Must be running in high precision mode.");
             }
 
+            _lastTicks = 0;
             _stopwatch = Stopwatch.StartNew();
         }
-        
+
         public void Block(long ticks)
         {
-            while (_stopwatch.ElapsedTicks < ticks)
-            {
-            }
-
-            _stopwatch.Restart();
-        }
-
-        public void BlockFor(long ticks)
-        {
-            var stopWatch = Stopwatch.StartNew();
-            while (stopWatch.ElapsedTicks < ticks)
-            {
-            }
+            var nextTicks = ticks + _lastTicks;
+            SpinWait.SpinUntil(() => _stopwatch.ElapsedTicks >= nextTicks);
+            _lastTicks = _stopwatch.ElapsedTicks;
         }
     }
 }

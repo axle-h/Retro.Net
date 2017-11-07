@@ -17,8 +17,14 @@ namespace Retro.Net.Timing
         /// Uses the configured instruction timings to sync real time to the CPU.
         /// </summary>
         /// <param name="timings">The timings.</param>
-        /// <param name="backgroundSync">if set to <c>true</c> [background synchronize].</param>
-        Task SyncToTimingsAsync(InstructionTimings timings, bool backgroundSync = false);
+        void SyncToTimings(InstructionTimings timings);
+
+        /// <summary>
+        /// Returns a task that will complete in an amount of time according to the specified timings.
+        /// </summary>
+        /// <param name="timings">The timings.</param>
+        /// <returns></returns>
+        Task DelayAsync(InstructionTimings timings);
 
         /// <summary>
         /// Notifies the instruction timer that the CPU has accepted the halt and is halted.

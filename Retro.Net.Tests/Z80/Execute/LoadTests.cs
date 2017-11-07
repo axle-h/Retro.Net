@@ -214,14 +214,14 @@ namespace Retro.Net.Tests.Z80.Execute
         }
 
 
-        private static IEnumerable<object[]> Readable8Bit() =>
+        public static IEnumerable<object[]> Readable8Bit() =>
             new SimpleTheorySource<Operand>(Writable8BitOperands.Concat(new[] {Operand.n, Operand.R}).ToArray());
 
-        private static IEnumerable<object[]> Writable8Bit() => new SimpleTheorySource<Operand>(Writable8BitOperands);
-        
-        private static IEnumerable<object[]> Readable16Bit() =>
+        public static IEnumerable<object[]> Writable8Bit() => new SimpleTheorySource<Operand>(Writable8BitOperands);
+
+        public static IEnumerable<object[]> Readable16Bit() =>
             new SimpleTheorySource<Operand>(Writable16BitOperands.Concat(new[] {Operand.nn, Operand.SPd}).ToArray());
 
-        private static IEnumerable<object[]> Writeble16Bit() => new SimpleTheorySource<Operand>(Writable16BitOperands);
+        public static IEnumerable<object[]> Writeble16Bit() => new SimpleTheorySource<Operand>(Writable16BitOperands);
     }
 }

@@ -51,25 +51,27 @@ namespace Retro.Net.Z80.Timing
         /// Uses the configured instruction timings to sync real time to the CPU.
         /// </summary>
         /// <param name="timings">The timings.</param>
-        /// <param name="backgroundSync">if set to <c>true</c> [background synchronize].</param>
-        public async Task SyncToTimingsAsync(InstructionTimings timings, bool backgroundSync = false)
+        public void SyncToTimings(InstructionTimings timings)
         {
-            if (backgroundSync)
+            // Check if we need to call the sync event.
+            _cyclesSinceLastEventSync += timings.MachineCycles;
+            if (_cyclesSinceLastEventSync > CyclesPerSyncEvent)
             {
-                var blockFor = (long)_ticksPerCycle * timings.MachineCycles;
-                await Task.Delay(new TimeSpan(blockFor)).ConfigureAwait(false);
+                TimingSync?.Invoke(new InstructionTimings(_cyclesSinceLastEventSync));
+                _timer.Block((long)(_ticksPerCycle * _cyclesSinceLastEventSync));
+                _cyclesSinceLastEventSync = _cyclesSinceLastEventSync - CyclesPerSyncEvent;
             }
-            else
-            {
-                // Check if we need to call the sync event.
-                _cyclesSinceLastEventSync += timings.MachineCycles;
-                if (_cyclesSinceLastEventSync > CyclesPerSyncEvent)
-                {
-                    TimingSync?.Invoke(new InstructionTimings(_cyclesSinceLastEventSync));
-                    _timer.Block((long)(_ticksPerCycle * _cyclesSinceLastEventSync));
-                    _cyclesSinceLastEventSync = _cyclesSinceLastEventSync - CyclesPerSyncEvent;
-                }
-            }
+        }
+
+        /// <summary>
+        /// Returns a task that will complete in an amount of time according to the specified timings.
+        /// </summary>
+        /// <param name="timings">The timings.</param>
+        /// <returns></returns>
+        public async Task DelayAsync(InstructionTimings timings)
+        {
+            var blockFor = (long)_ticksPerCycle * timings.MachineCycles;
+            await Task.Delay(new TimeSpan(blockFor)).ConfigureAwait(false);
         }
 
         /// <summary>
