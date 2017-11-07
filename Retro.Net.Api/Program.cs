@@ -20,7 +20,7 @@ namespace Retro.Net.Api
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
                 .UseSetting(WebHostDefaults.PreventHostingStartupKey, bool.TrueString)
-                .UseUrls("http://localhost:2500/")
+                .UseUrls("http://*:2500/")
                 .Build();
 
             host.Run();

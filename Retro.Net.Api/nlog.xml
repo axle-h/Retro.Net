@@ -15,6 +15,6 @@
   </targets>
 
   <rules>
-    <logger name="*" minlevel="Info" writeTo="stdout" />
+    <logger name="*" minlevel="Warn" writeTo="stdout" />
   </rules>
 </nlog>
