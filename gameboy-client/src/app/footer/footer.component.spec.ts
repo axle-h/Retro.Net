@@ -22,4 +22,15 @@ describe("FooterComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it(`should have all social links`, async(() => {
+    const app = fixture.debugElement.componentInstance;
+    const providers = app.links.map(x => x.name);
+    expect(providers).toEqual(["twitter", "github", "linkedin", "google-plus", "facebook"]);
+  }));
+
+  it("should render a footer tag", async(() => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector("footer")).toBeTruthy();
+  }));
 });

@@ -1,14 +1,20 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { By } from "@angular/platform-browser";
+import { DefaultComponent } from "./default.component";
+import {MockComponent} from "ng2-mock-component";
 
-import { DefaultComponent } from './default.component';
-
-describe('DefaultComponent', () => {
+describe("DefaultComponent", () => {
   let component: DefaultComponent;
   let fixture: ComponentFixture<DefaultComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DefaultComponent ]
+      imports: [ RouterTestingModule ],
+      declarations: [
+        DefaultComponent,
+        MockComponent({ selector: "gb-lcd", inputs: ["maxScale"] })
+      ]
     })
     .compileComponents();
   }));
@@ -19,7 +25,12 @@ describe('DefaultComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should render gameboy router url", () => {
+    const href = fixture.debugElement.query(By.css("#gb-join-in-link")).nativeElement.getAttribute("href");
+    expect(href).toEqual("/gameboy");
   });
 });

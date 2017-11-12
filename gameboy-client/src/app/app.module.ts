@@ -23,9 +23,9 @@ import { NavComponent } from "./nav/nav.component";
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
-    NgbModule.forRoot(),
-    FormsModule
+    NgbModule.forRoot()
   ],
   providers: [GameboyService],
   bootstrap: [AppComponent]

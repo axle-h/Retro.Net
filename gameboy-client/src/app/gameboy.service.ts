@@ -18,7 +18,6 @@ const metricsHeader = "MTC";
 const stateUpdateHeader = "STU";
 const errorHeader = "ERR";
 
-
 @Injectable()
 export class GameboyService implements OnDestroy {
   public frame: Uint8Array;

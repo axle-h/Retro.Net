@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { LcdComponent } from "./lcd.component";
+import {GameboyService} from "../gameboy.service";
 
 describe("LcdComponent", () => {
   let component: LcdComponent;
@@ -8,7 +9,8 @@ describe("LcdComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LcdComponent ]
+      declarations: [ LcdComponent ],
+      providers: [GameboyService]
     })
     .compileComponents();
   }));
