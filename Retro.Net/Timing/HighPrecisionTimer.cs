@@ -22,6 +22,11 @@ namespace Retro.Net.Timing
 
         public void Block(long ticks)
         {
+            if (ticks <= 0)
+            {
+                return;
+            }
+
             var nextTicks = ticks + _lastTicks;
             SpinWait.SpinUntil(() => _stopwatch.ElapsedTicks >= nextTicks);
             _lastTicks = _stopwatch.ElapsedTicks;

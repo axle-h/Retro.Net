@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Copy project structure first and restore dependencies as a distinct layer.
 COPY gameboy-client/package.json gameboy-client/package-lock.json ./
-RUN npm set progress=false && npm config set depth 0
+RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 RUN npm install
 
 # Copy rest, test and build.

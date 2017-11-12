@@ -10,6 +10,7 @@ import { LcdComponent } from "./lcd/lcd.component";
 import { DefaultComponent } from "./default/default.component";
 import { GameboyComponent } from "./gameboy/gameboy.component";
 import { NavComponent } from "./nav/nav.component";
+import {VisibilityService} from "./visibility.service";
 
 
 @NgModule({
@@ -27,7 +28,7 @@ import { NavComponent } from "./nav/nav.component";
     AppRoutingModule,
     NgbModule.forRoot()
   ],
-  providers: [GameboyService],
+  providers: [GameboyService, VisibilityService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

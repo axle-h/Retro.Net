@@ -4,6 +4,11 @@ import {GameboyButton} from "../models/gameboy-button";
 import * as Rx from "rxjs/Rx";
 import { debounceTime } from "rxjs/operator/debounceTime";
 import {GameboyClientMessage} from "../models/gameboy-client-message";
+import {GameboySocketHealth} from "../models/gameboy-socket-health";
+import {ErrorMessage} from "../models/error-message";
+import {GameboySocketClientState} from "../models/gameboy-socket-client-state";
+import {GameboyMetrics} from "../models/gameboy-metrics";
+import {GameboyEventType} from "../models/gameboy-event";
 
 const maxClientMessages = 20;
 
@@ -19,70 +24,54 @@ export class GameboyComponent implements OnInit, OnDestroy {
   errorMessages: string[] = [];
   clientMessages: GameboyClientMessage[] = [];
 
+  private ngUnsubscribe = new Rx.Subject();
   private errors = new Rx.Subject<string>();
-  private subscriptions: [Rx.Subscription];
 
-  constructor(private service: GameboyService) {
-  }
+  constructor(private service: GameboyService) { }
 
   ngOnInit() {
+    // Initial state.
     this.healthy = this.service.healthy;
     if (this.service.state.displayName) {
       this.setDisplayName(this.service.state.displayName);
     }
 
-    const errorMessages = this.errors.subscribe(err => this.errorMessages.push(err));
+    // Errors.
+    this.errors
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(err => this.errorMessages.push(err));
     debounceTime.call(this.errors, 5000).subscribe(err => this.closeErrorMessageAlert(err));
 
-    const health = this.service.healthStream().subscribe(h => {
-      this.healthy = h;
-      if (this.healthy && !this.service.state.metricsEnabled) {
-        this.service.setMetricsEnabled(true);
-      }
+    // GameBoy socket subscription.
+    this.service
+      .stream()
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(message => {
+        switch (message.type) {
+          case GameboyEventType.Metrics:
+            this.handleMetrics(<GameboyMetrics> message.event)
+            break;
 
-      if (!this.healthy) {
-        this.clientMessages = [];
-      }
-    });
+          case GameboyEventType.Error:
+            this.handleError(<ErrorMessage> message.event);
+            break;
 
-    const errors = this.service.errorStream().subscribe(err => {
-      if (err.reasons.find(x => x.includes("Display name"))) {
-        // TODO: devise a better method of working this out.
-        this.displayNameSet = false;
-      }
+          case GameboyEventType.Health:
+            this.handleHealthChange(<GameboySocketHealth> message.event);
+            break;
 
-      err.reasons.forEach(r => this.addErrorMessageAlert(r));
-      this.errorMessages = err.reasons;
-    });
-
-    const states = this.service.stateStream()
-      .filter(state => !!state.displayName)
-      .subscribe(state => this.setDisplayName(state.displayName));
-
-    const metrics = this.service.metricsStream()
-      .filter(mt => mt.messages.length > 0)
-      .subscribe(mt => {
-        if (this.clientMessages.length + mt.messages.length >= maxClientMessages) {
-          this.clientMessages = this.clientMessages.slice(0, maxClientMessages - mt.messages.length);
+          case GameboyEventType.State:
+            this.handleStateChange(<GameboySocketClientState> message.event);
+            break;
         }
-
-        if (this.clientMessages.length > 0) {
-          mt.messages.forEach(m => this.clientMessages.unshift(m));
-        } else {
-          this.clientMessages = mt.messages.reverse();
-        }
-      });
-
-    this.subscriptions = [health, errors, states, errorMessages, metrics];
+    });
 
     this.service.setMetricsEnabled(true);
   }
 
   ngOnDestroy(): void {
-    if (this.subscriptions) {
-      this.subscriptions.forEach(s => s.unsubscribe());
-    }
-
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
     this.service.setMetricsEnabled(false);
   }
 
@@ -122,10 +111,6 @@ export class GameboyComponent implements OnInit, OnDestroy {
     this.service.trySetDisplayName(this.displayName);
   }
 
-  addErrorMessageAlert(message: string) {
-    this.errors.next(message);
-  }
-
   closeErrorMessageAlert(message: string) {
     const index = this.errorMessages.indexOf(message);
     if (index > -1) {
@@ -136,5 +121,42 @@ export class GameboyComponent implements OnInit, OnDestroy {
   private setDisplayName(displayName: string): void {
     this.displayNameSet = true;
     this.displayName = displayName;
+  }
+
+  private handleMetrics(metrics: GameboyMetrics): void {
+    // Only bothered about metrics with messages for now.
+    if (metrics.messages.length > 0) {
+      if (this.clientMessages.length + metrics.messages.length >= maxClientMessages) {
+        this.clientMessages = this.clientMessages.slice(0, maxClientMessages - metrics.messages.length);
+      }
+
+      if (this.clientMessages.length > 0) {
+        metrics.messages.forEach(m => this.clientMessages.unshift(m));
+      } else {
+        this.clientMessages = metrics.messages.reverse();
+      }
+    }
+  }
+
+  private handleError(error: ErrorMessage): void {
+    error.reasons.forEach(r => this.errors.next(r));
+    this.errorMessages = error.reasons;
+  }
+
+  private handleHealthChange(health: GameboySocketHealth): void {
+    this.healthy = health.isHealthy;
+    if (health.isHealthy && !this.service.state.metricsEnabled) {
+      this.service.setMetricsEnabled(true);
+    }
+
+    if (!health.isHealthy) {
+      this.clientMessages = [];
+    }
+  }
+
+  private handleStateChange(state: GameboySocketClientState): void {
+    if (state.displayName) {
+      this.setDisplayName(state.displayName);
+    }
   }
 }

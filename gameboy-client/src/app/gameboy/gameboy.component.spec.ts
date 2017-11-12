@@ -4,6 +4,7 @@ import {MockComponent} from "ng2-mock-component";
 import {FormsModule} from "@angular/forms";
 import {GameboyService} from "../gameboy.service";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {VisibilityService} from "../visibility.service";
 
 describe("GameboyComponent", () => {
 
@@ -17,7 +18,7 @@ describe("GameboyComponent", () => {
         GameboyComponent,
         MockComponent({ selector: "gb-lcd", inputs: ["maxScale"] })
       ],
-      providers: [GameboyService]
+      providers: [GameboyService, VisibilityService]
     })
     .compileComponents();
   }));

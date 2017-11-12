@@ -17,8 +17,7 @@ script:
 after_success:
   - echo $DOCKER_PASS | docker login --username alexhaslehurst --password-stdin
   - export REPO=alexhaslehurst/server-side-gameboy
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - docker build -f Dockerfile -t $REPO:$COMMIT .
-  - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then docker tag $REPO:$COMMIT $REPO:latest; fi
   - docker push $REPO

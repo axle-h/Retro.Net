@@ -1,11 +1,12 @@
 import { TestBed, inject } from "@angular/core/testing";
 
 import { GameboyService } from "./gameboy.service";
+import {VisibilityService} from "./visibility.service";
 
 describe("GameboyService", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GameboyService]
+      providers: [GameboyService, VisibilityService]
     });
   });
 
