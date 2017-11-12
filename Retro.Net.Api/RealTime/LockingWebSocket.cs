@@ -79,7 +79,7 @@ namespace Retro.Net.Api.RealTime
 
         private async Task HeartbeatAsync()
         {
-            while (!_disposing.IsCancellationRequested)
+            while (!_disposing.IsCancellationRequested && !IsClosed)
             {
                 await Task.Delay(MinimumHeartbeatInterval - _timeSinceLastMessage.Elapsed + TimeSpan.FromSeconds(1)).ConfigureAwait(false);
 
@@ -134,12 +134,20 @@ namespace Retro.Net.Api.RealTime
                 {
                     _logger.LogError(0, e, "Receive message failed");
                     Abort();
+                    break;
                 }
             }
         }
 
         private async Task CloseNowAsync()
         {
+            if (_socket.State == WebSocketState.Closed || _socket.State == WebSocketState.CloseSent)
+            {
+                IsClosed = true;
+                Abort();
+                return;
+            }
+
             await _semaphore.WaitAsync(_disposing.Token).ConfigureAwait(false);
             try
             {

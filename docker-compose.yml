@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  https-portal:
+    image: steveltn/https-portal
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    environment:
+      WEBSOCKET: "true"
+      DOMAINS: "gb.ax-h.com -> http://server-side-gameboy:2500"
+      # STAGE: production
+
+  server-side-gameboy:
+    image: alexhaslehurst/server-side-gameboy
+    restart: always
+    depends_on:
+      - https-portal
+    
