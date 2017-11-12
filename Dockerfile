@@ -9,8 +9,8 @@ RUN npm install
 
 # Copy rest, test and build.
 COPY gameboy-client .
-RUN npm run ng test -- --watch false --single-run true
-RUN npm run ng build -- --prod
+RUN npm run ng test -- --watch false --single-run true --no-progress
+RUN npm run ng build -- --prod --no-progress
 
 ### STAGE 2: Build .NET Core Backend ###
 FROM microsoft/aspnetcore-build:1.0-2.0 AS netcore-build-env

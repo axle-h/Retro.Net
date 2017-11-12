@@ -8,5 +8,17 @@ before_install:
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
   - sudo apt-get -y install docker-ce
+env:
+  global:
+    - secure: "dGgxb/IybrMFnAF1osj9dYOfKP5Z7dK8IQRG/NYY/lQh4HWRZuGobl/uBlECUA5qkUc7SAUXVz6wLTJOjwH9yz2Hu/Rcxvg3AqUGE4DRhaZKs2dsRKB05/j3K5PV/mAtdPOIz17EDmCVgRXEgg/DzsfXFYtGbKLcSke8giUK482bm5tjXIyj/6DaG+L96RZtHcv6ee2PC98W3XFbjjPw5lixJb3cW05qzHGW2oA4uCA67Z0LnyWLSykVljjIEEm1siChCKxmBKDTutXu1OwfPMuOk5qr+KZW57DMwM0YhRerFPQW6esoGFA8LQkoi4H8mkFrZy85wPfP5HN5n9ijWKLWBJ5fUZJ6Xa9yE2e6pnmm8rACXDMlR+KhXNKHM6NaW2S/ZF9DEfbZe4nIMnNtzbsqp1TM7mZFHRNDn7pTUBYs5GqD0CNDoWjr1Qtg+VCv0vqS+cWI7G4ubct1PqpzP4XDLtP+e3HQLu39TKaL1FSinGxQkWZymYhtUeW0tBYpfG7irCPE6jz4aUg2dlnCGFgdjLRGEUFLiDJ2ZETEV+9X4Yner5K7QHwdtB5LcjyNLLkfdGqFGDBYYLhaOaeS01ssCTy2t9/hdYL0UPftH5H3647Nn0/AaIJY4hAXcSIT0cDoNAjRc7HyWTwueKaG2vEdUYELOdqbx90QgwWSnc4=" # DOCKER_PASS
+    - COMMIT=${TRAVIS_COMMIT::8}
 script:
   - docker build .
+after_success:
+  - echo $DOCKER_PASS | docker login --username alexhaslehurst --password-stdin
+  - export REPO=alexhaslehurst/server-side-gameboy
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO
