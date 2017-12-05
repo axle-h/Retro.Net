@@ -7,7 +7,7 @@ To run a GameBoy on ASP.NET Core in a docker container:
 
     docker run -p 2500:2500 alexhaslehurst/server-side-gameboy
 
-Then browse to `localhost:2500` in your browser.
+Then browse to `localhost:2500`.
 
 See the included docker-compose file for running this behind a secure reverse proxy. 
 

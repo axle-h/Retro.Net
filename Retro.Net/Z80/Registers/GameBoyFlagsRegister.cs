@@ -17,32 +17,7 @@
         /// </summary>
         public byte Register
         {
-            get
-            {
-                byte ans = 0x00;
-
-                if (Zero)
-                {
-                    ans |= ZeroMask;
-                }
-
-                if (HalfCarry)
-                {
-                    ans |= HalfCarryMask;
-                }
-
-                if (Subtract)
-                {
-                    ans |= SubtractMask;
-                }
-
-                if (Carry)
-                {
-                    ans |= CarryMask;
-                }
-
-                return ans;
-            }
+            get => (byte) ((Zero ? ZeroMask : 0) | (HalfCarry ? HalfCarryMask : 0) | (Subtract ? SubtractMask : 0) | (Carry ? CarryMask : 0));
             set
             {
                 Zero = (value & ZeroMask) > 0;
