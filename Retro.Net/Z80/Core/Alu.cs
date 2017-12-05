@@ -552,7 +552,7 @@ namespace Retro.Net.Z80.Core
             flags.HalfCarry = (((a & 0x0f) + (b & 0x0f) + (carry & 0x0f)) & 0xf0) > 0;
 
             // Overflow = (added signs are same) && (result sign differs from the sign of either of operands)
-            flags.ParityOverflow = (((a ^ b) & 0x80) == 0) && (((result ^ a) & 0x80) != 0);
+            flags.ParityOverflow = ((a ^ b) & 0x80) == 0 && ((result ^ a) & 0x80) != 0;
 
             // Carry = result > byte.MaxValue;
             flags.Carry = (result & 0x100) == 0x100;

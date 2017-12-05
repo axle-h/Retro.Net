@@ -65,12 +65,7 @@ namespace Retro.Net.Z80.Registers
         public ushort BC
         {
             get => BitConverterHelpers.To16Bit(B, C);
-            set
-            {
-                var bytes = BitConverterHelpers.To8Bit(value);
-                B = bytes[1];
-                C = bytes[0];
-            }
+            set => (B, C) = BitConverterHelpers.To8Bit(value);
         }
 
         /// <summary>
@@ -82,12 +77,7 @@ namespace Retro.Net.Z80.Registers
         public ushort DE
         {
             get => BitConverterHelpers.To16Bit(D, E);
-            set
-            {
-                var bytes = BitConverterHelpers.To8Bit(value);
-                D = bytes[1];
-                E = bytes[0];
-            }
+            set => (D, E) = BitConverterHelpers.To8Bit(value);
         }
 
         /// <summary>
@@ -99,12 +89,7 @@ namespace Retro.Net.Z80.Registers
         public ushort HL
         {
             get => BitConverterHelpers.To16Bit(H, L);
-            set
-            {
-                var bytes = BitConverterHelpers.To8Bit(value);
-                H = bytes[1];
-                L = bytes[0];
-            }
+            set => (H, L) = BitConverterHelpers.To8Bit(value);
         }
 
         /// <summary>

@@ -41,13 +41,8 @@ namespace Retro.Net.Z80.Registers
         /// </value>
         public ushort AF
         {
-            get { return BitConverterHelpers.To16Bit(A, Flags.Register); }
-            set
-            {
-                var bytes = BitConverterHelpers.To8Bit(value);
-                A = bytes[1];
-                Flags.Register = bytes[0];
-            }
+            get => BitConverterHelpers.To16Bit(A, Flags.Register);
+            set => (A, Flags.Register) = BitConverterHelpers.To8Bit(value);
         }
 
         /// <summary>
