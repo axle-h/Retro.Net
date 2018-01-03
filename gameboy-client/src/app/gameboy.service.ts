@@ -166,8 +166,10 @@ export class GameboyService implements OnDestroy {
   }
 
   private disconnect(): void {
-    this.ws.close();
-    this.ws = undefined;
+    if (this.ws && this.ws.OPEN) {
+      this.ws.close();
+      this.ws = undefined;
+    }
   }
 
   public stream(): Rx.Observable<GameboyEvent> {

@@ -1,44 +1,47 @@
-import {Inject, Injectable} from "@angular/core";
-import {DOCUMENT} from "@angular/common";
+import {Injectable} from "@angular/core";
 import * as Rx from "rxjs/Rx";
 
+const renderBufferTime = 1000;
+
+/**
+ * A service for determining whether the application is visible.
+ * Since our primary concern is rendering the GameBoy LCD we tie this to the render loop.
+ * We prefer to use the render loop over say the visibility event as some browsers,
+ * notably chrome on Android, do not trigger this event when running in the background.
+ */
 @Injectable()
 export class VisibilityService {
   private subject = new Rx.Subject<boolean>();
-  private isHidden: () => boolean;
+  private rendering = new Rx.Subject<boolean>();
+  private isRendering: boolean;
 
-  constructor(@Inject(DOCUMENT) document) {
-    if (typeof document.addEventListener === "undefined") {
-      console.log("No event listener API support.");
-      return;
-    }
+  constructor() {
+    this.render();
 
-    // Set the name of the hidden property and the change event for visibility
-    let visibilityChange: string;
-    if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
-      this.isHidden = () => document.hidden;
-      visibilityChange = "visibilitychange";
-    } else if (typeof document.msHidden !== "undefined") {
-      this.isHidden = () => document.msHidden;
-      visibilityChange = "msvisibilitychange";
-    } else if (typeof document.webkitHidden !== "undefined") {
-      this.isHidden = () => document.webkitHidden;
-      visibilityChange = "webkitvisibilitychange";
-    } else {
-      console.log("No Page Visibility API support.");
-      return;
-    }
-
-    // Arrow function required for 'this'.
-    const handleVisibilityChange = () => {
-      this.subject.next(!this.isHidden());
-    };
-
-    // Handle page visibility change
-    document.addEventListener(visibilityChange, handleVisibilityChange, false);
+    this.rendering
+      .throttleTime(renderBufferTime / 4)
+      .bufferTime(renderBufferTime)
+      .subscribe(values => {
+        if (values.length === 0) {
+          if (this.isRendering) {
+            this.subject.next(false);
+            this.isRendering = false;
+          }
+        } else {
+          this.subject.next(true);
+        }
+      });
   }
 
-  public visibilityStream(): Rx.Observable<boolean> { return this.subject.asObservable(); }
+  public visibilityStream(): Rx.Observable<boolean> {
+    return this.subject.asObservable().distinctUntilChanged();
+  }
 
-  public isVisible(): boolean  { return !this.isHidden || !this.isHidden(); }
+  public isVisible(): boolean  { return this.isRendering; }
+
+  render = () => {
+    this.isRendering = true;
+    this.rendering.next(true);
+    requestAnimationFrame(this.render);
+  }
 }
