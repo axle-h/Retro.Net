@@ -11,12 +11,14 @@ import {GameboySocketClientState} from "./models/gameboy-socket-client-state";
 import {ErrorMessage} from "./models/error-message";
 import {VisibilityService} from "./visibility.service";
 import {GameboyEvent} from "./models/gameboy-event";
+import {GameboyClientMessage} from "./models/gameboy-client-message";
 
 const ServicePath = "ws/gameboy";
 const lcdWidth = 160;
 const lcdHeight = 144;
 const frameHeader = "GPU";
 const metricsHeader = "MTC";
+const clientMessageHeader = "MSG";
 const stateUpdateHeader = "STU";
 const errorHeader = "ERR";
 
@@ -127,6 +129,10 @@ export class GameboyService implements OnDestroy {
 
           case metricsHeader:
             this.subject.next(GameboyEvent.metrics(<GameboyMetrics> msgpack.decode(body)));
+            break;
+
+          case clientMessageHeader:
+            this.subject.next(GameboyEvent.clientMessage(<GameboyClientMessage> msgpack.decode(body)));
             break;
 
           case stateUpdateHeader:

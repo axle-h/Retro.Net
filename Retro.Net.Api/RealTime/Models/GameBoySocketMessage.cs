@@ -45,20 +45,7 @@ namespace Retro.Net.Api.RealTime.Models
         ///   <c>true</c> if this message [is a heart beat]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsHeartBeat() => !Button.HasValue && !EnableMetrics.HasValue && string.IsNullOrEmpty(SetDisplayName);
-
-        /// <summary>
-        /// Merges the specified message with this one, preferring data from the specified message over this one.
-        /// </summary>
-        /// <param name="other">The other.</param>
-        /// <returns></returns>
-        public GameBoySocketMessage Merge(GameBoySocketMessage other)
-        {
-            Button = other.Button ?? Button;
-            EnableMetrics = other.EnableMetrics ?? EnableMetrics;
-            SetDisplayName = string.IsNullOrEmpty(other.SetDisplayName) ? SetDisplayName : other.SetDisplayName;
-            return this;
-        }
-
+        
         public override string ToString()
         {
             IEnumerable<string> Yield()

@@ -49,7 +49,11 @@ export class GameboyComponent implements OnInit, OnDestroy {
       .subscribe(message => {
         switch (message.type) {
           case GameboyEventType.Metrics:
-            this.handleMetrics(<GameboyMetrics> message.event)
+            this.handleMetrics(<GameboyMetrics> message.event);
+            break;
+
+          case GameboyEventType.ClientMessage:
+            this.handleClientMessage(<GameboyClientMessage> message.event);
             break;
 
           case GameboyEventType.Error:
@@ -124,17 +128,22 @@ export class GameboyComponent implements OnInit, OnDestroy {
   }
 
   private handleMetrics(metrics: GameboyMetrics): void {
-    // Only bothered about metrics with messages for now.
-    if (metrics.messages.length > 0) {
-      if (this.clientMessages.length + metrics.messages.length >= maxClientMessages) {
-        this.clientMessages = this.clientMessages.slice(0, maxClientMessages - metrics.messages.length);
-      }
+    // Do nothing for now.
+  }
 
-      if (this.clientMessages.length > 0) {
-        metrics.messages.forEach(m => this.clientMessages.unshift(m));
-      } else {
-        this.clientMessages = metrics.messages.reverse();
-      }
+  private handleClientMessage(message: GameboyClientMessage): void {
+    if (!message) {
+      return;
+    }
+
+    if (this.clientMessages.length + 1 >= maxClientMessages) {
+      this.clientMessages = this.clientMessages.slice(0, maxClientMessages - 1);
+    }
+
+    if (this.clientMessages.length > 0) {
+      this.clientMessages.unshift(message);
+    } else {
+      this.clientMessages = [message];
     }
   }
 

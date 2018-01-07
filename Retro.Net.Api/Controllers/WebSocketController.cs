@@ -25,7 +25,7 @@ namespace Retro.Net.Api.Controllers
         public async Task<IActionResult> GameBoy()
         {
             var renderer = _context.GetRenderer(Guid.Empty);
-            return await HttpContext.WithWebSocketDo((ws, ct) => renderer.RenderToWebSocketAsync(ws, ct)).ConfigureAwait(false);
+            return await HttpContext.WithWebSocketDo((ws, ct) => renderer.RenderToWebSocketAsync(ws, ct));
         }
     }
 }

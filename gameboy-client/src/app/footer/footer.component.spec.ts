@@ -26,7 +26,7 @@ describe("FooterComponent", () => {
   it(`should have all social links`, async(() => {
     const app = fixture.debugElement.componentInstance;
     const providers = app.links.map(x => x.name);
-    expect(providers).toEqual(["twitter", "github", "linkedin", "google-plus", "facebook"]);
+    expect(providers).toEqual(["twitter", "github", "linkedin", "google-plus"]);
   }));
 
   it("should render a footer tag", async(() => {

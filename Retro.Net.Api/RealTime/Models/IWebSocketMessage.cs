@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using LZ4;
 using MessagePack;
-using MessagePack.Resolvers;
 
 namespace Retro.Net.Api.RealTime.Models
 {
@@ -55,12 +54,15 @@ namespace Retro.Net.Api.RealTime.Models
     {
         private static readonly byte[] FrameHeader = Encoding.UTF8.GetBytes("GPU");
         private static readonly byte[] MetricsHeader = Encoding.UTF8.GetBytes("MTC");
+        private static readonly byte[] EventHeader = Encoding.UTF8.GetBytes("MSG");
         private static readonly byte[] StateUpdateHeader = Encoding.UTF8.GetBytes("STU");
         private static readonly byte[] ErrorHeader = Encoding.UTF8.GetBytes("ERR");
 
         public static IWebSocketMessage GpuFrame(byte[] frame, byte[] buffer = null) => new CompressedBinaryWebSocketMessage(FrameHeader, frame, buffer);
 
         public static IWebSocketMessage Metrics(GameBoyMetrics metrics) => new MessagePackWebSocketMessage<GameBoyMetrics>(MetricsHeader, metrics);
+
+        public static IWebSocketMessage ClientMessage(GameBoyClientMessage message) => new MessagePackWebSocketMessage<GameBoyClientMessage>(EventHeader, message);
 
         public static IWebSocketMessage Error(ErrorMessage error) => new MessagePackWebSocketMessage<ErrorMessage>(ErrorHeader, error);
         

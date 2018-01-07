@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using System;
+using MessagePack;
 
 namespace Retro.Net.Api.RealTime.Models
 {
@@ -34,5 +35,26 @@ namespace Retro.Net.Api.RealTime.Models
         /// </returns>
         public override string ToString() =>
             $"{nameof(DisplayName)}: {DisplayName}, {nameof(MetricsEnabled)}: {MetricsEnabled}";
+
+        public bool StateChanged(GameBoySocketMessage m) => MetricsEnabledChanged(m) || DisplayNameChanged(m);
+
+        public void Update(GameBoySocketMessage m)
+        {
+            if (MetricsEnabledChanged(m))
+            {
+                MetricsEnabled = m.EnableMetrics.GetValueOrDefault();
+            }
+
+            if (DisplayNameChanged(m))
+            {
+                DisplayName = m.SetDisplayName;
+            }
+        }
+
+        public bool MetricsEnabledChanged(GameBoySocketMessage m) =>
+            m.EnableMetrics.HasValue && m.EnableMetrics.Value != MetricsEnabled;
+
+        public bool DisplayNameChanged(GameBoySocketMessage m) =>
+            !string.IsNullOrEmpty(m.SetDisplayName) && !m.SetDisplayName.Equals(DisplayName, StringComparison.InvariantCultureIgnoreCase);
     }
 }

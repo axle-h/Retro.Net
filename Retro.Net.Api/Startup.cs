@@ -3,8 +3,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GameBoy.Net;
@@ -55,7 +53,7 @@ namespace Retro.Net.Api
 
             builder.RegisterType<SingleCoreWebSocketContext>().As<IWebSocketContext>().SingleInstance();
             builder.RegisterType<WebSocketRenderer>().As<IRenderer>().As<IWebSocketRenderer>().InZ80Scope();
-            builder.RegisterGeneric(typeof(FramedMessageHandler<>)).As(typeof(IFramedMessageHandler<>)).InZ80Scope();
+            builder.RegisterType<WebSocketMessageSerializer>().As<IWebSocketMessageSerializer>().SingleInstance();
 
             var cartridge = GetCartridgeBinary();
             var config = new StaticGameBoyConfig(cartridge, GameBoyType.GameBoy, true);

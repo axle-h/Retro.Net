@@ -2,21 +2,23 @@ import {GameboySocketHealth} from "./gameboy-socket-health";
 import {GameboySocketClientState} from "./gameboy-socket-client-state";
 import {ErrorMessage} from "./error-message";
 import {GameboyMetrics} from "./gameboy-metrics";
+import {GameboySocketMessage} from "./gameboy-socket-message";
+import {GameboyClientMessage} from "./gameboy-client-message";
 
 export enum GameboyEventType {
-  Metrics, Error, State, Health
+  Metrics, ClientMessage, Error, State, Health
 }
 
 export class GameboyEvent {
-
-  constructor(type: GameboyEventType, event?: GameboyMetrics | ErrorMessage | GameboySocketClientState | GameboySocketHealth) {
+  constructor(type: GameboyEventType,
+              event?: GameboyMetrics | GameboyClientMessage | ErrorMessage | GameboySocketClientState | GameboySocketHealth) {
     this.type = type;
     this.event = event;
   }
 
   type: GameboyEventType;
 
-  event: GameboyMetrics | ErrorMessage | GameboySocketClientState | GameboySocketHealth;
+  event: GameboyMetrics | GameboyClientMessage | ErrorMessage | GameboySocketClientState | GameboySocketHealth;
 
   public static state(state?: GameboySocketClientState): GameboyEvent {
     return new GameboyEvent(GameboyEventType.State, state);
@@ -38,5 +40,9 @@ export class GameboyEvent {
 
   public static metrics(metrics: GameboyMetrics): GameboyEvent {
     return new GameboyEvent(GameboyEventType.Metrics, metrics);
+  }
+
+  public static clientMessage(message: GameboyClientMessage): GameboyEvent {
+    return new GameboyEvent(GameboyEventType.ClientMessage, message);
   }
 }

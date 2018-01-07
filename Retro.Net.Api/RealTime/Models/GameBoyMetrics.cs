@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using GameBoy.Net.Graphics;
-using MessagePack;
+﻿using MessagePack;
 
 namespace Retro.Net.Api.RealTime.Models
 {
@@ -27,14 +25,5 @@ namespace Retro.Net.Api.RealTime.Models
         /// </value>
         [Key("skippedFrames")]
         public int SkippedFrames { get; set; }
-
-        /// <summary>
-        /// Gets or sets the messages.
-        /// </summary>
-        /// <value>
-        /// The messages.
-        /// </value>
-        [Key("messages")]
-        public ICollection<GameBoyClientMessage> Messages { get; set; }
     }
 }

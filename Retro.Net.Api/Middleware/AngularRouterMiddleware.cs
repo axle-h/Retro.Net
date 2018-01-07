@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 namespace Retro.Net.Api.Middleware
 {
     /// <summary>
-    /// Middleware to catch 404's that are not on the API or Webocket paths and redirect to index.html so that Angular can sort out a route.
+    /// Middleware to catch 404's that are not on the API or Websocket paths and redirect to index.html so that Angular can sort out a route.
     /// </summary>
     public class AngularRoutesMiddleware
     {

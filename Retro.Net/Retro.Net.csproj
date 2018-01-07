@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AgileObjects.ReadableExpressions" Version="1.9.4" />
+    <PackageReference Include="AgileObjects.ReadableExpressions" Version="1.10.1" />
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
