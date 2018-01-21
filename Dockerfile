@@ -1,5 +1,5 @@
 ### STAGE 1: Build Angular Frontend ###
-FROM trion/ng-cli-karma AS ng-build-env
+FROM trion/ng-cli-karma:1.6.5 AS ng-build-env
 WORKDIR /app
 
 # Copy project structure first and restore dependencies as a distinct layer.
@@ -13,7 +13,7 @@ RUN npm run ng test -- --watch false --single-run true --no-progress
 RUN npm run ng build -- --prod --no-progress
 
 ### STAGE 2: Build .NET Core Backend ###
-FROM microsoft/aspnetcore-build:1.0-2.0 AS netcore-build-env
+FROM microsoft/aspnetcore-build:2.0 AS netcore-build-env
 WORKDIR /app
 
 # Copy project structure first and restore dependencies as a distinct layer.
@@ -32,9 +32,8 @@ COPY Retro.Net.Api ./Retro.Net.Api
 COPY Retro.Net.Tests ./Retro.Net.Tests
 
 # Test.
-RUN dotnet build
 WORKDIR /app/Retro.Net.Tests
-RUN dotnet xunit
+RUN dotnet test -c Release
 
 # Build.
 WORKDIR /app/Retro.Net.Api
