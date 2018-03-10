@@ -13,9 +13,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
-using NLog.Web;
 using Retro.Net.Api.Middleware;
 using Retro.Net.Api.RealTime;
 using Retro.Net.Api.RealTime.Interfaces;
@@ -29,18 +26,6 @@ namespace Retro.Net.Api
         public const string WebSocketRootPath = "/ws";
 
         private const string CartridgeResource = "cartridge.zip";
-        
-        public Startup(IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
-        }
-
-        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -64,10 +49,13 @@ namespace Retro.Net.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IApplicationLifetime lifetime, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            loggerFactory.AddNLog();
-            app.AddNLogWeb();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseMiddleware<AngularRoutesMiddleware>();
             app.UseWebSockets();
             app.UseDefaultFiles();

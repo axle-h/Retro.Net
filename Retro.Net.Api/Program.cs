@@ -1,29 +1,21 @@
-﻿using System.IO;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog.Web;
+using Serilog;
 
 namespace Retro.Net.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .ConfigureLogging((h, builder) =>
-                                  {
-                                      h.HostingEnvironment.ConfigureNLog("nlog.xml");
-                                      builder.SetMinimumLevel(LogLevel.Trace);
-                                  })
-                .UseStartup<Startup>()
-                .UseApplicationInsights()
-                .UseSetting(WebHostDefaults.PreventHostingStartupKey, bool.TrueString)
-                .UseUrls("http://*:2500/")
-                .Build();
+            var host = WebHost.CreateDefaultBuilder(args)
+                       .UseSerilog((ctx, c) => c.ReadFrom.Configuration(ctx.Configuration))
+                       .UseStartup<Startup>()
+                       .UseUrls("http://*:2500/")
+                       .Build();
 
-            host.Run();
+            await host.RunAsync();
         }
     }
 }

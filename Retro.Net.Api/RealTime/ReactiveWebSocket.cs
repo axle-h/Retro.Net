@@ -99,6 +99,11 @@ namespace Retro.Net.Api.RealTime
                             throw new ArgumentOutOfRangeException();
                     }
                 }
+                catch (OperationCanceledException)
+                {
+                    observer.OnCompleted();
+                    break;
+                }
                 catch (Exception e)
                 {
                     observer.OnError(e);

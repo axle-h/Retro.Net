@@ -9,6 +9,7 @@ import {ErrorMessage} from "../models/error-message";
 import {GameboySocketClientState} from "../models/gameboy-socket-client-state";
 import {GameboyMetrics} from "../models/gameboy-metrics";
 import {GameboyEventType} from "../models/gameboy-event";
+import * as _ from "lodash";
 
 const maxClientMessages = 20;
 
@@ -145,6 +146,8 @@ export class GameboyComponent implements OnInit, OnDestroy {
     } else {
       this.clientMessages = [message];
     }
+
+    this.clientMessages = _.orderBy(this.clientMessages, m => m.date, "desc");
   }
 
   private handleError(error: ErrorMessage): void {

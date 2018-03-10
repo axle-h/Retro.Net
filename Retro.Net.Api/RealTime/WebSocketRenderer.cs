@@ -155,6 +155,11 @@ namespace Retro.Net.Api.RealTime
                                                }
                                            }
 
+                                           if (state.DisplayNameChanged(m))
+                                           {
+                                               Publish(m.SetDisplayName, "Joined the game");
+                                           }
+
                                            state.Update(m);
                                            var stateMessage = WebSocketMessageFactory.StateUpdate(state);
                                            observer.OnNext(stateMessage);

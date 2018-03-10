@@ -1,10 +1,10 @@
 ### STAGE 1: Build Angular Frontend ###
-FROM trion/ng-cli-karma:1.6.5 AS ng-build-env
+FROM trion/ng-cli-karma:1.7.3 AS ng-build-env
 WORKDIR /app
 
 # Copy project structure first and restore dependencies as a distinct layer.
 COPY gameboy-client/package.json gameboy-client/package-lock.json ./
-RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
+RUN npm set progress=false && npm config set depth 0 && npm cache verify
 RUN npm install
 
 # Copy rest, test and build.
