@@ -1,0 +1,5 @@
+FROM microsoft/aspnetcore:2.0.7
+WORKDIR /app
+COPY src/Retro.Net.Api/bin/publish .
+COPY gameboy-client/dist ./wwwroot
+ENTRYPOINT ["dotnet", "Retro.Net.Api.dll"]

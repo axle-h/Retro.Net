@@ -1,16 +1,16 @@
 import { TestBed, inject } from "@angular/core/testing";
 
-import { GameboyService } from "./gameboy.service";
+import { GameBoyService } from "./game-boy.service";
 import {VisibilityService} from "./visibility.service";
 
-describe("GameboyService", () => {
+describe("GameBoyService", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GameboyService, VisibilityService]
+      providers: [GameBoyService, VisibilityService]
     });
   });
 
-  it("should be created", inject([GameboyService], (service: GameboyService) => {
+  it("should be created", inject([GameBoyService], (service: GameBoyService) => {
     expect(service).toBeTruthy();
   }));
 });

@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Event";
+
+import "gameboy.event.messages.proto";
+
+// An event specific to GameBoy clients published by Retro.Net.Api.
+message GameBoyEvent {
+
+	// The body of the event.
+    oneof value {
+		// A single GameBoy GPU frame.
+		GameBoyGpuFrame frame = 1;
+
+		// A text message published to all connected GameBoy clients by Retro.Net.Api.
+		GameBoyPublishedMessage publishedMessage = 2;
+
+		// An error message published to all connected GameBoy clients by Retro.Net.Api.
+		GameBoyServerError error = 3;
+
+		// The state of a GameBoy websocket connection.
+		GameBoyClientState state = 4;
+    }
+}

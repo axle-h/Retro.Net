@@ -9,7 +9,7 @@ services:
     restart: always
     environment:
       WEBSOCKET: "true"
-      DOMAINS: "gb.ax-h.com -> http://server-side-gameboy:2500"
+      DOMAINS: "gb.ax-h.com -> http://server-side-gameboy"
       # STAGE: production
 
   server-side-gameboy:

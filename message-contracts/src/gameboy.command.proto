@@ -1,0 +1,19 @@
+syntax = "proto3";
+option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Command";
+
+import "gameboy.command.messages.proto";
+
+// A command sent from a connected GameBoy client.
+message GameBoyCommand {
+
+    oneof value {
+        // Just a heartbeat to keep the connection alive.
+        HeartBeat heartBeat = 1;
+
+		// Command to set the state of a GameBoy websocket connection.
+        SetGameBoyClientState setState = 2;
+        
+		// Command to press a button on the GameBoy joypad.
+		RequestGameBoyJoyPadButtonPress pressButton = 3;
+    }
+}

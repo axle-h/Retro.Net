@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.Net", "Retro.Net\Retro.Net.csproj", "{167F7D51-B153-4972-BB06-4BDD0B83AFA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.Net", "src\Retro.Net\Retro.Net.csproj", "{167F7D51-B153-4972-BB06-4BDD0B83AFA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBoy.Net", "GameBoy.Net\GameBoy.Net.csproj", "{00895975-EBF2-4A89-8295-934B500CF6D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBoy.Net", "src\GameBoy.Net\GameBoy.Net.csproj", "{00895975-EBF2-4A89-8295-934B500CF6D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.Net.Tests", "Retro.Net.Tests\Retro.Net.Tests.csproj", "{25C4041A-9204-40D5-B2D0-4F09AB0DB5F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.Net.Tests", "src\Retro.Net.Tests\Retro.Net.Tests.csproj", "{25C4041A-9204-40D5-B2D0-4F09AB0DB5F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro.Net.Api", "Retro.Net.Api\Retro.Net.Api.csproj", "{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro.Net.Api", "src\Retro.Net.Api\Retro.Net.Api.csproj", "{B75A3E3D-E2E2-48A6-9843-BDCFE498AD40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { LcdComponent } from "./lcd.component";
-import {GameboyService} from "../gameboy.service";
+import {GameBoyService} from "../game-boy.service";
 import {VisibilityService} from "../visibility.service";
 
 describe("LcdComponent", () => {
@@ -11,7 +11,7 @@ describe("LcdComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ LcdComponent ],
-      providers: [GameboyService, VisibilityService]
+      providers: [GameBoyService, VisibilityService]
     })
     .compileComponents();
   }));

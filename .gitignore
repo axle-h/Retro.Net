@@ -261,3 +261,5 @@ __pycache__/
 *.pyc
 
 wwwroot/
+message-contracts/tools/
+dist/

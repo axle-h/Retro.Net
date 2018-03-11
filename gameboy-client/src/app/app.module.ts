@@ -4,7 +4,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { FormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { GameboyService } from "./gameboy.service";
+import { GameBoyService } from "./game-boy.service";
 import { FooterComponent } from "./footer/footer.component";
 import { LcdComponent } from "./lcd/lcd.component";
 import { DefaultComponent } from "./default/default.component";
@@ -28,7 +28,7 @@ import {VisibilityService} from "./visibility.service";
     AppRoutingModule,
     NgbModule.forRoot()
   ],
-  providers: [GameboyService, VisibilityService],
+  providers: [GameBoyService, VisibilityService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

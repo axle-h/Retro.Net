@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Retro.Net.Api": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "launchUrl": "api/values",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:2500/"
+    }
+  }
+}

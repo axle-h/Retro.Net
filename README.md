@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/axle-h/Retro.Net.svg?branch=master)](https://travis-ci.org/axle-h/Retro.Net)
+[![CircleCI](https://circleci.com/gh/axle-h/Retro.Net/tree/master.svg?style=shield)](https://circleci.com/gh/axle-h/Retro.Net/tree/master)
 
 # Retro.Net
 Retro hardware libraries in .NET core.

@@ -1,0 +1,16 @@
+{
+  "name": "message-contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run js && npm run ts",
+    "js": "pbjs -t static-module -w commonjs -o dist/ts/messages.js src/*.proto",
+    "ts": "pbts -o dist/ts/messages.d.ts dist/ts/messages.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "protobufjs": "^6.8.6"
+  }
+}

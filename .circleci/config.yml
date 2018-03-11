@@ -1,0 +1,95 @@
+defaults: &netcore
+  docker:
+    - image: microsoft/aspnetcore-build:2.0
+  working_directory: ~/app
+
+version: 2
+jobs:
+  build-message-contracts:
+    docker:
+      - image: node:9.11
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: Install build dependencies
+          command: apt update && apt install -y unzip
+      - run:
+          name: Build message contracts
+          command: cd message-contracts && ./build.sh
+      - persist_to_workspace:
+          root: ~/app
+          paths: .
+
+  build-netcore:
+    <<: *netcore
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Build API
+          command: dotnet publish -o bin/publish -c Release --version-suffix $CIRCLE_BUILD_NUM src/Retro.Net.Api
+      - run:
+          name: Unit tests
+          command: dotnet test -c Release src/Retro.Net.Tests
+      - persist_to_workspace:
+          root: ~/app
+          paths: src/Retro.Net.Api/bin/publish
+
+  build-angular:
+    docker:
+      - image: trion/ng-cli-karma:1.7.3
+    working_directory: ~/app/gameboy-client
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: NPM Install
+          command: |
+            npm set progress=false && npm config set depth 0 && npm cache verify
+            npm install
+      - run:
+          name: Build Angular project
+          command: npm run ng build -- --prod --no-progress
+      - run:
+          name: Karma unit tests
+          command: npm run ng test -- --watch false --single-run true --no-progress
+      - persist_to_workspace:
+          root: ~/app
+          paths: gameboy-client/dist
+
+  publish:
+    docker:
+      - image: docker
+        environment:
+          - IMAGE=alexhaslehurst/server-side-gameboy
+    working_directory: ~/app
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - setup_remote_docker
+      - run:
+          name: Build and push docker container
+          command: |
+            echo $DOCKER_PASS | docker login --username alexhaslehurst --password-stdin
+            docker build -f Dockerfile-ci -t $IMAGE:latest $IMAGE:${CIRCLE_SHA1::8} $IMAGE:ci-$CIRCLE_BUILD_NUM .
+            docker push $IMAGE
+
+workflows:
+  version: 2
+  build-test-publish:
+    jobs:
+      - build-message-contracts
+      - build-netcore:
+          requires:
+            - build-message-contracts
+      - build-angular:
+          requires:
+            - build-message-contracts
+      - publish:
+          requires:
+            - build-netcore
+            - build-angular
+          filters:
+            branches:
+              only: master

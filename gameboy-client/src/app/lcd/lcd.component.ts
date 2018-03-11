@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from "@angular/core";
 import {Color} from "./color";
-import {GameboyService} from "../gameboy.service";
+import {GameBoyService} from "../game-boy.service";
 
 const colour0 = new Color(0x9b, 0xbc, 0x0f);
 const colour1 = new Color(0x8b, 0xac, 0x0f);
@@ -37,7 +37,7 @@ export class LcdComponent implements OnInit {
   private lcdInit = false;
   private lcdBorder: HTMLImageElement;
 
-  constructor(private service: GameboyService) {
+  constructor(private service: GameBoyService) {
     this.lcdWidth = service.lcdWidth;
     this.lcdHeight = service.lcdHeight;
   }

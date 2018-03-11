@@ -158,12 +158,12 @@
       <div class="row">
         <div class="col">
           <span class="badge badge-primary badge-pill">{{message.user}}</span>
-          {{message.message}}
+          {{message.body}}
         </div>
       </div>
       <div class="row">
         <div class="col text-muted">
-          <small>{{message.date}}</small>
+          <small>{{formatDate(message.date)}}</small>
         </div>
       </div>
     </li>

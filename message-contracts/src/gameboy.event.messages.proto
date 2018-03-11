@@ -1,0 +1,39 @@
+syntax = "proto3";
+option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Event";
+
+// A single GameBoy GPU frame.
+message GameBoyGpuFrame {
+
+    // The raw GameBoy GPU frame data.
+    bytes data = 1;
+
+    // The current frames per second.
+    int32 framesPerSecond = 2;
+}
+
+// A text message published to all connected GameBoy clients by Retro.Net.Api.
+message GameBoyPublishedMessage {
+
+    // The user associated with this message.
+    string user = 1;
+
+    // The UTC epoch milliseconds that this message was published.
+    int64 date = 2;
+
+    // The message body.
+    string body = 3;
+}
+
+// An error message published to all connected GameBoy clients by Retro.Net.Api.
+message GameBoyServerError {
+
+    // The reasons that caused this error.
+    repeated string reasons = 1;
+}
+
+// The state of a GameBoy websocket connection.
+message GameBoyClientState {
+
+    // The display name associated with the connected GameBoy client.
+    string displayName = 1;
+}

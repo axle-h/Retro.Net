@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { GameboyComponent } from "./gameboy.component";
 import {MockComponent} from "ng2-mock-component";
 import {FormsModule} from "@angular/forms";
-import {GameboyService} from "../gameboy.service";
+import {GameBoyService} from "../game-boy.service";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {VisibilityService} from "../visibility.service";
 
@@ -18,7 +18,7 @@ describe("GameboyComponent", () => {
         GameboyComponent,
         MockComponent({ selector: "gb-lcd", inputs: ["maxScale"] })
       ],
-      providers: [GameboyService, VisibilityService]
+      providers: [GameBoyService, VisibilityService]
     })
     .compileComponents();
   }));
