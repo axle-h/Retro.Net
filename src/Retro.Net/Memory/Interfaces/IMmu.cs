@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Retro.Net.Memory.Interfaces
@@ -61,5 +62,11 @@ namespace Retro.Net.Memory.Interfaces
         /// <param name="writable">if set to <c>true</c> [the stream will be writable].</param>
         /// <returns></returns>
         Stream GetStream(ushort address, bool readable = true, bool writable = true);
+
+        /// <summary>
+        /// Creates a new collection of state objects representing the current state of the MMU.
+        /// </summary>
+        /// <returns></returns>
+        ICollection<AddressSegmentState> CreateState();
     }
 }

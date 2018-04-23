@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Retro.Net.Memory.Interfaces
+﻿namespace Retro.Net.Memory.Interfaces
 {
     /// <summary>
     /// An address segment.

@@ -17,6 +17,7 @@ using Retro.Net.Z80.Core.Interpreted;
 using Retro.Net.Z80.Memory;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
+using Retro.Net.Z80.State;
 using Retro.Net.Z80.Timing;
 
 namespace Retro.Net.Wiring
@@ -87,15 +88,21 @@ namespace Retro.Net.Wiring
             builder.RegisterType<InterruptService>().As<IInterruptService>().InZ80Scope();
             builder.RegisterType<InstructionTimer>().As<IInstructionTimer>().InZ80Scope();
             builder.RegisterType<OpCodeDecoder>().As<IOpCodeDecoder>().InZ80Scope();
-            builder.RegisterType<MessageBus>().As<IMessageBus>().InZ80Scope();
+            builder.RegisterType<ReactiveMessageBus>().As<IMessageBus>().InZ80Scope();
 
-            if (_runtimeConfig.DebugMode)
+
+
+            if (_platformConfig.CpuMode == CpuMode.Z80)
             {
-                builder.RegisterType<CpuCoreDebugger>().As<ICpuCoreDebugger>();
+                builder.RegisterType<CpuCoreDebugger<Z80RegisterState>>()
+                       .As<ICpuCoreDebugger<Z80RegisterState>>()
+                       .As<IInternalCpuCoreDebugger>();
             }
             else
             {
-                builder.RegisterType<NullCpuCoreDebugger>().As<ICpuCoreDebugger>();
+                builder.RegisterType<CpuCoreDebugger<Intel8080RegisterState>>()
+                       .As<ICpuCoreDebugger<Intel8080RegisterState>>()
+                       .As<IInternalCpuCoreDebugger>();
             }
 
             switch (_runtimeConfig.CoreMode)

@@ -8,18 +8,19 @@ namespace Retro.Net.Memory
 {
     public class SegmentPointer<TAddressSegment> where TAddressSegment : IAddressSegment
     {
-        private readonly IList<TAddressSegment> _segments;
         private readonly Action<ushort, int> _onWrite;
         private readonly ushort[] _addresses;
 
         public SegmentPointer(IList<TAddressSegment> segments, Action<ushort, int> onWrite = null)
         {
             CheckSegments(segments);
-            _segments = segments;
+            Segments = segments;
             _onWrite = onWrite;
             _addresses = segments.Select(x => x.Address).ToArray();
         }
-        
+
+        public IList<TAddressSegment> Segments { get; }
+
         public (TAddressSegment segment, ushort offset) GetOffset(ushort address)
         {
             var index = Array.BinarySearch(_addresses, address);
@@ -31,7 +32,7 @@ namespace Retro.Net.Memory
                 index = ~index - 1;
             }
 
-            var segment = _segments[index];
+            var segment = Segments[index];
             var offset = (ushort) (address - segment.Address);
             return (segment, offset);
         }

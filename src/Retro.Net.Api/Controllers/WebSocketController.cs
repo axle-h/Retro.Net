@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Retro.Net.Api.Infrastructure;
-using Retro.Net.Api.RealTime;
 using Retro.Net.Api.RealTime.Extensions;
 using Retro.Net.Api.RealTime.Interfaces;
 using Retro.Net.Api.Services.Interfaces;
@@ -27,7 +26,7 @@ namespace Retro.Net.Api.Controllers
         [HttpGet("gameboy")]
         public async Task<IActionResult> GameBoy()
         {
-            var renderer = _context.GetRenderer() as IWebSocketRenderer ?? throw new InvalidOperationException("Cannot render to web sockets without the web socket renderer");
+            var renderer = _context.GetRenderer() as IWebSocketRenderer ?? throw new InvalidOperationException("Cannot render to a web socket without the web socket renderer");
             return await HttpContext.WithWebSocketDo((ws, ct) => renderer.RenderToWebSocketAsync(ws, ct));
         }
     }

@@ -5,16 +5,19 @@
     /// </summary>
     public class Tile
     {
-        private readonly Palette[] _palette;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="Tile"/> struct.
+        /// Initializes a new instance of the <see cref="Tile"/> class.
         /// </summary>
         /// <param name="palette">The palette.</param>
         public Tile(Palette[] palette)
         {
-            _palette = palette;
+            Palette = palette;
         }
+
+        /// <summary>
+        /// Gets the tile palette.
+        /// </summary>
+        public Palette[] Palette { get; }
 
         /// <summary>
         /// Gets the palette value at the specified row and column.
@@ -22,6 +25,6 @@
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
         /// <returns></returns>
-        public Palette Get(int row, int column) => _palette[row * 8 + column];
+        public Palette Get(int row, int column) => Palette[row * 8 + column];
     }
 }

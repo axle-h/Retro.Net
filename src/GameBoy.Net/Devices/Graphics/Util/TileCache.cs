@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameBoy.Net.Devices.Graphics.Models;
 
 namespace GameBoy.Net.Devices.Graphics.Util
@@ -9,9 +10,14 @@ namespace GameBoy.Net.Devices.Graphics.Util
     /// </summary>
     public class TileCache
     {
+        private const int TileSize = 16;
         private readonly IList<byte> _bytes;
         private readonly IDictionary<int, Tile> _cache;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TileCache"/> class.
+        /// </summary>
+        /// <param name="bytes">The bytes.</param>
         public TileCache(ArraySegment<byte> bytes)
         {
             _bytes = bytes;
@@ -36,6 +42,12 @@ namespace GameBoy.Net.Devices.Graphics.Util
         }
 
         /// <summary>
+        /// Gets all tiles.
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<Tile> GetAllTiles() => Enumerable.Range(0, _bytes.Count / TileSize).Select(GetTile).ToList();
+
+        /// <summary>
         /// Reads the tile directly from tile RAM.
         /// </summary>
         /// <param name="index">The index.</param>
@@ -43,7 +55,7 @@ namespace GameBoy.Net.Devices.Graphics.Util
         private Tile ReadTile(int index)
         {
             var palette = new Palette[64];
-            var address = index * 16;
+            var address = index * TileSize;
             for (var row = 0; row < 8; row++, address += 2)
             {
                 var low = _bytes[address];

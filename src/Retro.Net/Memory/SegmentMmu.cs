@@ -37,8 +37,8 @@ namespace Retro.Net.Memory
         /// <param name="dmaController">The dma controller.</param>
         /// <param name="instructionTimer">The instruction timer.</param>
         public SegmentMmu(IEnumerable<IAddressSegment> addressSegments,
-            IDmaController dmaController,
-            IInstructionTimer instructionTimer)
+                          IDmaController dmaController,
+                          IInstructionTimer instructionTimer)
         {
             _dmaController = dmaController;
             _instructionTimer = instructionTimer;
@@ -147,6 +147,12 @@ namespace Retro.Net.Memory
         /// <param name="writable">if set to <c>true</c> [the stream will be writable].</param>
         /// <returns></returns>
         public Stream GetStream(ushort address, bool readable = true, bool writable = true) => new SegmentStream(address, readable ? _readPointer : null, writable ? _writePointer : null);
+
+        /// <summary>
+        /// Creates a new collection of state objects representing the current state of the MMU.
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<AddressSegmentState> CreateState() => _readPointer.Segments.Select(s => s.CreateState()).ToList();
 
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

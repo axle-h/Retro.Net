@@ -61,7 +61,13 @@ namespace Retro.Net.Memory
         /// <param name="count">The count.</param>
         /// <returns></returns>
         public int ReadBytes(ushort address, byte[] buffer, int offset, int count) => count;
-        
+
+        /// <summary>
+        /// Creates the state.
+        /// </summary>
+        /// <returns></returns>
+        public AddressSegmentState CreateState() => AddressSegmentState.FromReadableSegment(this);
+
         /// <summary>
         /// Writes a byte to this address segment.
         /// </summary>

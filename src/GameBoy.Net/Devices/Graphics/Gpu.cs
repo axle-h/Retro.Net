@@ -12,6 +12,7 @@ using Retro.Net.Config;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
+using Retro.Net.Util;
 using Retro.Net.Z80.Core.Interfaces;
 
 namespace GameBoy.Net.Devices.Graphics
@@ -67,18 +68,20 @@ namespace GameBoy.Net.Devices.Graphics
         private bool _halted;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Gpu"/> class.
+        /// Initializes a new instance of the <see cref="Gpu" /> class.
         /// </summary>
         /// <param name="gameBoyConfig">The game boy configuration.</param>
         /// <param name="interruptFlagsRegister">The interrupt flags register.</param>
         /// <param name="gpuRegisters">The gpu registers.</param>
         /// <param name="renderer">The renderer.</param>
         /// <param name="timer">The timer.</param>
+        /// <param name="messageBus">The message bus.</param>
         public Gpu(IGameBoyConfig gameBoyConfig,
                    IInterruptFlagsRegister interruptFlagsRegister,
                    IGpuRegisters gpuRegisters,
                    IRenderer renderer,
-                   IInstructionTimer timer)
+                   IInstructionTimer timer,
+                   IMessageBus messageBus)
         {
             _interruptFlagsRegister = interruptFlagsRegister;
             _gpuRegisters = gpuRegisters;
@@ -96,7 +99,7 @@ namespace GameBoy.Net.Devices.Graphics
 
             var timerSubscription = timer.Timing.Subscribe(Sync);
 
-            var initialContext = GetCurrentRenderContext();
+            var initialContext = GetCurrentRenderContext(false);
             var observer = new DistinctRenderContextObserver(gpuRegisters, renderer, initialContext);
 
             // Render the first frame by publishing directly to the observer.
@@ -113,9 +116,21 @@ namespace GameBoy.Net.Devices.Graphics
                                       .Count()
                                       .Subscribe(fps => renderer.UpdateMetrics(new GpuMetrics(fps)));
 
-            _subscriptions = new CompositeDisposable { timerSubscription, renderSubscription, metricsSubscription };
+            var getGpuStateSubscription = messageBus.GetObservable(GameBoyDeviceMessages.GetGpuState)
+                                                    .Subscribe(response =>
+                                                               {
+                                                                   try
+                                                                   {
+                                                                       response.OnNext(CreateState());
+                                                                       response.OnCompleted();
+                                                                   }
+                                                                   catch (Exception e)
+                                                                   {
+                                                                       response.OnError(e);
+                                                                   }
+                                                               });
 
-
+            _subscriptions = new CompositeDisposable { timerSubscription, renderSubscription, metricsSubscription, getGpuStateSubscription };
         }
 
         /// <summary>
@@ -168,7 +183,7 @@ namespace GameBoy.Net.Devices.Graphics
                         if (_gpuRegisters.CurrentScanlineRegister.Scanline == VerticalBlankScanLines)
                         {
                             // Paint.
-                            var context = GetCurrentRenderContext();
+                            var context = GetCurrentRenderContext(true);
                             _renderSubject.OnNext(context);
                             _lastRenderedChecksum = context.Checksum;
 
@@ -203,7 +218,13 @@ namespace GameBoy.Net.Devices.Graphics
             }
         }
 
-        private RenderContext GetCurrentRenderContext()
+        /// <summary>
+        /// Creates a new state object that describes the GPU.
+        /// </summary>
+        /// <returns></returns>
+        public GpuTileState CreateState() => new TileMapPointer(GetCurrentRenderContext(false)).GetCurrentState();
+
+        private RenderContext GetCurrentRenderContext(bool calculateChecksum)
         {
             var renderSettings = new RenderSettings(_gpuRegisters);
 
@@ -225,7 +246,13 @@ namespace GameBoy.Net.Devices.Graphics
                 spriteOam = spriteTileSet = new ArraySegment<byte>(Array.Empty<byte>());
             }
 
-            return new RenderContext(renderSettings, tileSet, backgroundTileMap, windowTileMap, spriteOam, spriteTileSet, _lastRenderedChecksum);
+            return new RenderContext(renderSettings,
+                                     tileSet,
+                                     backgroundTileMap,
+                                     windowTileMap,
+                                     spriteOam,
+                                     spriteTileSet,
+                                     calculateChecksum ? _lastRenderedChecksum : null as RenderChecksum?);
         }
 
         public void Dispose()

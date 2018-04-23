@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
-using Retro.Net.Memory.Dma;
 using Retro.Net.Memory.Interfaces;
-using Retro.Net.Timing;
 using Retro.Net.Util;
-using Retro.Net.Z80.Cache;
 using Retro.Net.Z80.Cache.Interfaces;
 using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Peripherals;
@@ -26,11 +24,10 @@ namespace Retro.Net.Z80.Core
         private readonly IAlu _alu;
         private readonly IOpCodeDecoder _opCodeDecoder;
         private readonly IInstructionBlockFactory _instructionBlockFactory;
-        private readonly IDmaController _dmaController;
-        private readonly IMessageBus _messageBus;
         private readonly IInstructionBlockCache _instructionBlockCache;
-        private readonly ICpuCoreDebugger _debugger;
+        private readonly IInternalCpuCoreDebugger _debugger;
 
+        private readonly IDisposable _messageBusSubscriptions;
         private readonly SemaphoreSlim _paused;
         private readonly CancellationTokenSource _cancellation;
         private bool _disposed;
@@ -46,7 +43,6 @@ namespace Retro.Net.Z80.Core
         /// <param name="alu">The alu.</param>
         /// <param name="opCodeDecoder">The opcode decoder.</param>
         /// <param name="instructionBlockFactory">The instruction block decoder.</param>
-        /// <param name="dmaController">The dma controller.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="instructionBlockCache">The instruction block cache.</param>
         /// <param name="debugger">The debugger.</param>
@@ -58,10 +54,9 @@ namespace Retro.Net.Z80.Core
                        IAlu alu,
                        IOpCodeDecoder opCodeDecoder,
                        IInstructionBlockFactory instructionBlockFactory,
-                       IDmaController dmaController,
                        IMessageBus messageBus,
                        IInstructionBlockCache instructionBlockCache,
-                       ICpuCoreDebugger debugger)
+                       IInternalCpuCoreDebugger debugger)
         {
             CoreId = Guid.NewGuid();
             _registers = registers;
@@ -72,14 +67,14 @@ namespace Retro.Net.Z80.Core
             _alu = alu;
             _opCodeDecoder = opCodeDecoder;
             _instructionBlockFactory = instructionBlockFactory;
-            _dmaController = dmaController;
-            _messageBus = messageBus;
             _instructionBlockCache = instructionBlockCache;
             _debugger = debugger;
-            messageBus.RegisterHandler(Message.PauseCpu, Pause);
-            messageBus.RegisterHandler(Message.ResumeCpu, Resume);
             _paused = new SemaphoreSlim(1, 1);
             _cancellation = new CancellationTokenSource();
+
+            var pauseSubscription = messageBus.GetObservable(CpuCoreMessages.PauseCpu).Subscribe(x => Pause());
+            var resumeSubscription = messageBus.GetObservable(CpuCoreMessages.ResumeCpu).Subscribe(x => Resume());
+            _messageBusSubscriptions = new CompositeDisposable {pauseSubscription, resumeSubscription};
         }
 
         /// <summary>
@@ -213,10 +208,12 @@ namespace Retro.Net.Z80.Core
                 }
 
                 _disposed = true;
-                _cancellation.Cancel();
-                _paused.Dispose();
-                _cancellation.Dispose();
             }
+
+            _messageBusSubscriptions.Dispose();
+            _cancellation.Cancel();
+            _paused.Dispose();
+            _cancellation.Dispose();
         }
     }
 }

@@ -87,6 +87,12 @@ namespace Retro.Net.Memory
         }
 
         /// <summary>
+        /// Creates a new segment state from this address segment.
+        /// </summary>
+        /// <returns></returns>
+        public AddressSegmentState CreateState() => AddressSegmentState.FromReadableSegment(this);
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>

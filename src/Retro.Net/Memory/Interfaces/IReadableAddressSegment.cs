@@ -24,5 +24,11 @@
         /// <param name="count">The number of bytes to read.</param>
         /// <returns>The number of bytes read into the buffer.</returns>
         int ReadBytes(ushort address, byte[] buffer, int offset, int count);
+
+        /// <summary>
+        /// Creates a new segment state from this address segment.
+        /// </summary>
+        /// <returns></returns>
+        AddressSegmentState CreateState();
     }
 }

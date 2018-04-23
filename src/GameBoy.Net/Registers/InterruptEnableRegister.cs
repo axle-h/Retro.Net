@@ -78,6 +78,12 @@ namespace GameBoy.Net.Registers
         }
 
         /// <summary>
+        /// Creates a new segment state from this address segment.
+        /// </summary>
+        /// <returns></returns>
+        public AddressSegmentState CreateState() => AddressSegmentState.FromReadableSegment(this);
+
+        /// <summary>
         /// Writes a byte to this address segment.
         /// </summary>
         /// <param name="address">The address.</param>

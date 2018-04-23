@@ -5,7 +5,6 @@ using Retro.Net.Config;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
 using Retro.Net.Memory.Interfaces;
-using Retro.Net.Timing;
 using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Peripherals;

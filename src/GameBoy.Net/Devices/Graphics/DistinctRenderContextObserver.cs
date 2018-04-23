@@ -39,7 +39,7 @@ namespace GameBoy.Net.Devices.Graphics
             {
                 for (var x = 0; x < GpuConstants.LcdWidth; x++)
                 {
-                    _lcdBuffer.SetPixel(x, y, (byte)bitmapPalette[_tileMapPointer.Pixel]);
+                    _lcdBuffer.SetPixel(x, y, (byte) bitmapPalette[_tileMapPointer.Pixel]);
 
                     if (x + 1 < GpuConstants.LcdWidth)
                     {

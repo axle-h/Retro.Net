@@ -24,20 +24,6 @@ namespace GameBoy.Net.Wiring
     /// <seealso cref="T:Autofac.Module" />
     public class GameBoyHardwareModule : Module
     {
-
-#if DEBUG
-        private const bool DebugMode = true;
-#else
-        private const bool DebugMode = false;
-#endif
-
-        /// <summary>
-        /// Gets the runtime configuration.
-        /// </summary>
-        /// <value>
-        /// The runtime configuration.
-        /// </value>
-        public static IRuntimeConfig RuntimeConfig { get; } = new RuntimeConfig(DebugMode, CoreMode.DynaRec);
         
         private readonly IGameBoyConfig _gameBoyConfig;
 

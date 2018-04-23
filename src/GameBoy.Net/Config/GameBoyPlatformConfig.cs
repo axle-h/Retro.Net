@@ -104,11 +104,11 @@ namespace GameBoy.Net.Config
                                                CartridgeRomBank0Address,
                                                CartridgeRomBankLength,
                                                cartridge.RomBanks[0]);
-                for (byte i = 1; i < cartridge.RomBanks.Length; i++)
+                for (byte i = 0; i < cartridge.RomBanks.Length; i++)
                 {
                     yield return
                         new SimpleMemoryBankConfig(MemoryBankType.ReadOnlyMemory,
-                                                   i,
+                                                   (byte?) (i + 1),
                                                    CartridgeRomBank1Address,
                                                    CartridgeRomBankLength,
                                                    cartridge.RomBanks[i]);
@@ -117,7 +117,7 @@ namespace GameBoy.Net.Config
                 if (cartridge.RamBankLengths.Any())
                 {
                     var ramBanks = cartridge.RamBankLengths.Length > 1
-                                       ? cartridge.RamBankLengths.SelectMany((length, id) => GetCartridgeRamBankConfig(id, length))
+                                       ? cartridge.RamBankLengths.SelectMany((length, id) => GetCartridgeRamBankConfig(id + 1, length))
                                        : GetCartridgeRamBankConfig(null, cartridge.RamBankLengths.First());
 
                     foreach (var bank in ramBanks)
@@ -142,11 +142,11 @@ namespace GameBoy.Net.Config
                                                        SystemMemoryBank1Length);
                         break;
                     case GameBoyType.GameBoyColour:
-                        for (byte i = 1; i < CgbSystemMemoryBanks; i++)
+                        for (byte i = 0; i < CgbSystemMemoryBanks; i++)
                         {
                             yield return
                                 new SimpleMemoryBankConfig(MemoryBankType.RandomAccessMemory,
-                                                           i,
+                                                           (byte?) (i + 1),
                                                            SystemMemoryBank1Address,
                                                            SystemMemoryBank1Length);
                         }

@@ -47,6 +47,12 @@ namespace GameBoy.Net.Devices.Graphics.Util
         }
 
         /// <summary>
+        /// Gets the current state.
+        /// </summary>
+        /// <returns></returns>
+        public GpuTileState GetCurrentState() => new GpuTileState(_tiles.GetAllTiles(), _spriteTiles.GetAllTiles(), _allSprites);
+
+        /// <summary>
         /// Resets the specified render state.
         /// </summary>
         /// <param name="renderContext">State of the render.</param>
@@ -231,7 +237,6 @@ namespace GameBoy.Net.Devices.Graphics.Util
             if (_renderSettings.TileSetIsSigned)
             {
                 var signedTileMapValue = (sbyte) tileMapValue;
-                //index = signedTileMapValue < 0 ? Math.Abs(signedTileMapValue) - 1 : signedTileMapValue + 128;
                 index = signedTileMapValue + 128;
             }
             else

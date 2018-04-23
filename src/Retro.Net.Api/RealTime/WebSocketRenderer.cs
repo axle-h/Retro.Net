@@ -19,6 +19,9 @@ using Retro.Net.Api.RealTime.Messages.Command;
 using Retro.Net.Api.RealTime.Messages.Event;
 using Retro.Net.Api.Validation;
 using Retro.Net.Util;
+using Retro.Net.Z80.Core;
+using Retro.Net.Z80.Core.Interfaces;
+using Retro.Net.Z80.State;
 
 namespace Retro.Net.Api.RealTime
 {
@@ -38,14 +41,19 @@ namespace Retro.Net.Api.RealTime
         private readonly IDisposable _joyPadSubscription;
         private readonly ISet<string> _displayNames;
         private readonly ILogger _logger;
+        private readonly ICpuCoreDebugger<Intel8080RegisterState> _coreDebugger;
 
         private GpuMetrics _lastGpuMetrics;
 
         private int _connectedSockets;
 
-        public WebSocketRenderer(ILoggerFactory loggerFactory, IJoyPad joyPad, IMessageBus messageBus)
+        public WebSocketRenderer(ILoggerFactory loggerFactory,
+                                 IJoyPad joyPad,
+                                 IMessageBus messageBus,
+                                 ICpuCoreDebugger<Intel8080RegisterState> coreDebugger)
         {
             _messageBus = messageBus;
+            _coreDebugger = coreDebugger;
             _displayNames = new HashSet<string>();
             _logger = loggerFactory.CreateLogger<WebSocketRenderer>();
 
@@ -57,22 +65,22 @@ namespace Retro.Net.Api.RealTime
 
             // Press the most requested button.
             _joyPadSubscription = _joyPadSubject
-                .Buffer(FrameLength)
-                .Where(x => x.Any())
-                .Subscribe(presses =>
-                           {
-                               var (button, name) = presses
-                                   .Where(x => !string.IsNullOrEmpty(x.name))
-                                   .GroupBy(x => x.button)
-                                   .OrderByDescending(grp => grp.Count())
-                                   .Select(grp => (button: grp.Key, name: grp.Select(x => x.name).First()))
-                                   .FirstOrDefault();
-                               joyPad.PressOne(button);
-                               Publish(name, $"Pressed {button}");
+                                  .Buffer(FrameLength)
+                                  .Where(x => x.Any())
+                                  .Subscribe(presses =>
+                                             {
+                                                 var (button, name) = presses
+                                                                      .Where(x => !string.IsNullOrEmpty(x.name))
+                                                                      .GroupBy(x => x.button)
+                                                                      .OrderByDescending(grp => grp.Count())
+                                                                      .Select(grp => (button: grp.Key, name: grp.Select(x => x.name).First()))
+                                                                      .FirstOrDefault();
+                                                 joyPad.PressOne(button);
+                                                 Publish(name, $"Pressed {button}");
 
-                               Thread.Sleep(ButtonPressLength);
-                               joyPad.ReleaseAll();
-                           });
+                                                 Thread.Sleep(ButtonPressLength);
+                                                 joyPad.ReleaseAll();
+                                             });
         }
 
         public void Paint(Frame frame)
@@ -98,7 +106,7 @@ namespace Retro.Net.Api.RealTime
             var connectedSockets = Interlocked.Increment(ref _connectedSockets);
             if (connectedSockets == 1)
             {
-                _messageBus.SendMessage(Message.ResumeCpu);
+                _messageBus.FireAndForget(CpuCoreMessages.ResumeCpu);
                 _logger.LogInformation("Resuming CPU");
             }
             _logger.LogInformation($"Added socket: {id}, Connected sockets: {connectedSockets}");
@@ -175,7 +183,7 @@ namespace Retro.Net.Api.RealTime
 
                 if (connectedSockets == 0)
                 {
-                    _messageBus.SendMessage(Message.PauseCpu);
+                    _messageBus.FireAndForget(CpuCoreMessages.PauseCpu);
                     _logger.LogInformation($"Removed socket: {id}, Connected sockets: 0. Pausing CPU.");
                 }
                 else

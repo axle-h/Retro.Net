@@ -45,6 +45,8 @@ namespace Retro.Net.Memory
 
         public ushort Length { get; }
 
+        public AddressSegmentState CreateState() => AddressSegmentState.FromReadableSegment(this);
+
         public byte ReadByte(ushort address) => _memory[address];
 
         public int ReadBytes(ushort address, byte[] buffer, int offset, int count)

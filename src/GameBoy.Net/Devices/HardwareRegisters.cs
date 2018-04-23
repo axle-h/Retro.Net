@@ -29,10 +29,10 @@ namespace GameBoy.Net.Devices
         /// <param name="gpuRegisters">The gpu registers.</param>
         /// <param name="timerRegisters">The timer registers.</param>
         public HardwareRegisters(IEnumerable<IRegister> registers,
-            IJoyPadRegister joyPad,
-            ISerialPortRegister serialPort,
-            IGpuRegisters gpuRegisters,
-            ITimerRegisters timerRegisters)
+                                 IJoyPadRegister joyPad,
+                                 ISerialPortRegister serialPort,
+                                 IGpuRegisters gpuRegisters,
+                                 ITimerRegisters timerRegisters)
         {
             JoyPad = joyPad;
             SerialPort = serialPort;
@@ -119,7 +119,13 @@ namespace GameBoy.Net.Devices
             }
             return count;
         }
-        
+
+        /// <summary>
+        /// Creates a new segment state from this address segment.
+        /// </summary>
+        /// <returns></returns>
+        public AddressSegmentState CreateState() => AddressSegmentState.FromReadableSegment(this);
+
         /// <summary>
         /// Writes a byte to this address segment.
         /// </summary>

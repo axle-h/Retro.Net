@@ -1,14 +1,39 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using Retro.Net.Z80.State;
 
 namespace Retro.Net.Z80.Core.Interfaces
 {
-    public interface ICpuCoreDebugger
+    public interface ICpuCoreDebugger<TRegisterState>
+        where TRegisterState : Intel8080RegisterState
     {
         /// <summary>
-        /// Passes the next block to the debugger for processing.
+        /// Gets an observable stream of break events.
         /// </summary>
-        /// <param name="instructionBlock">The instruction block.</param>
+        IObservable<IDebuggerContext<TRegisterState>> BreakEvents { get; }
+
+        /// <summary>
+        /// Adds the specified breakpoint.
+        /// </summary>
+        /// <param name="address">The address to break on.</param>
+        void AddBreakpoint(ushort address);
+
+        /// <summary>
+        /// Removes the specified breakpoint.
+        /// </summary>
+        /// <param name="address">The existing breakpoint address.</param>
+        void RemoveBreakpoint(ushort address);
+
+        /// <summary>
+        /// Gets all defined breakpoints.
+        /// </summary>
         /// <returns></returns>
-        Task NextBlockAsync(IInstructionBlock instructionBlock);
+        IReadOnlyCollection<ushort> GetBreakpoints();
+
+        /// <summary>
+        /// Breaks ASAP.
+        /// </summary>
+        /// <returns></returns>
+        void Break();
     }
 }

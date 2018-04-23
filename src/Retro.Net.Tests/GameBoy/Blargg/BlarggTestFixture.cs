@@ -12,9 +12,10 @@ using GameBoy.Net.Devices.Graphics;
 using GameBoy.Net.Devices.Interfaces;
 using GameBoy.Net.Peripherals;
 using GameBoy.Net.Wiring;
-using Retro.Net.Z80.Core;
 using Retro.Net.Z80.Core.Interfaces;
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
+using Moq;
 
 namespace Retro.Net.Tests.GameBoy.Blargg
 {
@@ -31,7 +32,10 @@ namespace Retro.Net.Tests.GameBoy.Blargg
 
             var builder = new ContainerBuilder();
             builder.RegisterType<NullRenderer>().As<IRenderer>().SingleInstance();
-            builder.RegisterGameBoy(config);
+
+            var environment = Mock.Of<IHostingEnvironment>();
+            Mock.Get(environment).SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Production);
+            builder.RegisterGameBoy(environment, config);
 
             using (var container = builder.Build())
             using (var scope = container.BeginLifetimeScope())

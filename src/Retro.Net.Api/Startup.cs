@@ -25,6 +25,13 @@ namespace Retro.Net.Api
     {
         private const string CartridgeResource = "cartridge.zip";
 
+        private readonly IHostingEnvironment _environment;
+
+        public Startup(IHostingEnvironment environment)
+        {
+            _environment = environment;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
@@ -39,7 +46,7 @@ namespace Retro.Net.Api
 
             var cartridge = GetCartridgeBinary();
             var config = new StaticGameBoyConfig(cartridge, GameBoyType.GameBoy, true);
-            builder.RegisterGameBoy(config);
+            builder.RegisterGameBoy(_environment, config);
             var container = builder.Build();
 
             return new AutofacServiceProvider(container);
