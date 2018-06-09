@@ -1,6 +1,10 @@
 syntax = "proto3";
 option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Event";
 
+import "gameboy.event.debugger.registers.proto";
+import "gameboy.event.debugger.gpu.proto";
+import "gameboy.event.debugger.core.proto";
+
 // A single GameBoy GPU frame.
 message GameBoyGpuFrame {
 
@@ -36,4 +40,20 @@ message GameBoyClientState {
 
     // The display name associated with the connected GameBoy client.
     string displayName = 1;
+}
+
+// A debugger event.
+message GameBoyDebuggerEvent {
+    
+    // The current state of the GameBoy CPU registers.
+    GameBoyRegisters registers = 1;
+
+    // A dump pf the enture address space (64k).
+    bytes memory = 2;
+
+    // A structured dump of the current GPU state.
+    GameBoyGpuState gpuState = 3;
+
+    // The current instruction block.
+    GameBoyInstructionBlock instructionBlock = 4;
 }

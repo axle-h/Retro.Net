@@ -3,7 +3,7 @@ set -e
 
 csharp_dist=dist/csharp
 csharp_path=Retro.Net.Api/RealTime/Messages
-csharp_out=../$csharp_path
+csharp_out=../src/$csharp_path
 csharp_namespace=`echo $csharp_path |  tr / .`
 
 ts_dist=dist/ts
@@ -31,7 +31,6 @@ echo "Building .NET proto's with protoc..."
 cp -R $csharp_dist/* $csharp_out
 
 echo "Building TypeScript proto's with protobufjs..."
-npm install
 npm start
 
 # Fix missing Long import

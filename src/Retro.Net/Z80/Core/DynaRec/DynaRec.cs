@@ -64,7 +64,7 @@ namespace Retro.Net.Z80.Core.DynaRec
         {
             var lambda = BuildExpressionTree(block);
             var (rawBlock, debugInfo) = _debug ? (block, lambda.ToReadableString()) : (null, null);
-            return new InstructionBlock(block.Address, block.Length, lambda.Compile(), block.Timings, block.Halt, block.Stop, rawBlock, debugInfo);
+            return new InstructionBlock(block.Address, block.Length, lambda.Compile(), block.Timings, block.Halt, block.Stop, rawBlock?.Operations, debugInfo);
         }
 
         /// <summary>

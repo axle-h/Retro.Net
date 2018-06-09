@@ -24,20 +24,26 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
     static GameboyCommandMessagesReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Ch5nYW1lYm95LmNvbW1hbmQubWVzc2FnZXMucHJvdG8iGQoJSGVhcnRCZWF0",
-            "EgwKBGRhdGUYASABKAkiLAoVU2V0R2FtZUJveUNsaWVudFN0YXRlEhMKC2Rp",
-            "c3BsYXlOYW1lGAEgASgJIkcKH1JlcXVlc3RHYW1lQm95Sm95UGFkQnV0dG9u",
-            "UHJlc3MSJAoGYnV0dG9uGAEgASgOMhQuR2FtZUJveUpveVBhZEJ1dHRvbipr",
-            "ChNHYW1lQm95Sm95UGFkQnV0dG9uEggKBE5PTkUQABIGCgJVUBABEggKBERP",
-            "V04QAhIICgRMRUZUEAMSCQoFUklHSFQQBBIFCgFBEAUSBQoBQhAGEgkKBVNU",
-            "QVJUEAcSCgoGU0VMRUNUEAhCKqoCJ1JldHJvLk5ldC5BcGkuUmVhbFRpbWUu",
-            "TWVzc2FnZXMuQ29tbWFuZGIGcHJvdG8z"));
+            "Ch5nYW1lYm95LmNvbW1hbmQubWVzc2FnZXMucHJvdG8aHmdhbWVib3kuY29t",
+            "bWFuZC5kZWJ1Z2dlci5wcm90byIZCglIZWFydEJlYXQSDAoEZGF0ZRgBIAEo",
+            "CSIsChVTZXRHYW1lQm95Q2xpZW50U3RhdGUSEwoLZGlzcGxheU5hbWUYASAB",
+            "KAkiRwofUmVxdWVzdEdhbWVCb3lKb3lQYWRCdXR0b25QcmVzcxIkCgZidXR0",
+            "b24YASABKA4yFC5HYW1lQm95Sm95UGFkQnV0dG9uIskBChZHYW1lQm95RGVi",
+            "dWdnZXJDb21tYW5kEicKDWFkZEJyZWFrcG9pbnQYASABKAsyDi5BZGRCcmVh",
+            "a3BvaW50SAASLQoQcmVtb3ZlQnJlYWtwb2ludBgCIAEoCzIRLlJlbW92ZUJy",
+            "ZWFrcG9pbnRIABIpCg5nZXRCcmVha3BvaW50cxgDIAEoCzIPLkdldEJyZWFr",
+            "cG9pbnRzSAASIwoHY29tbWFuZBgEIAEoDjIQLkRlYnVnZ2VyQ29tbWFuZEgA",
+            "QgcKBXZhbHVlKmsKE0dhbWVCb3lKb3lQYWRCdXR0b24SCAoETk9ORRAAEgYK",
+            "AlVQEAESCAoERE9XThACEggKBExFRlQQAxIJCgVSSUdIVBAEEgUKAUEQBRIF",
+            "CgFCEAYSCQoFU1RBUlQQBxIKCgZTRUxFQ1QQCEIqqgInUmV0cm8uTmV0LkFw",
+            "aS5SZWFsVGltZS5NZXNzYWdlcy5Db21tYW5kYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Retro.Net.Api.RealTime.Messages.Command.Debugger.GameboyCommandDebuggerReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Retro.Net.Api.RealTime.Messages.Command.GameBoyJoyPadButton), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Command.HeartBeat), global::Retro.Net.Api.RealTime.Messages.Command.HeartBeat.Parser, new[]{ "Date" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Command.SetGameBoyClientState), global::Retro.Net.Api.RealTime.Messages.Command.SetGameBoyClientState.Parser, new[]{ "DisplayName" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Command.RequestGameBoyJoyPadButtonPress), global::Retro.Net.Api.RealTime.Messages.Command.RequestGameBoyJoyPadButtonPress.Parser, new[]{ "Button" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Command.RequestGameBoyJoyPadButtonPress), global::Retro.Net.Api.RealTime.Messages.Command.RequestGameBoyJoyPadButtonPress.Parser, new[]{ "Button" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Command.GameBoyDebuggerCommand), global::Retro.Net.Api.RealTime.Messages.Command.GameBoyDebuggerCommand.Parser, new[]{ "AddBreakpoint", "RemoveBreakpoint", "GetBreakpoints", "Command" }, new[]{ "Value" }, null, null)
           }));
     }
     #endregion
@@ -459,6 +465,296 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
             break;
           case 8: {
             button_ = (global::Retro.Net.Api.RealTime.Messages.Command.GameBoyJoyPadButton) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// A command sent to the GameBoy debugger.
+  /// </summary>
+  public sealed partial class GameBoyDebuggerCommand : pb::IMessage<GameBoyDebuggerCommand> {
+    private static readonly pb::MessageParser<GameBoyDebuggerCommand> _parser = new pb::MessageParser<GameBoyDebuggerCommand>(() => new GameBoyDebuggerCommand());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GameBoyDebuggerCommand> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Retro.Net.Api.RealTime.Messages.Command.GameboyCommandMessagesReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameBoyDebuggerCommand() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameBoyDebuggerCommand(GameBoyDebuggerCommand other) : this() {
+      switch (other.ValueCase) {
+        case ValueOneofCase.AddBreakpoint:
+          AddBreakpoint = other.AddBreakpoint.Clone();
+          break;
+        case ValueOneofCase.RemoveBreakpoint:
+          RemoveBreakpoint = other.RemoveBreakpoint.Clone();
+          break;
+        case ValueOneofCase.GetBreakpoints:
+          GetBreakpoints = other.GetBreakpoints.Clone();
+          break;
+        case ValueOneofCase.Command:
+          Command = other.Command;
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameBoyDebuggerCommand Clone() {
+      return new GameBoyDebuggerCommand(this);
+    }
+
+    /// <summary>Field number for the "addBreakpoint" field.</summary>
+    public const int AddBreakpointFieldNumber = 1;
+    /// <summary>
+    /// Adds a breakpoint to the debugger.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Command.Debugger.AddBreakpoint AddBreakpoint {
+      get { return valueCase_ == ValueOneofCase.AddBreakpoint ? (global::Retro.Net.Api.RealTime.Messages.Command.Debugger.AddBreakpoint) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.AddBreakpoint;
+      }
+    }
+
+    /// <summary>Field number for the "removeBreakpoint" field.</summary>
+    public const int RemoveBreakpointFieldNumber = 2;
+    /// <summary>
+    /// Removes a breakpoint from the debugger.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Command.Debugger.RemoveBreakpoint RemoveBreakpoint {
+      get { return valueCase_ == ValueOneofCase.RemoveBreakpoint ? (global::Retro.Net.Api.RealTime.Messages.Command.Debugger.RemoveBreakpoint) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.RemoveBreakpoint;
+      }
+    }
+
+    /// <summary>Field number for the "getBreakpoints" field.</summary>
+    public const int GetBreakpointsFieldNumber = 3;
+    /// <summary>
+    /// Gets all defined breakpoints.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Command.Debugger.GetBreakpoints GetBreakpoints {
+      get { return valueCase_ == ValueOneofCase.GetBreakpoints ? (global::Retro.Net.Api.RealTime.Messages.Command.Debugger.GetBreakpoints) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.GetBreakpoints;
+      }
+    }
+
+    /// <summary>Field number for the "command" field.</summary>
+    public const int CommandFieldNumber = 4;
+    /// <summary>
+    /// A debugger command.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Command.Debugger.DebuggerCommand Command {
+      get { return valueCase_ == ValueOneofCase.Command ? (global::Retro.Net.Api.RealTime.Messages.Command.Debugger.DebuggerCommand) value_ : 0; }
+      set {
+        value_ = value;
+        valueCase_ = ValueOneofCase.Command;
+      }
+    }
+
+    private object value_;
+    /// <summary>Enum of possible cases for the "value" oneof.</summary>
+    public enum ValueOneofCase {
+      None = 0,
+      AddBreakpoint = 1,
+      RemoveBreakpoint = 2,
+      GetBreakpoints = 3,
+      Command = 4,
+    }
+    private ValueOneofCase valueCase_ = ValueOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ValueOneofCase ValueCase {
+      get { return valueCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void ClearValue() {
+      valueCase_ = ValueOneofCase.None;
+      value_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GameBoyDebuggerCommand);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GameBoyDebuggerCommand other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(AddBreakpoint, other.AddBreakpoint)) return false;
+      if (!object.Equals(RemoveBreakpoint, other.RemoveBreakpoint)) return false;
+      if (!object.Equals(GetBreakpoints, other.GetBreakpoints)) return false;
+      if (Command != other.Command) return false;
+      if (ValueCase != other.ValueCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (valueCase_ == ValueOneofCase.AddBreakpoint) hash ^= AddBreakpoint.GetHashCode();
+      if (valueCase_ == ValueOneofCase.RemoveBreakpoint) hash ^= RemoveBreakpoint.GetHashCode();
+      if (valueCase_ == ValueOneofCase.GetBreakpoints) hash ^= GetBreakpoints.GetHashCode();
+      if (valueCase_ == ValueOneofCase.Command) hash ^= Command.GetHashCode();
+      hash ^= (int) valueCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (valueCase_ == ValueOneofCase.AddBreakpoint) {
+        output.WriteRawTag(10);
+        output.WriteMessage(AddBreakpoint);
+      }
+      if (valueCase_ == ValueOneofCase.RemoveBreakpoint) {
+        output.WriteRawTag(18);
+        output.WriteMessage(RemoveBreakpoint);
+      }
+      if (valueCase_ == ValueOneofCase.GetBreakpoints) {
+        output.WriteRawTag(26);
+        output.WriteMessage(GetBreakpoints);
+      }
+      if (valueCase_ == ValueOneofCase.Command) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Command);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (valueCase_ == ValueOneofCase.AddBreakpoint) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(AddBreakpoint);
+      }
+      if (valueCase_ == ValueOneofCase.RemoveBreakpoint) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(RemoveBreakpoint);
+      }
+      if (valueCase_ == ValueOneofCase.GetBreakpoints) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GetBreakpoints);
+      }
+      if (valueCase_ == ValueOneofCase.Command) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Command);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GameBoyDebuggerCommand other) {
+      if (other == null) {
+        return;
+      }
+      switch (other.ValueCase) {
+        case ValueOneofCase.AddBreakpoint:
+          if (AddBreakpoint == null) {
+            AddBreakpoint = new global::Retro.Net.Api.RealTime.Messages.Command.Debugger.AddBreakpoint();
+          }
+          AddBreakpoint.MergeFrom(other.AddBreakpoint);
+          break;
+        case ValueOneofCase.RemoveBreakpoint:
+          if (RemoveBreakpoint == null) {
+            RemoveBreakpoint = new global::Retro.Net.Api.RealTime.Messages.Command.Debugger.RemoveBreakpoint();
+          }
+          RemoveBreakpoint.MergeFrom(other.RemoveBreakpoint);
+          break;
+        case ValueOneofCase.GetBreakpoints:
+          if (GetBreakpoints == null) {
+            GetBreakpoints = new global::Retro.Net.Api.RealTime.Messages.Command.Debugger.GetBreakpoints();
+          }
+          GetBreakpoints.MergeFrom(other.GetBreakpoints);
+          break;
+        case ValueOneofCase.Command:
+          Command = other.Command;
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            global::Retro.Net.Api.RealTime.Messages.Command.Debugger.AddBreakpoint subBuilder = new global::Retro.Net.Api.RealTime.Messages.Command.Debugger.AddBreakpoint();
+            if (valueCase_ == ValueOneofCase.AddBreakpoint) {
+              subBuilder.MergeFrom(AddBreakpoint);
+            }
+            input.ReadMessage(subBuilder);
+            AddBreakpoint = subBuilder;
+            break;
+          }
+          case 18: {
+            global::Retro.Net.Api.RealTime.Messages.Command.Debugger.RemoveBreakpoint subBuilder = new global::Retro.Net.Api.RealTime.Messages.Command.Debugger.RemoveBreakpoint();
+            if (valueCase_ == ValueOneofCase.RemoveBreakpoint) {
+              subBuilder.MergeFrom(RemoveBreakpoint);
+            }
+            input.ReadMessage(subBuilder);
+            RemoveBreakpoint = subBuilder;
+            break;
+          }
+          case 26: {
+            global::Retro.Net.Api.RealTime.Messages.Command.Debugger.GetBreakpoints subBuilder = new global::Retro.Net.Api.RealTime.Messages.Command.Debugger.GetBreakpoints();
+            if (valueCase_ == ValueOneofCase.GetBreakpoints) {
+              subBuilder.MergeFrom(GetBreakpoints);
+            }
+            input.ReadMessage(subBuilder);
+            GetBreakpoints = subBuilder;
+            break;
+          }
+          case 32: {
+            value_ = input.ReadEnum();
+            valueCase_ = ValueOneofCase.Command;
             break;
           }
         }

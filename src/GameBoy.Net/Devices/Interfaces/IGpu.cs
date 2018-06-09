@@ -32,6 +32,6 @@ namespace GameBoy.Net.Devices.Interfaces
         /// Creates a new state object that describes the GPU.
         /// </summary>
         /// <returns></returns>
-        GpuTileState CreateState();
+        GpuState CreateState();
     }
 }

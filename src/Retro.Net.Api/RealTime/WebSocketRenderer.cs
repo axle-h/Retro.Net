@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -20,8 +21,6 @@ using Retro.Net.Api.RealTime.Messages.Event;
 using Retro.Net.Api.Validation;
 using Retro.Net.Util;
 using Retro.Net.Z80.Core;
-using Retro.Net.Z80.Core.Interfaces;
-using Retro.Net.Z80.State;
 
 namespace Retro.Net.Api.RealTime
 {
@@ -41,7 +40,6 @@ namespace Retro.Net.Api.RealTime
         private readonly IDisposable _joyPadSubscription;
         private readonly ISet<string> _displayNames;
         private readonly ILogger _logger;
-        private readonly ICpuCoreDebugger<Intel8080RegisterState> _coreDebugger;
 
         private GpuMetrics _lastGpuMetrics;
 
@@ -49,11 +47,9 @@ namespace Retro.Net.Api.RealTime
 
         public WebSocketRenderer(ILoggerFactory loggerFactory,
                                  IJoyPad joyPad,
-                                 IMessageBus messageBus,
-                                 ICpuCoreDebugger<Intel8080RegisterState> coreDebugger)
+                                 IMessageBus messageBus)
         {
             _messageBus = messageBus;
-            _coreDebugger = coreDebugger;
             _displayNames = new HashSet<string>();
             _logger = loggerFactory.CreateLogger<WebSocketRenderer>();
 
@@ -67,6 +63,7 @@ namespace Retro.Net.Api.RealTime
             _joyPadSubscription = _joyPadSubject
                                   .Buffer(FrameLength)
                                   .Where(x => x.Any())
+                                  .ObserveOn(Scheduler.Default)
                                   .Subscribe(presses =>
                                              {
                                                  var (button, name) = presses
@@ -122,7 +119,7 @@ namespace Retro.Net.Api.RealTime
                     _eventsSubject.Subscribe(observer);
 
                     // Paint to the socket.
-                    subscriptions.Add(_frameSubject.Subscribe(observer.OnNext));
+                    subscriptions.Add(_frameSubject.ObserveOn(Scheduler.Default).Subscribe(observer.OnNext));
 
                     // Listen for client messages.
                     var tcs = new TaskCompletionSource<bool>();

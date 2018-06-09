@@ -47,7 +47,7 @@ namespace Retro.Net.Z80.Core.Interpreted
         public IInstructionBlock Build(DecodedBlock block)
         {
             InstructionTimings Run(IRegisters registers, IMmu mmu, IAlu alu, IPeripheralManager peripherals) => Interpret(registers, mmu, alu, peripherals, block);
-            return new InstructionBlock(block.Address, block.Length, Run, block.Timings, block.Halt, block.Stop, _debug ? block : null, string.Empty);
+            return new InstructionBlock(block.Address, block.Length, Run, block.Timings, block.Halt, block.Stop, _debug ? block.Operations : null, string.Empty);
         }
 
         private InstructionTimings Interpret(IRegisters registers, IMmu mmu, IAlu alu, IPeripheralManager peripherals, DecodedBlock block)

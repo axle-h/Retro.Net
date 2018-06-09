@@ -1,0 +1,37 @@
+syntax = "proto3";
+option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Command.Debugger";
+
+// Adds a breakpoint to the debugger.
+message AddBreakpoint {
+    
+    // The address of the breakpoint to add.
+    uint32 address = 1;
+}
+
+// Removes a breakpoint from the debugger.
+message RemoveBreakpoint {
+    
+    // The address of the breakpoint to remove.
+    uint32 address = 1;
+}
+
+// Gets all defined breakpoints.
+message GetBreakpoints {
+
+    // All defined breakpoints.
+    repeated uint32 breakpoints = 1;
+}
+
+// A debugger command.
+enum DebuggerCommand {
+    
+    // Break immediately.
+    BREAK = 0;
+
+    // Continue execution until another break.
+    CONTINUE = 1;
+
+    // Continue execution by one step.
+    STEP_OVER = 2;
+}
+

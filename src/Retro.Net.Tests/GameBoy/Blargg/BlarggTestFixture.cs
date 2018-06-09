@@ -15,7 +15,10 @@ using GameBoy.Net.Wiring;
 using Retro.Net.Z80.Core.Interfaces;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 using Moq;
+using Retro.Net.Tests.Util;
+using Xunit.Abstractions;
 
 namespace Retro.Net.Tests.GameBoy.Blargg
 {
@@ -24,6 +27,13 @@ namespace Retro.Net.Tests.GameBoy.Blargg
         private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(5);
 
         private const string BlarggArchiveResource = "Blargg.zip";
+
+        private readonly ILoggerFactory _loggerFactory;
+
+        protected BlarggTestFixture(ITestOutputHelper output)
+        {
+            _loggerFactory = new LoggerFactory().AddXunit(output);
+        }
 
         public async Task RunAsync(string cartridgeResource)
         {
@@ -36,6 +46,7 @@ namespace Retro.Net.Tests.GameBoy.Blargg
             var environment = Mock.Of<IHostingEnvironment>();
             Mock.Get(environment).SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Production);
             builder.RegisterGameBoy(environment, config);
+            builder.RegisterInstance(_loggerFactory).As<ILoggerFactory>();
 
             using (var container = builder.Build())
             using (var scope = container.BeginLifetimeScope())
@@ -44,30 +55,50 @@ namespace Retro.Net.Tests.GameBoy.Blargg
                 var core = ownedCore.Value;
                 var io = core.GetPeripheralOfType<IGameBoyMemoryMappedIo>();
 
-                var serialPort = new BlarggTestSerialPort(Timeout);
+                var serialPort = new BlarggTestSerialPort();
                 io.HardwareRegisters.SerialPort.Connect(serialPort);
 
                 using (var cancellation = new CancellationTokenSource())
                 {
                     var token = cancellation.Token;
-                    var coreProcess = Task.Run(() => core.StartCoreProcessAsync(token), token);
+                    Exception exception = null;
+                    var coreProcess = Task.Run(async () =>
+                                               {
+                                                   try
+                                                   {
+                                                       await core.StartCoreProcessAsync(token);
+                                                   }
+                                                   catch (Exception e)
+                                                   {
+                                                       exception = e;
+                                                       cancellation.Cancel();
+                                                   }
+                                               }, token);
                     cancellation.CancelAfter(Timeout + TimeSpan.FromMinutes(1));
-                    while (!cancellation.IsCancellationRequested)
+
+                    try
                     {
-                        var word = serialPort.WaitForNextWord();
-                        if (word == null)
+                        while (!cancellation.IsCancellationRequested)
                         {
-                            throw new Exception("Couldn't get next word");
-                        }
+                            var word = serialPort.WaitForNextWord(cancellation.Token);
+                            if (word == null)
+                            {
+                                throw new Exception("Couldn't get next word");
+                            }
 
-                        if (word == "Failed" || word == "Passed")
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(1), token);
-                            cancellation.Cancel();
+                            if (word == "Failed" || word == "Passed")
+                            {
+                                await Task.Delay(TimeSpan.FromSeconds(1), token);
+                                cancellation.Cancel();
 
-                            word.Should().Be("Passed");
-                            return;
+                                word.Should().Be("Passed");
+                                return;
+                            }
                         }
+                    }
+                    catch (OperationCanceledException e)
+                    {
+                        throw new Exception("Blargg test failed", exception ?? e);
                     }
                 }
             }

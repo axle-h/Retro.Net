@@ -24,20 +24,27 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
     static GameboyEventMessagesReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChxnYW1lYm95LmV2ZW50Lm1lc3NhZ2VzLnByb3RvIjgKD0dhbWVCb3lHcHVG",
-            "cmFtZRIMCgRkYXRhGAEgASgMEhcKD2ZyYW1lc1BlclNlY29uZBgCIAEoBSJD",
-            "ChdHYW1lQm95UHVibGlzaGVkTWVzc2FnZRIMCgR1c2VyGAEgASgJEgwKBGRh",
-            "dGUYAiABKAMSDAoEYm9keRgDIAEoCSIlChJHYW1lQm95U2VydmVyRXJyb3IS",
-            "DwoHcmVhc29ucxgBIAMoCSIpChJHYW1lQm95Q2xpZW50U3RhdGUSEwoLZGlz",
-            "cGxheU5hbWUYASABKAlCKKoCJVJldHJvLk5ldC5BcGkuUmVhbFRpbWUuTWVz",
-            "c2FnZXMuRXZlbnRiBnByb3RvMw=="));
+            "ChxnYW1lYm95LmV2ZW50Lm1lc3NhZ2VzLnByb3RvGiZnYW1lYm95LmV2ZW50",
+            "LmRlYnVnZ2VyLnJlZ2lzdGVycy5wcm90bxogZ2FtZWJveS5ldmVudC5kZWJ1",
+            "Z2dlci5ncHUucHJvdG8aIWdhbWVib3kuZXZlbnQuZGVidWdnZXIuY29yZS5w",
+            "cm90byI4Cg9HYW1lQm95R3B1RnJhbWUSDAoEZGF0YRgBIAEoDBIXCg9mcmFt",
+            "ZXNQZXJTZWNvbmQYAiABKAUiQwoXR2FtZUJveVB1Ymxpc2hlZE1lc3NhZ2US",
+            "DAoEdXNlchgBIAEoCRIMCgRkYXRlGAIgASgDEgwKBGJvZHkYAyABKAkiJQoS",
+            "R2FtZUJveVNlcnZlckVycm9yEg8KB3JlYXNvbnMYASADKAkiKQoSR2FtZUJv",
+            "eUNsaWVudFN0YXRlEhMKC2Rpc3BsYXlOYW1lGAEgASgJIqQBChRHYW1lQm95",
+            "RGVidWdnZXJFdmVudBIkCglyZWdpc3RlcnMYASABKAsyES5HYW1lQm95UmVn",
+            "aXN0ZXJzEg4KBm1lbW9yeRgCIAEoDBIiCghncHVTdGF0ZRgDIAEoCzIQLkdh",
+            "bWVCb3lHcHVTdGF0ZRIyChBpbnN0cnVjdGlvbkJsb2NrGAQgASgLMhguR2Ft",
+            "ZUJveUluc3RydWN0aW9uQmxvY2tCKKoCJVJldHJvLk5ldC5BcGkuUmVhbFRp",
+            "bWUuTWVzc2FnZXMuRXZlbnRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Registers.GameboyEventDebuggerRegistersReflection.Descriptor, global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Gpu.GameboyEventDebuggerGpuReflection.Descriptor, global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Core.GameboyEventDebuggerCoreReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Event.GameBoyGpuFrame), global::Retro.Net.Api.RealTime.Messages.Event.GameBoyGpuFrame.Parser, new[]{ "Data", "FramesPerSecond" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Event.GameBoyPublishedMessage), global::Retro.Net.Api.RealTime.Messages.Event.GameBoyPublishedMessage.Parser, new[]{ "User", "Date", "Body" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Event.GameBoyServerError), global::Retro.Net.Api.RealTime.Messages.Event.GameBoyServerError.Parser, new[]{ "Reasons" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Event.GameBoyClientState), global::Retro.Net.Api.RealTime.Messages.Event.GameBoyClientState.Parser, new[]{ "DisplayName" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Event.GameBoyClientState), global::Retro.Net.Api.RealTime.Messages.Event.GameBoyClientState.Parser, new[]{ "DisplayName" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Event.GameBoyDebuggerEvent), global::Retro.Net.Api.RealTime.Messages.Event.GameBoyDebuggerEvent.Parser, new[]{ "Registers", "Memory", "GpuState", "InstructionBlock" }, null, null, null)
           }));
     }
     #endregion
@@ -661,6 +668,252 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
             break;
           case 10: {
             DisplayName = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// A debugger event.
+  /// </summary>
+  public sealed partial class GameBoyDebuggerEvent : pb::IMessage<GameBoyDebuggerEvent> {
+    private static readonly pb::MessageParser<GameBoyDebuggerEvent> _parser = new pb::MessageParser<GameBoyDebuggerEvent>(() => new GameBoyDebuggerEvent());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GameBoyDebuggerEvent> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Retro.Net.Api.RealTime.Messages.Event.GameboyEventMessagesReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameBoyDebuggerEvent() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameBoyDebuggerEvent(GameBoyDebuggerEvent other) : this() {
+      Registers = other.registers_ != null ? other.Registers.Clone() : null;
+      memory_ = other.memory_;
+      GpuState = other.gpuState_ != null ? other.GpuState.Clone() : null;
+      InstructionBlock = other.instructionBlock_ != null ? other.InstructionBlock.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameBoyDebuggerEvent Clone() {
+      return new GameBoyDebuggerEvent(this);
+    }
+
+    /// <summary>Field number for the "registers" field.</summary>
+    public const int RegistersFieldNumber = 1;
+    private global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Registers.GameBoyRegisters registers_;
+    /// <summary>
+    /// The current state of the GameBoy CPU registers.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Registers.GameBoyRegisters Registers {
+      get { return registers_; }
+      set {
+        registers_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "memory" field.</summary>
+    public const int MemoryFieldNumber = 2;
+    private pb::ByteString memory_ = pb::ByteString.Empty;
+    /// <summary>
+    /// A dump pf the enture address space (64k).
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pb::ByteString Memory {
+      get { return memory_; }
+      set {
+        memory_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "gpuState" field.</summary>
+    public const int GpuStateFieldNumber = 3;
+    private global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Gpu.GameBoyGpuState gpuState_;
+    /// <summary>
+    /// A structured dump of the current GPU state.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Gpu.GameBoyGpuState GpuState {
+      get { return gpuState_; }
+      set {
+        gpuState_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "instructionBlock" field.</summary>
+    public const int InstructionBlockFieldNumber = 4;
+    private global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Core.GameBoyInstructionBlock instructionBlock_;
+    /// <summary>
+    /// The current instruction block.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Core.GameBoyInstructionBlock InstructionBlock {
+      get { return instructionBlock_; }
+      set {
+        instructionBlock_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GameBoyDebuggerEvent);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GameBoyDebuggerEvent other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Registers, other.Registers)) return false;
+      if (Memory != other.Memory) return false;
+      if (!object.Equals(GpuState, other.GpuState)) return false;
+      if (!object.Equals(InstructionBlock, other.InstructionBlock)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (registers_ != null) hash ^= Registers.GetHashCode();
+      if (Memory.Length != 0) hash ^= Memory.GetHashCode();
+      if (gpuState_ != null) hash ^= GpuState.GetHashCode();
+      if (instructionBlock_ != null) hash ^= InstructionBlock.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (registers_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Registers);
+      }
+      if (Memory.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteBytes(Memory);
+      }
+      if (gpuState_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(GpuState);
+      }
+      if (instructionBlock_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(InstructionBlock);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (registers_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Registers);
+      }
+      if (Memory.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Memory);
+      }
+      if (gpuState_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GpuState);
+      }
+      if (instructionBlock_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(InstructionBlock);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GameBoyDebuggerEvent other) {
+      if (other == null) {
+        return;
+      }
+      if (other.registers_ != null) {
+        if (registers_ == null) {
+          registers_ = new global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Registers.GameBoyRegisters();
+        }
+        Registers.MergeFrom(other.Registers);
+      }
+      if (other.Memory.Length != 0) {
+        Memory = other.Memory;
+      }
+      if (other.gpuState_ != null) {
+        if (gpuState_ == null) {
+          gpuState_ = new global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Gpu.GameBoyGpuState();
+        }
+        GpuState.MergeFrom(other.GpuState);
+      }
+      if (other.instructionBlock_ != null) {
+        if (instructionBlock_ == null) {
+          instructionBlock_ = new global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Core.GameBoyInstructionBlock();
+        }
+        InstructionBlock.MergeFrom(other.InstructionBlock);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (registers_ == null) {
+              registers_ = new global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Registers.GameBoyRegisters();
+            }
+            input.ReadMessage(registers_);
+            break;
+          }
+          case 18: {
+            Memory = input.ReadBytes();
+            break;
+          }
+          case 26: {
+            if (gpuState_ == null) {
+              gpuState_ = new global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Gpu.GameBoyGpuState();
+            }
+            input.ReadMessage(gpuState_);
+            break;
+          }
+          case 34: {
+            if (instructionBlock_ == null) {
+              instructionBlock_ = new global::Retro.Net.Api.RealTime.Messages.Event.Debugger.Core.GameBoyInstructionBlock();
+            }
+            input.ReadMessage(instructionBlock_);
             break;
           }
         }

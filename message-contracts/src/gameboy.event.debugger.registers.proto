@@ -1,0 +1,61 @@
+syntax = "proto3";
+option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Event.Debugger.Registers";
+
+// The current state of the GameBoy CPU registers.
+message GameBoyRegisters {
+
+    // Accumulator register.
+    uint32 A = 1;
+
+    // General purpose register B.
+    uint32 B = 2;
+
+    // General purpose register C.
+    uint32 C = 3;
+
+    // General purpose register D.
+    uint32 D = 4;
+
+    // General purpose register E.
+    uint32 E = 5;
+
+    // General purpose register H.
+    uint32 H = 6;
+
+    // General purpose register L.
+    uint32 L = 7;
+
+    // The flags register.
+    GameBoyFlagsRegister Flags = 8;
+
+    // The program counter.
+    uint32 programCounter = 9;
+
+    // The stack pointer.
+    uint32 stackPointer = 10;
+
+    // The interrupt flip flop 1.
+    bool interruptFlipFlop1 = 11;
+
+    // The interrupt flip flop 2
+    bool interruptFlipFlop2 = 12;
+
+    // The interrupt mode.
+    uint32 interruptMode = 13;
+}
+
+// The GameBoy flags regoster.
+message GameBoyFlagsRegister {
+
+    // Z - Zero flag. Set if the value is zero.
+    bool zero = 1;
+
+    // H - Half Carry. Carry from bit 3 to bit 4.
+    bool halfCarry = 2;
+
+    // N - Subtract. Set if the last operation was a subtraction.
+    bool subtract = 3;
+
+    // C - Carry. Set if the result did not fit in the register.
+    bool carry = 4;
+}

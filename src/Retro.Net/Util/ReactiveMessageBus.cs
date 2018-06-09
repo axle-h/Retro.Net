@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
@@ -25,7 +26,7 @@ namespace Retro.Net.Util
         }
 
         public IObservable<IObserver<object>> GetObservable(string message) =>
-            _subject.Where(x => x.message == message).Select(x => x.responseObserver).AsObservable();
+            _subject.Where(x => x.message == message).Select(x => x.responseObserver).AsObservable().ObserveOn(Scheduler.Default);
 
         public async Task<TResponse> RequestAsync<TResponse>(string message, CancellationToken cancellationToken)
             where TResponse : class

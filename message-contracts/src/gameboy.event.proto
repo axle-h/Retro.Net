@@ -19,5 +19,8 @@ message GameBoyEvent {
 
 		// The state of a GameBoy websocket connection.
 		GameBoyClientState state = 4;
+
+		// A debugger event.
+		GameBoyDebuggerEvent debugger = 5;
     }
 }

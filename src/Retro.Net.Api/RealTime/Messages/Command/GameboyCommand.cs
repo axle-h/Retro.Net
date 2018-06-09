@@ -25,15 +25,16 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChVnYW1lYm95LmNvbW1hbmQucHJvdG8aHmdhbWVib3kuY29tbWFuZC5tZXNz",
-            "YWdlcy5wcm90byKfAQoOR2FtZUJveUNvbW1hbmQSHwoJaGVhcnRCZWF0GAEg",
+            "YWdlcy5wcm90byLMAQoOR2FtZUJveUNvbW1hbmQSHwoJaGVhcnRCZWF0GAEg",
             "ASgLMgouSGVhcnRCZWF0SAASKgoIc2V0U3RhdGUYAiABKAsyFi5TZXRHYW1l",
             "Qm95Q2xpZW50U3RhdGVIABI3CgtwcmVzc0J1dHRvbhgDIAEoCzIgLlJlcXVl",
-            "c3RHYW1lQm95Sm95UGFkQnV0dG9uUHJlc3NIAEIHCgV2YWx1ZUIqqgInUmV0",
+            "c3RHYW1lQm95Sm95UGFkQnV0dG9uUHJlc3NIABIrCghkZWJ1Z2dlchgEIAEo",
+            "CzIXLkdhbWVCb3lEZWJ1Z2dlckNvbW1hbmRIAEIHCgV2YWx1ZUIqqgInUmV0",
             "cm8uTmV0LkFwaS5SZWFsVGltZS5NZXNzYWdlcy5Db21tYW5kYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Retro.Net.Api.RealTime.Messages.Command.GameboyCommandMessagesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Command.GameBoyCommand), global::Retro.Net.Api.RealTime.Messages.Command.GameBoyCommand.Parser, new[]{ "HeartBeat", "SetState", "PressButton" }, new[]{ "Value" }, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Command.GameBoyCommand), global::Retro.Net.Api.RealTime.Messages.Command.GameBoyCommand.Parser, new[]{ "HeartBeat", "SetState", "PressButton", "Debugger" }, new[]{ "Value" }, null, null)
           }));
     }
     #endregion
@@ -77,6 +78,9 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
           break;
         case ValueOneofCase.PressButton:
           PressButton = other.PressButton.Clone();
+          break;
+        case ValueOneofCase.Debugger:
+          Debugger = other.Debugger.Clone();
           break;
       }
 
@@ -130,6 +134,20 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
       }
     }
 
+    /// <summary>Field number for the "debugger" field.</summary>
+    public const int DebuggerFieldNumber = 4;
+    /// <summary>
+    /// A command sent to the GameBoy debugger.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Command.GameBoyDebuggerCommand Debugger {
+      get { return valueCase_ == ValueOneofCase.Debugger ? (global::Retro.Net.Api.RealTime.Messages.Command.GameBoyDebuggerCommand) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.Debugger;
+      }
+    }
+
     private object value_;
     /// <summary>Enum of possible cases for the "value" oneof.</summary>
     public enum ValueOneofCase {
@@ -137,6 +155,7 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
       HeartBeat = 1,
       SetState = 2,
       PressButton = 3,
+      Debugger = 4,
     }
     private ValueOneofCase valueCase_ = ValueOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -166,6 +185,7 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
       if (!object.Equals(HeartBeat, other.HeartBeat)) return false;
       if (!object.Equals(SetState, other.SetState)) return false;
       if (!object.Equals(PressButton, other.PressButton)) return false;
+      if (!object.Equals(Debugger, other.Debugger)) return false;
       if (ValueCase != other.ValueCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -176,6 +196,7 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
       if (valueCase_ == ValueOneofCase.HeartBeat) hash ^= HeartBeat.GetHashCode();
       if (valueCase_ == ValueOneofCase.SetState) hash ^= SetState.GetHashCode();
       if (valueCase_ == ValueOneofCase.PressButton) hash ^= PressButton.GetHashCode();
+      if (valueCase_ == ValueOneofCase.Debugger) hash ^= Debugger.GetHashCode();
       hash ^= (int) valueCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -202,6 +223,10 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
         output.WriteRawTag(26);
         output.WriteMessage(PressButton);
       }
+      if (valueCase_ == ValueOneofCase.Debugger) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Debugger);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -218,6 +243,9 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
       }
       if (valueCase_ == ValueOneofCase.PressButton) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(PressButton);
+      }
+      if (valueCase_ == ValueOneofCase.Debugger) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Debugger);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -248,6 +276,12 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
             PressButton = new global::Retro.Net.Api.RealTime.Messages.Command.RequestGameBoyJoyPadButtonPress();
           }
           PressButton.MergeFrom(other.PressButton);
+          break;
+        case ValueOneofCase.Debugger:
+          if (Debugger == null) {
+            Debugger = new global::Retro.Net.Api.RealTime.Messages.Command.GameBoyDebuggerCommand();
+          }
+          Debugger.MergeFrom(other.Debugger);
           break;
       }
 
@@ -287,6 +321,15 @@ namespace Retro.Net.Api.RealTime.Messages.Command {
             }
             input.ReadMessage(subBuilder);
             PressButton = subBuilder;
+            break;
+          }
+          case 34: {
+            global::Retro.Net.Api.RealTime.Messages.Command.GameBoyDebuggerCommand subBuilder = new global::Retro.Net.Api.RealTime.Messages.Command.GameBoyDebuggerCommand();
+            if (valueCase_ == ValueOneofCase.Debugger) {
+              subBuilder.MergeFrom(Debugger);
+            }
+            input.ReadMessage(subBuilder);
+            Debugger = subBuilder;
             break;
           }
         }

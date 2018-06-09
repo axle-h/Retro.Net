@@ -1,8 +1,11 @@
 syntax = "proto3";
 option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Command";
 
+import "gameboy.command.debugger.proto";
+
 // Just a heartbeat to keep the connection alive.
 message HeartBeat {
+    
     // The date of the heartbeat.
     string date = 1;
 }
@@ -32,4 +35,21 @@ message RequestGameBoyJoyPadButtonPress {
 
     // The requested button to press.
     GameBoyJoyPadButton button = 1;
+}
+
+// A command sent to the GameBoy debugger.
+message GameBoyDebuggerCommand {
+    oneof value {
+        // Adds a breakpoint to the debugger.
+        AddBreakpoint addBreakpoint = 1;
+
+        // Removes a breakpoint from the debugger.
+        RemoveBreakpoint removeBreakpoint = 2;
+
+        // Gets all defined breakpoints.
+        GetBreakpoints getBreakpoints = 3;
+
+        // A debugger command.
+        DebuggerCommand command = 4;
+    }
 }

@@ -1,10 +1,15 @@
 ﻿using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Retro.Net.Tests.GameBoy.Blargg
 {
     public class CpuInstructionsTests : BlarggTestFixture
     {
+        public CpuInstructionsTests(ITestOutputHelper output) : base(output)
+        {
+        }
+
         [Fact] public async Task cpu_instrs_01_special() => await RunAsync("01-special.gb");
 
         [Fact(Skip = "Still not compatible")] public async Task cpu_instrs_02_interrupts() => await RunAsync("02-interrupts.gb");

@@ -5,149 +5,101 @@ namespace GameBoy.Net.Devices.Graphics.Util
     /// <summary>
     /// GameBoy GPU render settings.
     /// </summary>
-    public struct RenderSettings
+    public class RenderSettings
     {
-        public static ushort TileMap1Address = 0x1800;
-        public static ushort TileMap2Address = 0x1c00;
+        private static readonly TileMapAddress TileMap1Address = new TileMapAddress(0x1800, false);
+        private static readonly TileMapAddress TileMap2Address = new TileMapAddress(0x1c00, true);
 
-        public static ushort TileSet1Address = 0;
-        public static ushort TileSet2Address = 0x800;
+        private const ushort TileSet1Address = 0;
+        private const ushort TileSet2Address = 0x800;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RenderSettings"/> struct.
+        /// Initializes a new instance of the <see cref="RenderSettings"/> class.
         /// </summary>
         /// <param name="registers">The registers.</param>
         public RenderSettings(IGpuRegisters registers)
         {
+            BackgroundDisplay = registers.LcdControlRegister.BackgroundDisplay;
             BackgroundTileMapAddress = registers.LcdControlRegister.BackgroundTileMap ? TileMap2Address : TileMap1Address;
             WindowTileMapAddress = registers.LcdControlRegister.WindowTileMap ? TileMap2Address : TileMap1Address;
             WindowEnabled = registers.LcdControlRegister.WindowDisplay;
-            WindowAndBackgroundTileMapShared = BackgroundTileMapAddress == WindowTileMapAddress;
 
             if (registers.LcdControlRegister.TilePatternTable)
             {
-                SpriteAndBackgroundTileSetShared = true;
                 TileSetAddress = TileSet1Address;
-                TileSetIsSigned = false;
+                SpriteTileSetAddress = TileSet1Address;
             }
             else
             {
-                SpriteAndBackgroundTileSetShared = false;
                 TileSetAddress = TileSet2Address;
-                TileSetIsSigned = true;
+                SpriteTileSetAddress = TileSet1Address;
             }
 
-            ScrollX = registers.ScrollXRegister.Register;
-            ScrollY = registers.ScrollYRegister.Register;
-            WindowXPosition = registers.WindowXPositionRegister.Register - 7;
-            WindowYPosition = registers.WindowYPositionRegister.Register;
-            SpriteHeight = (byte) (registers.LcdControlRegister.SpriteSize ? 16 : 8);
+            Scroll = new Coordinates(registers.ScrollXRegister.Register, registers.ScrollYRegister.Register);
+            WindowPosition = new Coordinates(registers.WindowXPositionRegister.Register - 7, registers.WindowYPositionRegister.Register);
+            LargeSprites = registers.LcdControlRegister.SpriteSize;
             SpritesEnabled = registers.LcdControlRegister.SpriteDisplayEnable;
         }
 
         /// <summary>
-        /// Gets the tile map address.
+        /// Gets a value indicating whether [background display]. 
         /// </summary>
         /// <value>
-        /// The tile map address.
+        /// Monochrome GameBoy and SGB: BG Display
+        ///   <c>true</c> if background should be displayed; otherwise, <c>false</c>.
+        /// 
+        /// CGB in CGB Mode: BG and Window Master Priority
+        ///   <c>true</c> if background and window should lose it's priority (sprites are always rendered on top); otherwise, <c>false</c>.
+        /// 
+        /// CGB in Non CGB Mode: BG and Window Display
+        ///   <c>true</c> if background and window should be displayed; otherwise, <c>false</c>.
         /// </value>
-        public ushort BackgroundTileMapAddress { get; }
-
-        /// <summary>
-        /// Gets the window tile map address.
-        /// </summary>
-        /// <value>
-        /// The window tile map address.
-        /// </value>
-        public ushort WindowTileMapAddress { get; }
+        public bool BackgroundDisplay { get; }
 
         /// <summary>
         /// Gets a value indicating whether [window enabled].
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [window enabled]; otherwise, <c>false</c>.
-        /// </value>
         public bool WindowEnabled { get; }
-
-        /// <summary>
-        /// Gets the tile set address.
-        /// </summary>
-        /// <value>
-        /// The tile set address.
-        /// </value>
-        public ushort TileSetAddress { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether [sprite and background tile set shared].
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if [sprite and background tile set shared]; otherwise, <c>false</c>.
-        /// </value>
-        public bool SpriteAndBackgroundTileSetShared { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether [window and background tile map shared].
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if [window and background tile map shared]; otherwise, <c>false</c>.
-        /// </value>
-        public bool WindowAndBackgroundTileMapShared { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether [tile set is signed].
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if [tile set is signed]; otherwise, <c>false</c>.
-        /// </value>
-        public bool TileSetIsSigned { get; }
-
-        /// <summary>
-        /// Gets the scroll x.
-        /// </summary>
-        /// <value>
-        /// The scroll x.
-        /// </value>
-        public byte ScrollX { get; }
-
-        /// <summary>
-        /// Gets the scroll y.
-        /// </summary>
-        /// <value>
-        /// The scroll y.
-        /// </value>
-        public byte ScrollY { get; }
-
-        /// <summary>
-        /// Gets the window x position.
-        /// </summary>
-        /// <value>
-        /// The window x position.
-        /// </value>
-        public int WindowXPosition { get; }
-
-        /// <summary>
-        /// Gets the window y position.
-        /// </summary>
-        /// <value>
-        /// The window y position.
-        /// </value>
-        public byte WindowYPosition { get; }
-
-        /// <summary>
-        /// Gets the height of the sprite.
-        /// </summary>
-        /// <value>
-        /// The height of the sprite.
-        /// </value>
-        public byte SpriteHeight { get; }
 
         /// <summary>
         /// Gets a value indicating whether [sprites enabled].
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [sprites enabled]; otherwise, <c>false</c>.
-        /// </value>
         public bool SpritesEnabled { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether [large sprites are enabled].
+        /// </summary>
+        public bool LargeSprites { get; }
+
+        /// <summary>
+        /// Gets the tile map address.
+        /// </summary>
+        public TileMapAddress BackgroundTileMapAddress { get; }
+
+        /// <summary>
+        /// Gets the window tile map address.
+        /// </summary>
+        public TileMapAddress WindowTileMapAddress { get; }
+
+        /// <summary>
+        /// Gets the address of the background and window tile set.
+        /// </summary>
+        public ushort TileSetAddress { get; }
+
+        /// <summary>
+        /// Gets the address of the sprite tile set.
+        /// </summary>
+        public ushort SpriteTileSetAddress { get; }
+        
+        /// <summary>
+        /// Gets the scroll coordinates.
+        /// </summary>
+        public Coordinates Scroll { get; }
+        
+        /// <summary>
+        /// Gets the window position.
+        /// </summary>
+        public Coordinates WindowPosition { get; }
         
         /// <summary>
         /// Gets the render settings that have changed in comparison to the specified render settings.
@@ -157,12 +109,17 @@ namespace GameBoy.Net.Devices.Graphics.Util
         public RenderStateChange GetRenderStateChange(RenderSettings other)
         {
             var result = RenderStateChange.None;
-            if (BackgroundTileMapAddress != other.BackgroundTileMapAddress)
+            if (BackgroundDisplay != other.BackgroundDisplay)
+            {
+                result |= RenderStateChange.BackgroundDisplay;
+            }
+
+            if (!BackgroundTileMapAddress.Equals(other.BackgroundTileMapAddress))
             {
                 result |= RenderStateChange.BackgroundTileMap;
             }
 
-            if (WindowEnabled != other.WindowEnabled || WindowTileMapAddress != other.WindowTileMapAddress)
+            if (WindowEnabled != other.WindowEnabled || !WindowTileMapAddress.Equals(other.WindowTileMapAddress))
             {
                 result |= RenderStateChange.WindowTileMap;
             }
@@ -172,14 +129,24 @@ namespace GameBoy.Net.Devices.Graphics.Util
                 result |= RenderStateChange.TileSet;
             }
 
-            if (ScrollX != other.ScrollX || ScrollY != other.ScrollY)
+            if (!Scroll.Equals(other.Scroll))
             {
                 result |= RenderStateChange.Scroll;
             }
+            
+            if (!WindowPosition.Equals(other.WindowPosition))
+            {
+                result |= RenderStateChange.WindowPosition;
+            }
 
-            if (SpriteHeight != other.SpriteHeight)
+            if (LargeSprites != other.LargeSprites)
             {
                 result |= RenderStateChange.SpriteSize;
+            }
+
+            if (SpriteTileSetAddress != other.SpriteTileSetAddress)
+            {
+                result |= RenderStateChange.SpriteTileSet;
             }
 
             if (SpritesEnabled != other.SpritesEnabled)
@@ -187,34 +154,6 @@ namespace GameBoy.Net.Devices.Graphics.Util
                 result |= RenderStateChange.SpriteTileSet | RenderStateChange.SpriteOam;
             }
             return result;
-        }
-
-        public bool Equals(RenderSettings other)
-        {
-            return WindowEnabled == other.WindowEnabled
-                   && ScrollX == other.ScrollX
-                   && ScrollY == other.ScrollY
-                   && WindowXPosition == other.WindowXPosition
-                   && WindowYPosition == other.WindowYPosition
-                   && SpriteHeight == other.SpriteHeight
-                   && SpritesEnabled == other.SpritesEnabled;
-        }
-
-        public override bool Equals(object obj) => !(obj is null) && obj is RenderSettings settings && Equals(settings);
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = WindowEnabled.GetHashCode();
-                hashCode = (hashCode * 397) ^ ScrollX.GetHashCode();
-                hashCode = (hashCode * 397) ^ ScrollY.GetHashCode();
-                hashCode = (hashCode * 397) ^ WindowXPosition;
-                hashCode = (hashCode * 397) ^ WindowYPosition.GetHashCode();
-                hashCode = (hashCode * 397) ^ SpriteHeight.GetHashCode();
-                hashCode = (hashCode * 397) ^ SpritesEnabled.GetHashCode();
-                return hashCode;
-            }
         }
     }
 }

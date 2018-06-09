@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using System.Threading.Tasks;
-using Retro.Net.Memory;
+using Microsoft.Extensions.Logging;
 using Retro.Net.Memory.Interfaces;
 using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Core.Interfaces;
@@ -28,13 +27,23 @@ namespace Retro.Net.Z80.Core.Debugger
         private readonly IRuntimeConfig _runtimeConfig;
         private readonly IMmu _mmu;
         private readonly ISubject<IDebuggerContext<TRegisterState>> _subject;
+        private readonly ILogger _logger;
 
-        public CpuCoreDebugger(IRegisters registers, IPlatformConfig platformConfig, IMmu mmu, IRuntimeConfig runtimeConfig)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CpuCoreDebugger{TRegisterState}" /> class.
+        /// </summary>
+        /// <param name="registers">The registers.</param>
+        /// <param name="platformConfig">The platform configuration.</param>
+        /// <param name="mmu">The mmu.</param>
+        /// <param name="runtimeConfig">The runtime configuration.</param>
+        /// <param name="loggerFactory">The logger factory.</param>
+        public CpuCoreDebugger(IRegisters registers, IPlatformConfig platformConfig, IMmu mmu, IRuntimeConfig runtimeConfig, ILoggerFactory loggerFactory)
         {
             _registers = registers;
             _platformConfig = platformConfig;
             _mmu = mmu;
             _runtimeConfig = runtimeConfig;
+            _logger = loggerFactory.CreateLogger<CpuCoreDebugger<TRegisterState>>();
             _breakpoints = new ConcurrentDictionary<ushort, object>();
             _subject = new ReplaySubject<IDebuggerContext<TRegisterState>>(1);
         }
@@ -67,21 +76,26 @@ namespace Retro.Net.Z80.Core.Debugger
                 }
             }
 
+            _logger.LogWarning($"Breaking. Stepping = {_isStepping}");
+
             _continue = new TaskCompletionSource<bool>();
 
             var registers = _platformConfig.CpuMode == CpuMode.Z80
                                 ? _registers.GetZ80RegisterState()
                                 : _registers.GetIntel8080RegisterState();
             var state = _mmu.CreateState();
+            var flatState = state.OrderBy(x => x.Address).SelectMany(x => x.Banks[x.CurrentBank]).ToArray();
             var context = new DebuggerContext(instructionBlock,
                                               () => Continue(false),
                                               () => Continue(true),
                                               (TRegisterState) registers,
-                                              state);
+                                              flatState);
 
             _subject.OnNext(context);
 
             _isStepping = await _continue.Task;
+
+            _logger.LogWarning($"Resuming. Stepping = {_isStepping}");
         }
 
         /// <summary>
@@ -127,7 +141,7 @@ namespace Retro.Net.Z80.Core.Debugger
                 _disposed = true;
             }
 
-            _continue.TrySetCanceled();
+            _continue?.TrySetCanceled();
         }
 
         private class DebuggerContext : IDebuggerContext<TRegisterState>
@@ -140,21 +154,21 @@ namespace Retro.Net.Z80.Core.Debugger
                                    Action continueAction,
                                    Action stepOverAction,
                                    TRegisterState registers,
-                                   ICollection<AddressSegmentState> addressSpaceState)
+                                   byte[] memory)
             {
                 Active = true;
                 Block = block;
                 _continueAction = continueAction;
                 _stepOverAction = stepOverAction;
                 Registers = registers;
-                AddressSpaceState = addressSpaceState;
+                Memory = memory;
             }
 
             public bool Active { get; private set; }
 
             public TRegisterState Registers { get; }
 
-            public ICollection<AddressSegmentState> AddressSpaceState { get; }
+            public byte[] Memory { get; }
 
             public IInstructionBlock Block { get; }
 

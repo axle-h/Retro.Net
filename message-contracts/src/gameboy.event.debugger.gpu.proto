@@ -1,0 +1,106 @@
+syntax = "proto3";
+option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Event.Debugger.Gpu";
+
+message GameBoyGpuState {
+
+    // The GPU render settings.
+    GameBoyRenderSettings renderSettings = 1;
+
+    // The background tiles.
+    repeated GameBoyTile backgroundTiles = 2;
+
+    // The sprite tiles.
+    repeated GameBoyTile spriteTiles = 3;
+
+    // The sprites (OAM).
+    repeated GameBoySprite sprites = 4;
+}
+
+// GameBoy GPU render settings.
+message GameBoyRenderSettings {
+
+    // Indicates whether the background should be displayed.
+    bool backgroundDisplay = 1;
+
+    // Indicates whether the window should be displayed.
+    bool windowEnabled = 2;
+
+    // Indicates whether sprites are enabled.
+    bool spritesEnabled = 3;
+
+    // Indicates whether large sprites are enabled.
+    bool largeSprites = 4;
+
+    // The address of 0x400 byte the background tile map.
+    TileMapAddress backgroundTileMapAddress = 5;
+
+    // The address of 0x400 byte the window tile map.
+    TileMapAddress windowTileMapAddress = 6;
+
+    // The address of the 0x1000 byte window and background tile set. I.e. 64 tiles.
+    uint32 tileSetAddress = 7;
+
+    // The address of the 0x1000 byte tile set. I.e. 64 tiles.
+    uint32 spriteTileSetAddress = 8;
+
+    // The scroll coordinates.
+    Coordinates scroll = 9;
+
+    // The window coordinates.
+    Coordinates windowPosition = 10;
+}
+
+// A tile map address.
+message TileMapAddress {
+
+    // The address of the tile map.
+    uint32 address = 1;
+
+    // Indicates that the tile map is signed.
+    bool isSigned = 2;
+}
+
+// Cartesian 2D coordinates.
+message Coordinates {
+
+    // The x coordinate.
+    uint32 x = 1;
+
+    // The y coordinate.
+    uint32 y = 2;
+}
+
+// A GameBoy sprite.
+message GameBoySprite {
+
+    // The x coordinate.
+    uint32 x = 1;
+
+    // The y coordinate.
+    uint32 y = 2;
+
+    // The tile number.
+    uint32 tileNumber = 3;
+
+    // Indicates whether the sprite (except colour 0) is above or below the background.
+    bool backgroundPriority = 4;
+
+    // Indicates whether the sprite is flipped in the vertical (y) direction.
+    bool yFlip = 5;
+
+    // Indicates whether the sprite is flipped in the horizontal (x) direction.
+    bool xFlip = 6;
+
+    // Indicates whether the sprite should use sprite palette 1 or 0.
+    bool usePalette1 = 7;
+}
+
+// An 8*8=64 byte GameBoy GPU background/window/sprite tile structure.
+message GameBoyTile {
+
+    // The tile number.
+    uint32 tileNumber = 1;
+
+    // A flat, 64 byte array of the tile palette. Access via row * 8 + column.
+    bytes palette = 2;
+}

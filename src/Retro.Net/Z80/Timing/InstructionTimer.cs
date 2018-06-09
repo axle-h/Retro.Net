@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ namespace Retro.Net.Z80.Timing
             _timer = new HighPrecisionTimer();
 
             _subject = new Subject<InstructionTimings>();
-            Timing = _subject.AsObservable();
+            Timing = _subject.AsObservable().ObserveOn(Scheduler.Default);
         }
 
         public IObservable<InstructionTimings> Timing { get; }

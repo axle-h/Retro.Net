@@ -14,6 +14,9 @@ message GameBoyCommand {
         SetGameBoyClientState setState = 2;
         
 		// Command to press a button on the GameBoy joypad.
-		RequestGameBoyJoyPadButtonPress pressButton = 3;
+        RequestGameBoyJoyPadButtonPress pressButton = 3;
+        
+        // A command sent to the GameBoy debugger.
+        GameBoyDebuggerCommand debugger = 4;
     }
 }

@@ -11,7 +11,7 @@ namespace Retro.Net.Z80.Core.Interfaces
 
         TRegisterState Registers { get; }
 
-        ICollection<AddressSegmentState> AddressSpaceState { get; }
+        byte[] Memory { get; }
 
         IInstructionBlock Block { get; }
 

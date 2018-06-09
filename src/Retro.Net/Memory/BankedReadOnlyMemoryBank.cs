@@ -13,6 +13,7 @@ namespace Retro.Net.Memory
     /// <seealso cref="IReadableAddressSegment" />
     public class BankedReadOnlyMemoryBank : IReadableAddressSegment
     {
+        private readonly IMemoryBankController _memoryBankController;
         private readonly IDictionary<byte, byte[]> _banks;
         private byte[] _bank;
 
@@ -29,6 +30,8 @@ namespace Retro.Net.Memory
         /// <exception cref="MemoryConfigStateException"></exception>
         public BankedReadOnlyMemoryBank(ICollection<IMemoryBankConfig> bankConfigs, IMemoryBankController memoryBankController)
         {
+            _memoryBankController = memoryBankController;
+
             if (bankConfigs == null || !bankConfigs.Any() || !bankConfigs.All(x => x.BankId.HasValue) ||
                 bankConfigs.Select(x => x.BankId.Value).Distinct().Count() != bankConfigs.Count)
             {
@@ -62,16 +65,16 @@ namespace Retro.Net.Memory
                                                   return memory;
                                               });
 
-            _bank = _banks[memoryBankController.RomBankNumber];
+            _bank = _banks[_memoryBankController.RomBankNumber];
 
-            memoryBankController.MemoryBankSwitch += target =>
+            _memoryBankController.MemoryBankSwitch += target =>
                                                      {
                                                          if (target != MemoryBankControllerEventTarget.RomBankSwitch)
                                                          {
                                                              return;
                                                          }
 
-                                                         _bank = _banks[memoryBankController.RomBankNumber];
+                                                         _bank = _banks[_memoryBankController.RomBankNumber];
                                                      };
         }
 
@@ -129,7 +132,7 @@ namespace Retro.Net.Memory
         {
             // Take copies of all banks.
             var banks = _banks.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToArray());
-            return new AddressSegmentState(Address, Type, banks);
+            return new AddressSegmentState(Address, Type, banks, _memoryBankController.RomBankNumber);
         }
 
         /// <summary>

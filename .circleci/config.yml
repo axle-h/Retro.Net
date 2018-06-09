@@ -14,6 +14,12 @@ jobs:
       - run:
           name: Install build dependencies
           command: apt update && apt install -y unzip
+       - run:
+          name: NPM Install
+          command: |
+            cd message-contracts
+            npm set progress=false && npm config set depth 0 && npm cache verify
+            npm install
       - run:
           name: Build message contracts
           command: cd message-contracts && ./build.sh

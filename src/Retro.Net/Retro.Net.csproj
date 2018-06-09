@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="AgileObjects.ReadableExpressions" Version="1.11.0" />
     <PackageReference Include="Autofac" Version="4.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.1" />
     <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
   </ItemGroup>
 

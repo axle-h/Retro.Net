@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -107,11 +108,13 @@ namespace GameBoy.Net.Devices.Graphics
             _lastRenderedChecksum = initialContext.Checksum;
 
             _renderSubject = new Subject<RenderContext>();
-            var renderSubscription = _renderSubject
+            var renderObservable = _renderSubject.ObserveOn(Scheduler.Default).AsObservable();
+
+            var renderSubscription = renderObservable
                                      .Where(x => !_halted && x.RenderStateChange != RenderStateChange.None)
                                      .Subscribe(observer);
 
-            var metricsSubscription = _renderSubject
+            var metricsSubscription = renderObservable
                                       .Buffer(TimeSpan.FromSeconds(1))
                                       .Count()
                                       .Subscribe(fps => renderer.UpdateMetrics(new GpuMetrics(fps)));
@@ -222,23 +225,22 @@ namespace GameBoy.Net.Devices.Graphics
         /// Creates a new state object that describes the GPU.
         /// </summary>
         /// <returns></returns>
-        public GpuTileState CreateState() => new TileMapPointer(GetCurrentRenderContext(false)).GetCurrentState();
+        public GpuState CreateState() => new TileMapPointer(GetCurrentRenderContext(false)).GetCurrentState();
 
         private RenderContext GetCurrentRenderContext(bool calculateChecksum)
         {
             var renderSettings = new RenderSettings(_gpuRegisters);
 
-            var backgroundTileMap = _tileRam.Segment(renderSettings.BackgroundTileMapAddress, 0x400);
             var tileSet = _tileRam.Segment(renderSettings.TileSetAddress, 0x1000);
+            var backgroundTileMap = _tileRam.Segment(renderSettings.BackgroundTileMapAddress.Address, 0x400);
             var windowTileMap = renderSettings.WindowEnabled
-                                    ? _tileRam.Segment(renderSettings.WindowTileMapAddress, 0x400)
+                                    ? _tileRam.Segment(renderSettings.WindowTileMapAddress.Address, 0x400)
                                     : new ArraySegment<byte>(Array.Empty<byte>());
 
             ArraySegment<byte> spriteOam, spriteTileSet;
             if (renderSettings.SpritesEnabled)
             {
-                // If the background tiles are read from the sprite pattern table then we can reuse the bytes.
-                spriteTileSet = renderSettings.SpriteAndBackgroundTileSetShared ? tileSet : _tileRam.Segment(0x0, 0x1000);
+                spriteTileSet =  _tileRam.Segment(renderSettings.SpriteTileSetAddress, 0x1000);
                 spriteOam = _spriteRam.Segment(0x0, 0xa0);
             }
             else

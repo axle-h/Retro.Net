@@ -50,7 +50,7 @@ namespace GameBoy.Net.Devices.Graphics.Util
         /// Gets the current state.
         /// </summary>
         /// <returns></returns>
-        public GpuTileState GetCurrentState() => new GpuTileState(_tiles.GetAllTiles(), _spriteTiles.GetAllTiles(), _allSprites);
+        public GpuState GetCurrentState() => new GpuState(_renderSettings, _tiles.GetAllTiles(), _spriteTiles.GetAllTiles(), _allSprites);
 
         /// <summary>
         /// Resets the specified render state.
@@ -63,14 +63,14 @@ namespace GameBoy.Net.Devices.Graphics.Util
             _lcdColumn = 0;
             _lcdRow = 0;
 
-            _column = renderContext.RenderSettings.ScrollX;
-            _row = renderContext.RenderSettings.ScrollY;
+            _column = renderContext.RenderSettings.Scroll.X;
+            _row = renderContext.RenderSettings.Scroll.Y;
 
             _backgroundTileMap = renderContext.BackgroundTileMap;
-            _backgroundTileMapColumn = renderContext.RenderSettings.ScrollX / 8;
-            _backgroundTileMapRow = renderContext.RenderSettings.ScrollY / 8;
-            _backgroundTileColumn = renderContext.RenderSettings.ScrollX % 8;
-            _backgroundTileRow = renderContext.RenderSettings.ScrollY % 8;
+            _backgroundTileMapColumn = renderContext.RenderSettings.Scroll.X / 8;
+            _backgroundTileMapRow = renderContext.RenderSettings.Scroll.Y / 8;
+            _backgroundTileColumn = renderContext.RenderSettings.Scroll.X % 8;
+            _backgroundTileRow = renderContext.RenderSettings.Scroll.Y % 8;
 
             if (_renderSettings.WindowEnabled)
             {
@@ -92,7 +92,8 @@ namespace GameBoy.Net.Devices.Graphics.Util
             {
                 if (_spriteTiles == null || renderContext.RenderStateChange.HasFlag(RenderStateChange.SpriteTileSet))
                 {
-                    _spriteTiles = renderContext.RenderSettings.SpriteAndBackgroundTileSetShared
+                    // Check if we can share the background and sprite tile set.
+                    _spriteTiles = renderContext.RenderSettings.SpriteTileSetAddress.Equals(renderContext.RenderSettings.TileSetAddress)
                                        ? _tiles
                                        : new TileCache(renderContext.SpriteTileSet);
                 }
@@ -126,8 +127,9 @@ namespace GameBoy.Net.Devices.Graphics.Util
             {
                 // Check window first as it overlays background.
                 var pixel = _currentWindowTile?.Get(_windowTileRow, _windowTileColumn) ??
-                            _currentBackgroundTile.Get(_backgroundTileRow, _backgroundTileColumn);
-                
+                            _currentBackgroundTile?.Get(_backgroundTileRow, _backgroundTileColumn)
+                            ?? Palette.Colour0;
+
                 if (!_renderSettings.SpritesEnabled)
                 {
                     return pixel;
@@ -176,10 +178,10 @@ namespace GameBoy.Net.Devices.Graphics.Util
             UpdateRowSprites();
 
             // Reset column.
-            _column = _renderSettings.ScrollX;
+            _column = _renderSettings.Scroll.X;
             _lcdColumn = 0;
-            _backgroundTileMapColumn = _renderSettings.ScrollX / 8;
-            _backgroundTileColumn = _renderSettings.ScrollX % 8;
+            _backgroundTileMapColumn = _renderSettings.Scroll.X / 8;
+            _backgroundTileColumn = _renderSettings.Scroll.X % 8;
             UpdateCurrentTiles();
         }
 
@@ -206,7 +208,9 @@ namespace GameBoy.Net.Devices.Graphics.Util
         {
             var tileMapIndex = _backgroundTileMapRow * 32 + _backgroundTileMapColumn;
 
-            _currentBackgroundTile = GetTile(_backgroundTileMap[tileMapIndex]);
+            _currentBackgroundTile = _renderSettings.BackgroundDisplay
+                                         ? GetTile(_backgroundTileMap[tileMapIndex], _renderSettings.BackgroundTileMapAddress.IsSigned)
+                                         : null;
             _currentWindowTile = null; // reset now just in case we don't set this later.
 
             if (!_renderSettings.WindowEnabled)
@@ -214,8 +218,8 @@ namespace GameBoy.Net.Devices.Graphics.Util
                 return;
             }
 
-            var windowX = _lcdColumn - _renderSettings.WindowXPosition;
-            var windowY = _lcdRow - _renderSettings.WindowYPosition;
+            var windowX = _lcdColumn - _renderSettings.WindowPosition.X;
+            var windowY = _lcdRow - _renderSettings.WindowPosition.Y;
 
             if (windowX < 0 || windowY < 0)
             {
@@ -228,13 +232,13 @@ namespace GameBoy.Net.Devices.Graphics.Util
 
             _windowTileColumn = windowX % 8;
             _windowTileRow = windowY % 8;
-            _currentWindowTile = GetTile(_windowTileMap[windowTileMapRow * 32 + windowTileMapColumn]);
+            _currentWindowTile = GetTile(_windowTileMap[windowTileMapRow * 32 + windowTileMapColumn], _renderSettings.WindowTileMapAddress.IsSigned);
         }
 
-        private Tile GetTile(byte tileMapValue)
+        private Tile GetTile(byte tileMapValue, bool isSigned)
         {
             int index;
-            if (_renderSettings.TileSetIsSigned)
+            if (isSigned)
             {
                 var signedTileMapValue = (sbyte) tileMapValue;
                 index = signedTileMapValue + 128;

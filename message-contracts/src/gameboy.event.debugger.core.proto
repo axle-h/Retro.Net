@@ -1,0 +1,47 @@
+syntax = "proto3";
+option csharp_namespace = "Retro.Net.Api.RealTime.Messages.Event.Debugger.Core";
+
+// An instruction block.
+message GameBoyInstructionBlock {
+
+    // The address of the block.
+    uint32 address = 1;
+
+    // The length of the block.
+    uint32 length = 2;
+
+    // Indicates whetehr this block will halt the CPU.
+    bool haltCpu = 3;
+
+    // Indicates whetehr this block will halt the peripherals.
+    bool haltPeripherals = 4;
+
+    // The debug info string.
+    string debugInfo = 5;
+
+    // The operations executed in this block.
+    repeated GameBoyOperation operations = 6;
+
+    // Timings of this instruction block.
+    GameBoyIntructionTimings timings = 7;
+}
+
+// An operation executed by a GameBoy.
+message GameBoyOperation {
+
+    // The address of the operation.
+    uint32 address = 1;
+
+    // The mnemonic and operands that form this operation.
+    string operation = 2;
+}
+
+// Timings of an instruction block.
+message GameBoyIntructionTimings {
+
+    // The number of machine cycles executed.
+    uint32 machineCycles = 1;
+
+    // The number of throttling states executed.
+    uint32 throttlingStates = 2;
+}

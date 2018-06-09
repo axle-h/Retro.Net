@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
@@ -18,11 +19,6 @@ namespace Retro.Net.Z80.Core
         private readonly Func<IRegisters, IMmu, IAlu, IPeripheralManager, InstructionTimings> _action;
 
         /// <summary>
-        /// Static instruction timings, known at compile time
-        /// </summary>
-        private readonly InstructionTimings _staticTimings;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="InstructionBlock" /> class.
         /// </summary>
         /// <param name="address">The address.</param>
@@ -31,7 +27,7 @@ namespace Retro.Net.Z80.Core
         /// <param name="staticTimings">The static timings.</param>
         /// <param name="halt">if set to <c>true</c> [halt].</param>
         /// <param name="stop">if set to <c>true</c> [stop].</param>
-        /// <param name="rawBlock">The raw block.</param>
+        /// <param name="operations">The operations.</param>
         /// <param name="debugInfo">The debug information.</param>
         public InstructionBlock(ushort address,
                                 int length,
@@ -39,67 +35,55 @@ namespace Retro.Net.Z80.Core
                                 InstructionTimings staticTimings,
                                 bool halt,
                                 bool stop,
-                                DecodedBlock rawBlock = null,
-                                string debugInfo = null)
+                                ICollection<Operation> operations,
+                                string debugInfo)
         {
             _action = action;
-            _staticTimings = staticTimings;
             Address = address;
+            StaticTimings = staticTimings;
             Length = length;
             HaltCpu = halt || stop;
             HaltPeripherals = stop;
-            RawBlock = rawBlock;
+            Operations = operations;
             DebugInfo = debugInfo;
         }
 
         /// <summary>
         /// Gets the address.
         /// </summary>
-        /// <value>
-        /// The address.
-        /// </value>
         public ushort Address { get; }
 
         /// <summary>
         /// Gets the length.
         /// </summary>
-        /// <value>
-        /// The length.
-        /// </value>
         public int Length { get; }
 
         /// <summary>
         /// Gets a value indicating whether [to halt the cpu at the end of the block].
         /// </summary>
-        /// <value>
-        /// <c>true</c> if [the cpu should be halted at the end of this instruction block]; otherwise, <c>false</c>.
-        /// </value>
         public bool HaltCpu { get; }
 
         /// <summary>
         /// Gets a value indicating whether [to halt peripherals at the end of the block].
         /// </summary>
-        /// <value>
-        /// <c>true</c> if [peripherals should be halted at the end of this instruction block]; otherwise, <c>false</c>.
-        /// </value>
         public bool HaltPeripherals { get; }
+
+        /// <summary>
+        /// Static instruction timings, known at compile time
+        /// </summary>
+        public InstructionTimings StaticTimings { get; }
 
         /// <summary>
         /// Gets the debug information.
         /// This is only populated when debug mode is enabled in config.
         /// </summary>
-        /// <value>
-        /// The debug information.
-        /// </value>
         public string DebugInfo { get; }
 
         /// <summary>
-        /// Gets the raw block.
+        /// Gets the operations.
+        /// This is only populated when debug mode is enabled in config.
         /// </summary>
-        /// <value>
-        /// The raw block.
-        /// </value>
-        public DecodedBlock RawBlock { get; }
+        public ICollection<Operation> Operations { get; }
 
         /// <summary>
         /// Executes the instruction block.
@@ -112,6 +96,6 @@ namespace Retro.Net.Z80.Core
         public InstructionTimings ExecuteInstructionBlock(IRegisters registers,
             IMmu mmu,
             IAlu alu,
-            IPeripheralManager peripheralManager) => _action(registers, mmu, alu, peripheralManager) + _staticTimings;
+            IPeripheralManager peripheralManager) => _action(registers, mmu, alu, peripheralManager) + StaticTimings;
     }
 }

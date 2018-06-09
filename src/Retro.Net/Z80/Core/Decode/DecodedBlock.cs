@@ -30,49 +30,31 @@ namespace Retro.Net.Z80.Core.Decode
         /// <summary>
         /// Gets the address.
         /// </summary>
-        /// <value>
-        /// The address.
-        /// </value>
         public ushort Address { get; }
 
         /// <summary>
         /// Gets the total block length including literals, displacements etc.
         /// </summary>
-        /// <value>
-        /// The total block length including literals, displacements etc.
-        /// </value>
         public int Length { get; }
 
         /// <summary>
         /// Gets the operations.
         /// </summary>
-        /// <value>
-        /// The operations.
-        /// </value>
         public ICollection<Operation> Operations { get; }
 
         /// <summary>
         /// Gets the timings.
         /// </summary>
-        /// <value>
-        /// The timings.
-        /// </value>
         public InstructionTimings Timings { get; }
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="DecodedBlock"/> ends on a HALT instruction.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if halt; otherwise, <c>false</c>.
-        /// </value>
         public bool Halt { get; }
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="DecodedBlock"/> ends on a STOP instruction.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if stop; otherwise, <c>false</c>.
-        /// </value>
         public bool Stop { get; }
     }
 }

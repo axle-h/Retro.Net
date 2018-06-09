@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Retro.Net.Memory.Interfaces;
 using Retro.Net.Util;
 using Retro.Net.Z80.Cache.Interfaces;
@@ -26,6 +27,7 @@ namespace Retro.Net.Z80.Core
         private readonly IInstructionBlockFactory _instructionBlockFactory;
         private readonly IInstructionBlockCache _instructionBlockCache;
         private readonly IInternalCpuCoreDebugger _debugger;
+        private readonly ILogger _logger;
 
         private readonly IDisposable _messageBusSubscriptions;
         private readonly SemaphoreSlim _paused;
@@ -46,6 +48,7 @@ namespace Retro.Net.Z80.Core
         /// <param name="messageBus">The message bus.</param>
         /// <param name="instructionBlockCache">The instruction block cache.</param>
         /// <param name="debugger">The debugger.</param>
+        /// <param name="loggerFactory">The logger factory.</param>
         public CpuCore(IRegisters registers,
                        IInterruptService interruptService,
                        IPeripheralManager peripheralManager,
@@ -56,7 +59,8 @@ namespace Retro.Net.Z80.Core
                        IInstructionBlockFactory instructionBlockFactory,
                        IMessageBus messageBus,
                        IInstructionBlockCache instructionBlockCache,
-                       IInternalCpuCoreDebugger debugger)
+                       IInternalCpuCoreDebugger debugger,
+                       ILoggerFactory loggerFactory)
         {
             CoreId = Guid.NewGuid();
             _registers = registers;
@@ -69,6 +73,7 @@ namespace Retro.Net.Z80.Core
             _instructionBlockFactory = instructionBlockFactory;
             _instructionBlockCache = instructionBlockCache;
             _debugger = debugger;
+            _logger = loggerFactory.CreateLogger($"{typeof(CpuCore)}[{CoreId}]");
             _paused = new SemaphoreSlim(1, 1);
             _cancellation = new CancellationTokenSource();
 
@@ -120,18 +125,23 @@ namespace Retro.Net.Z80.Core
         /// <summary>
         /// Pauses this core.
         /// </summary>
-        public void Pause() => Task.Run(() => _paused.WaitAsync(_cancellation.Token));
+        public void Pause()
+        {
+            _logger.LogInformation("Pausing core");
+            _paused.Wait(_cancellation.Token);
+        }
 
         /// <summary>
         /// Resumes this core after a pause.
         /// </summary>
-        public void Resume() => Task.Run(() =>
-                                         {
-                                             if (_paused.CurrentCount == 0)
-                                             {
-                                                 _paused.Release();
-                                             }
-                                         });
+        public void Resume()
+        {
+            if (_paused.CurrentCount == 0)
+            {
+                _logger.LogInformation("Resuming core");
+                _paused.Release();
+            }
+        }
 
         /// <summary>
         /// Executes the specified instruction block.
@@ -144,11 +154,11 @@ namespace Retro.Net.Z80.Core
             try
             {
                 await _paused.WaitAsync(_cancellation.Token);
-
+                
                 if (isInterrupt)
                 {
                     // Push the program counter onto the stack
-                    _registers.StackPointer = (ushort)(_registers.StackPointer - 2);
+                    _registers.StackPointer = (ushort) (_registers.StackPointer - 2);
                     _mmu.WriteWord(_registers.StackPointer, _registers.ProgramCounter);
 
                     // Disable interrupts whilst we're... interrupting.
@@ -169,9 +179,12 @@ namespace Retro.Net.Z80.Core
                     return;
                 }
 
+                _logger.LogDebug("Halting");
+
                 // We're halting.
                 if (instructionBlock.HaltPeripherals)
                 {
+                    _logger.LogDebug("Halting peripherals");
                     _peripheralManager.Signal(ControlSignal.Halt);
                 }
 
@@ -182,10 +195,13 @@ namespace Retro.Net.Z80.Core
                                        _interruptService.InterruptsEnabled = true;
                                        return _interruptService.InterruptedAddress.HasValue;
                                    });
-                _instructionTimer.NotifyResume();
 
+                _logger.LogDebug("Resuming");
+
+                _instructionTimer.NotifyResume();
                 if (instructionBlock.HaltPeripherals)
                 {
+                    _logger.LogDebug("Resuming peripherals");
                     _peripheralManager.Signal(ControlSignal.Resume);
                 }
             }

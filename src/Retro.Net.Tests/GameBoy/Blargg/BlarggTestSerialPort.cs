@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GameBoy.Net.Devices;
 using GameBoy.Net.Devices.Interfaces;
 
@@ -12,11 +13,9 @@ namespace Retro.Net.Tests.GameBoy.Blargg
         private readonly IList<char> _currentWord;
 
         private readonly BlockingCollection<string> _wordQueue;
-        private readonly TimeSpan _timeout;
 
-        public BlarggTestSerialPort(TimeSpan timeout)
+        public BlarggTestSerialPort()
         {
-            _timeout = timeout;
             _currentWord = new List<char>();
             _wordQueue = new BlockingCollection<string>();
             Words = new List<string>();
@@ -54,9 +53,9 @@ namespace Retro.Net.Tests.GameBoy.Blargg
             return 0x00;
         }
 
-        public string WaitForNextWord()
+        public string WaitForNextWord(CancellationToken cancellationToken)
         {
-            var result = _wordQueue.TryTake(out var word, _timeout);
+            var result = _wordQueue.TryTake(out var word, Timeout.Infinite, cancellationToken);
             if (result)
             {
                 Words.Add(word);

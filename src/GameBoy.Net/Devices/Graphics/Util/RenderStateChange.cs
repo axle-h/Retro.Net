@@ -52,6 +52,16 @@ namespace GameBoy.Net.Devices.Graphics.Util
         Scroll = 0x40,
 
         /// <summary>
+        /// The background display has changed.
+        /// </summary>
+        BackgroundDisplay = 0x80,
+
+        /// <summary>
+        /// The window position has changed.
+        /// </summary>
+        WindowPosition = 0x100,
+
+        /// <summary>
         /// Sprites have changed.
         /// </summary>
         Sprites = SpriteOam | SpriteTileSet | SpriteSize,
@@ -59,6 +69,6 @@ namespace GameBoy.Net.Devices.Graphics.Util
         /// <summary>
         /// Everything has changed.
         /// </summary>
-        All = BackgroundTileMap | WindowTileMap | TileSet | SpriteOam | SpriteTileSet | Scroll | SpriteSize
+        All = BackgroundTileMap | WindowTileMap | TileSet | SpriteOam | SpriteTileSet | Scroll | SpriteSize | BackgroundDisplay
     }
 }

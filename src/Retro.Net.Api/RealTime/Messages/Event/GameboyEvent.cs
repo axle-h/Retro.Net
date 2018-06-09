@@ -25,16 +25,17 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChNnYW1lYm95LmV2ZW50LnByb3RvGhxnYW1lYm95LmV2ZW50Lm1lc3NhZ2Vz",
-            "LnByb3RvIrwBCgxHYW1lQm95RXZlbnQSIQoFZnJhbWUYASABKAsyEC5HYW1l",
+            "LnByb3RvIucBCgxHYW1lQm95RXZlbnQSIQoFZnJhbWUYASABKAsyEC5HYW1l",
             "Qm95R3B1RnJhbWVIABI0ChBwdWJsaXNoZWRNZXNzYWdlGAIgASgLMhguR2Ft",
             "ZUJveVB1Ymxpc2hlZE1lc3NhZ2VIABIkCgVlcnJvchgDIAEoCzITLkdhbWVC",
             "b3lTZXJ2ZXJFcnJvckgAEiQKBXN0YXRlGAQgASgLMhMuR2FtZUJveUNsaWVu",
-            "dFN0YXRlSABCBwoFdmFsdWVCKKoCJVJldHJvLk5ldC5BcGkuUmVhbFRpbWUu",
-            "TWVzc2FnZXMuRXZlbnRiBnByb3RvMw=="));
+            "dFN0YXRlSAASKQoIZGVidWdnZXIYBSABKAsyFS5HYW1lQm95RGVidWdnZXJF",
+            "dmVudEgAQgcKBXZhbHVlQiiqAiVSZXRyby5OZXQuQXBpLlJlYWxUaW1lLk1l",
+            "c3NhZ2VzLkV2ZW50YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Retro.Net.Api.RealTime.Messages.Event.GameboyEventMessagesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Event.GameBoyEvent), global::Retro.Net.Api.RealTime.Messages.Event.GameBoyEvent.Parser, new[]{ "Frame", "PublishedMessage", "Error", "State" }, new[]{ "Value" }, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Retro.Net.Api.RealTime.Messages.Event.GameBoyEvent), global::Retro.Net.Api.RealTime.Messages.Event.GameBoyEvent.Parser, new[]{ "Frame", "PublishedMessage", "Error", "State", "Debugger" }, new[]{ "Value" }, null, null)
           }));
     }
     #endregion
@@ -81,6 +82,9 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
           break;
         case ValueOneofCase.State:
           State = other.State.Clone();
+          break;
+        case ValueOneofCase.Debugger:
+          Debugger = other.Debugger.Clone();
           break;
       }
 
@@ -148,6 +152,20 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
       }
     }
 
+    /// <summary>Field number for the "debugger" field.</summary>
+    public const int DebuggerFieldNumber = 5;
+    /// <summary>
+    /// A debugger event.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Retro.Net.Api.RealTime.Messages.Event.GameBoyDebuggerEvent Debugger {
+      get { return valueCase_ == ValueOneofCase.Debugger ? (global::Retro.Net.Api.RealTime.Messages.Event.GameBoyDebuggerEvent) value_ : null; }
+      set {
+        value_ = value;
+        valueCase_ = value == null ? ValueOneofCase.None : ValueOneofCase.Debugger;
+      }
+    }
+
     private object value_;
     /// <summary>Enum of possible cases for the "value" oneof.</summary>
     public enum ValueOneofCase {
@@ -156,6 +174,7 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
       PublishedMessage = 2,
       Error = 3,
       State = 4,
+      Debugger = 5,
     }
     private ValueOneofCase valueCase_ = ValueOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -186,6 +205,7 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
       if (!object.Equals(PublishedMessage, other.PublishedMessage)) return false;
       if (!object.Equals(Error, other.Error)) return false;
       if (!object.Equals(State, other.State)) return false;
+      if (!object.Equals(Debugger, other.Debugger)) return false;
       if (ValueCase != other.ValueCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -197,6 +217,7 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
       if (valueCase_ == ValueOneofCase.PublishedMessage) hash ^= PublishedMessage.GetHashCode();
       if (valueCase_ == ValueOneofCase.Error) hash ^= Error.GetHashCode();
       if (valueCase_ == ValueOneofCase.State) hash ^= State.GetHashCode();
+      if (valueCase_ == ValueOneofCase.Debugger) hash ^= Debugger.GetHashCode();
       hash ^= (int) valueCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -227,6 +248,10 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
         output.WriteRawTag(34);
         output.WriteMessage(State);
       }
+      if (valueCase_ == ValueOneofCase.Debugger) {
+        output.WriteRawTag(42);
+        output.WriteMessage(Debugger);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -246,6 +271,9 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
       }
       if (valueCase_ == ValueOneofCase.State) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(State);
+      }
+      if (valueCase_ == ValueOneofCase.Debugger) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Debugger);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -282,6 +310,12 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
             State = new global::Retro.Net.Api.RealTime.Messages.Event.GameBoyClientState();
           }
           State.MergeFrom(other.State);
+          break;
+        case ValueOneofCase.Debugger:
+          if (Debugger == null) {
+            Debugger = new global::Retro.Net.Api.RealTime.Messages.Event.GameBoyDebuggerEvent();
+          }
+          Debugger.MergeFrom(other.Debugger);
           break;
       }
 
@@ -330,6 +364,15 @@ namespace Retro.Net.Api.RealTime.Messages.Event {
             }
             input.ReadMessage(subBuilder);
             State = subBuilder;
+            break;
+          }
+          case 42: {
+            global::Retro.Net.Api.RealTime.Messages.Event.GameBoyDebuggerEvent subBuilder = new global::Retro.Net.Api.RealTime.Messages.Event.GameBoyDebuggerEvent();
+            if (valueCase_ == ValueOneofCase.Debugger) {
+              subBuilder.MergeFrom(Debugger);
+            }
+            input.ReadMessage(subBuilder);
+            Debugger = subBuilder;
             break;
           }
         }
